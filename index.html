@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!--
+  sovernity.com landing page (R1-6a)
+
+  COPY GOVERNANCE: every privacy / security / risk / licensing string on this
+  page is verbatim from docs/legal/WEBSITE_COPY_KIT.md (governed by
+  docs/legal/CLAIMS.md). All other visible strings are navigational/neutral.
+  Do not add or edit claim strings without compliance-agent approval.
+
+  ZERO EXTERNAL REQUESTS: this site loads no external fonts, scripts, images,
+  styles, or embeds. Outbound hyperlinks (GitHub, mailto) are fine; fetched
+  resources are not. Keep it that way.
+
+  PRE-PUBLISH CHECKLIST (kit §9):
+   1. Run the ban-list grep (CLAIMS §4) over website/.
+   2. Re-verify the installer size figure against the DMG that D-058 names (kit §5) — this
+      checklist deliberately quotes NO figure: WEBSITE_COPY_KIT §5 derives it and the page
+      follows the kit. Derive the filename from BETA_SUFFIX in scripts/package.sh; never
+      "the newest DMG" in dist/.
+   3. Confirm privacy.html Version/Effective line matches the shipped build's bundled policy.
+   4. Replace placeholders: screenshots (FB-3), release URL + SHA-256 (R1-8).
+   5. Source-available block below is disabled inside a comment; enable ONLY once
+      D-017 gates (a) through (f) are executed and the repo is public (kit §3).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <!-- Title + meta description: kit §1a approved strings, verbatim — no free
+       assembly, even from approved hero fragments. The "never phones home"
+       short form is permitted only while the hero section below carries the
+       claim-#1 pairing sentence (kit §1a short-form rule). -->
+  <title>Sovernity Chat — a local AI with hands on your files. It never phones home.</title>
+  <meta name="description" content="A local AI with hands on your files — and it never phones home. Runs open-weights Qwen models entirely on your Mac (Apple Silicon) — no account, no cloud, no API key. Free during beta.">
+  <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="assets/mark.svg" width="26" height="26" alt="">
+        Sovernity Chat
+      </a>
+      <nav class="site-nav" aria-label="Site">
+        <a href="#how">How it works</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= HERO (kit §1) ================= -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="wrap">
+        <p class="kicker">Sovernity Chat · for macOS</p>
+        <!-- Approved hero (primary), verbatim. -->
+        <h1 id="hero-heading">A local AI with hands on your files&nbsp;— and it never phones home.</h1>
+        <!-- Approved sub-hero / model line, verbatim. -->
+        <p class="subhero">Runs open-weights Qwen models locally on Apple Silicon — no account, no cloud, no API key.</p>
+        <!-- REQUIRED pairing, claim #1, verbatim — must stay within eye-shot of the hero (same section). -->
+        <p class="qualifier">No automatic network activity, ever, in the default configuration — and nothing about your files or conversations is transmitted in any configuration. The only connections are ones you start or switch on: the first-run model download and optional update checks.</p>
+        <div class="cta-row">
+          <a class="btn" href="#download">Download for Mac</a>
+          <!-- Approved download line (kit §4); "beta" adjacent to CTA is required. -->
+          <span class="cta-note">Free during beta.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCREENSHOTS (kit §6) =================
+         All media placeholders. Founder ruling (2026-08-14): NO video on the
+         website — screenshots only; do not re-add a video slot. Screenshots
+         must show shipped UI and real behavior only, fixture content only (no
+         real personal documents). Captions and overlay text are public claim
+         strings: full CLAIMS §2 ban-list check before publish. -->
+    <section id="see" aria-labelledby="see-heading">
+      <div class="wrap">
+        <h2 id="see-heading">See the app</h2>
+
+        <!-- FB-3 DELIVERS THE SCREENSHOTS. Four slots, each 16:10 (macOS main
+             window). Deliver 2880x1800 PNG (@2x) per slot, fixture content
+             only. Suggested subjects, matching DESIGN_SPEC surfaces:
+             1. Conversation with a pending approval card (diff visible)
+             2. Folders pane (grant rows, indexing status)
+             3. Activity pane (audit trail)
+             4. Sources row expanded (visible retrieval)
+             Alt text below is placeholder-neutral now; FB-3 writes real alt
+             text describing what each screenshot shows (ban-list checked). -->
+        <div class="shot-grid">
+          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: conversation with an approval card">
+            <img class="watermark" src="assets/mark-mono.svg" alt="">
+            <span class="slot-label">Screenshot — conversation &amp; approval card</span>
+          </figure>
+          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: Folders pane">
+            <img class="watermark" src="assets/mark-mono.svg" alt="">
+            <span class="slot-label">Screenshot — Folders</span>
+          </figure>
+          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: Activity pane">
+            <img class="watermark" src="assets/mark-mono.svg" alt="">
+            <span class="slot-label">Screenshot — Activity</span>
+          </figure>
+          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: sources shown with an answer">
+            <img class="watermark" src="assets/mark-mono.svg" alt="">
+            <span class="slot-label">Screenshot — answers with sources</span>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section id="how" aria-labelledby="how-heading">
+      <div class="wrap">
+        <h2 id="how-heading">How it works</h2>
+        <ol class="steps">
+          <li>
+            <h3>Set up once</h3>
+            <!-- Sentence from the approved requirements copy (kit §5), verbatim. -->
+            <p>On first run the app downloads its AI model once (about 3–6 GB depending on your Mac's memory), then everything runs on-device — no further downloads needed.</p>
+          </li>
+          <li>
+            <h3>Grant a folder</h3>
+            <!-- First sentence: neutral feature description. Second: claim #4, verbatim. -->
+            <p>You choose which folders the app can see, using the standard macOS folder picker.</p>
+            <p><strong>Folder access is enforced by macOS itself — the App Sandbox — not just by our code.</strong></p>
+          </li>
+          <li>
+            <h3>Approve every change</h3>
+            <!-- Claim #8, verbatim. Rule: the 16 GB+ requirement for agentic
+                 editing must appear on this same page — the Requirements block
+                 in the Download section satisfies it. -->
+            <p><strong>Every change is previewed, approved by you, logged, and undoable — and deletes go to a recoverable trash.</strong></p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= PRIVACY (kit §2 — verbatim menu only) ================= -->
+    <section id="privacy" aria-labelledby="privacy-heading">
+      <div class="wrap">
+        <h2 id="privacy-heading">Privacy</h2>
+        <!-- Claim #6 (the workhorse), verbatim. -->
+        <p class="privacy-lead">Your files and conversations never leave your Mac. Sovernity never receives your data — there is no third party to trust, and nothing for us to breach.</p>
+        <div class="claim-grid">
+          <div class="claim-card">
+            <!-- Claim #2, verbatim. "after setup" and "in default use" may never
+                 be dropped. Do NOT hyperlink "capture the packets yourself"
+                 until the walkthrough page exists (R2-1/S1). -->
+            <p><strong>Verifiably local:</strong> after setup, zero network egress in default use — capture the packets yourself.</p>
+          </div>
+          <div class="claim-card">
+            <!-- Claim #3, verbatim, backups parenthetical retained. -->
+            <p><strong>Delete means gone from the app</strong> — messages, files, traces, immediately and permanently. There's no cloud copy because there is no cloud. (Your own backups, like Time Machine, are yours and stay yours.)</p>
+          </div>
+        </div>
+        <p style="margin-top: 24px;"><a href="privacy.html">Read the privacy policy</a></p>
+      </div>
+    </section>
+
+    <!-- ================= DOWNLOAD (kit §4 + §5) ================= -->
+    <section id="download" aria-labelledby="download-heading">
+      <div class="wrap">
+        <h2 id="download-heading">Download</h2>
+        <div class="download-cta">
+          <!-- PLACEHOLDER HREF (R1-8): point at the specific beta release on
+               GitHub Releases and publish the SHA-256 checksum beside it.
+
+               [D-060, RESOLVED 2026-09-12] The code repo is PRIVATE, and Releases on
+               a private repo require AUTH to download — so this points at the PUBLIC
+               web repo (SovernityHQ/sovernity-web), which serves this site and carries
+               the release asset. The /releases/latest form keeps the link stable across
+               versions, and the approved copy below ("served from GitHub Releases")
+               stays true. Enforced by scripts/publish-website.sh gate 5. -->
+          <a class="btn" href="https://github.com/SovernityHQ/sovernity-web/releases/latest">Download for Mac</a>
+          <!-- "beta" required in or adjacent to the CTA (kit §4). -->
+          <span class="cta-note">Free during beta.</span>
+        </div>
+        <div class="download-lines">
+          <!-- Approved lines, verbatim (kit §4). -->
+          <p>Download for Mac — notarized by Apple's notary service and signed with our Developer ID.</p>
+          <p>Downloads are served from GitHub Releases; the SHA-256 checksum is published beside each release.</p>
+          <!-- R1-8: once the release is cut, optionally surface the checksum
+               here too, e.g. <p class="mono">SHA-256: (value)</p>. If you name
+               it here, it must actually be present and correct (kit §4). -->
+        </div>
+
+        <!-- REQUIRED requirements disclosure (kit §5), verbatim; must appear
+             with the download button. Size figures re-verified against the
+             final DMG before publish. -->
+        <aside class="requirements" aria-label="Requirements">
+          <p><strong>Requires:</strong> macOS 15 (Sequoia) or later · Apple Silicon (M1 or newer).</p>
+          <p><strong>Memory:</strong> 8 GB unified memory minimum for chat and read-only file context. Agentic file editing — create, edit, move, delete with approval — requires 16 GB or more.</p>
+          <p><strong>Download size:</strong> ~325 MB installer. On first run the app downloads its AI model once (about 3–6 GB depending on your Mac's memory), then everything runs on-device — no further downloads needed.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= SOURCE-AVAILABLE (kit §3) — GATED, CURRENTLY DISABLED.
+         Enable ONLY after D-017 gates (a) through (f) are executed and the
+         repository is public. If the repo is not public at publish time this
+         block stays out entirely; do not tease it. Banned in this block:
+         "open source", "FOSS", "free software", "reproducible builds",
+         "audited". Acceptable descriptor: "source-available". Both copy lines
+         below are kit-verbatim; the second (qualifier) must stay within
+         eye-shot of the first.
+
+    <section id="source" aria-labelledby="source-heading">
+      <div class="wrap">
+        <h2 id="source-heading">Source-available</h2>
+        <p class="prose">The source code is published for verification — read the code and check the claims yourself.</p>
+        <p class="prose qualifier">Official builds are signed and notarized by Sovernity and produced separately from the public repository — the published source lets you verify how the app works, not byte-reproduce a given binary.</p>
+        <p><a href="https://github.com/SovernityHQ/SovernityChat">Sovernity Chat on GitHub</a></p>
+      </div>
+    </section>
+    -->
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <!-- Website self-description (kit §2), verbatim; required to link to the
+           privacy policy (whose §6 carries the hosting-logs nuance). -->
+      <p class="static-note">No cookies. No analytics. No tracking — this site is static files. <a href="privacy.html">Privacy policy</a></p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="mailto:milo.sovernity@shieber.com">Contact</a>
+        <!-- Optional per kit §7, same gate as the source-available section:
+        <a href="https://github.com/SovernityHQ/SovernityChat">Source-available on GitHub</a>
+        -->
+      </nav>
+      <p class="copyright">© 2026 Milo Shieber, doing business as Sovernity.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Folded-S ribbon only, single-hue, for blind-emboss watermark use
+  (media placeholders), echoing the DMG background treatment.
+  Rendered at low opacity via CSS; three tone steps keep the z-story.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="160 240 704 512">
+  <g fill="none" stroke-linecap="round" stroke-width="96" stroke="#8A8884">
+    <path d="M416 304H800" opacity="0.45"/>
+    <path d="M416 688H800" opacity="0.45"/>
+    <path d="M416 304 224 496" opacity="0.7"/>
+    <path d="M608 496 800 688" opacity="0.7"/>
+    <path d="M224 496H608" opacity="1"/>
+  </g>
+</svg>

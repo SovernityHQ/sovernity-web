@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--
+  sovernity.com/privacy (R1-6a)
+
+  GENERATED-CONTENT PAGE. The policy text between the BEGIN/END markers in
+  <main> must be generated from the master, docs/legal/PRIVACY_POLICY.md
+  (the policy proper, below the internal metadata divider), and must be
+  byte-identical in wording to the copy bundled in the concurrently shipped
+  build, INCLUDING the Version/Effective line (R1 dev-wiring rule).
+
+  The text in place matches the master at Version 1.0-beta.3 (Effective:
+  2026-08-21) and is wording-identical to the bundled
+  Resources/Legal/PRIVACY_POLICY.md, verified 2026-09-09 by stripping this
+  container and diffing it against the master: the two drifts found were the
+  Version/Effective line and §5's third bullet, and both are corrected.
+
+  WHY IT DRIFTED, stated here because the next reader inherits it: this page
+  says GENERATED and names its source, but NOTHING GENERATES IT. The master
+  moved to 1.0-beta.3 on 2026-08-21 (§5 deletion scope) and the bundled copy
+  followed; this hand-maintained mirror did not, and for two and a half weeks
+  the public page promised a deletion the shipping build does not perform —
+  a false claim on the product's most trust-loaded control, invisible to the
+  ban-list grep because a superseded sentence reads fine.
+
+  A label is not a pipeline. Do not hand-edit the policy text here — and note
+  that the instruction has now failed once, because the only thing enforcing
+  it was this comment. The fix is a web build step that injects the master
+  (as scripts/generate-legal-resources.sh does for the in-app copy) plus a
+  check that fails when this container and the bundled copy disagree.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <!-- Title + meta description: kit §1a approved strings, verbatim (neutral,
+       no claims — detached surfaces carry no qualifier). -->
+  <title>Privacy Policy — Sovernity Chat</title>
+  <meta name="description" content="The privacy policy for the Sovernity Chat app and sovernity.com.">
+  <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="assets/mark.svg" width="26" height="26" alt="">
+        Sovernity Chat
+      </a>
+      <nav class="site-nav" aria-label="Site">
+        <a href="index.html">Home</a>
+        <a href="index.html#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="policy">
+    <div class="wrap prose">
+
+      <!-- BEGIN GENERATED PRIVACY POLICY (source: docs/legal/PRIVACY_POLICY.md) -->
+
+      <h1>Privacy Policy — Sovernity Chat</h1>
+      <p class="version-line"><strong>Version 1.0-beta.3 · Effective: 2026-08-21</strong></p>
+
+      <p>Sovernity Chat is built so that this policy can be short: <strong>the app sends us nothing.</strong> Everything you do in it — every conversation, every file, every search — happens and stays on your Mac.</p>
+
+      <h2>1. What we collect through the app</h2>
+      <p><strong>Nothing.</strong> Sovernity Chat has:</p>
+      <ul>
+        <li>no account or sign-in,</li>
+        <li>no telemetry, analytics, or usage tracking,</li>
+        <li>no crash reporting,</li>
+        <li>no advertising or third-party SDKs that collect data,</li>
+        <li>no ability — by design — to see your conversations, files, file names, search indexes, or activity logs.</li>
+      </ul>
+      <p>We cannot hand over, sell, leak, or lose data we never receive.</p>
+
+      <h2>2. The only times the app uses the network</h2>
+      <p>Sovernity Chat makes exactly three kinds of network connection. Nothing else, ever, in any configuration — and none of them ever carries your content.</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Connection</th>
+              <th scope="col">When it happens</th>
+              <th scope="col">What the server can see</th>
+              <th scope="col">Who operates the server</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. First-run model download</strong></td>
+              <td>Once, during setup, when you click "Download and set up." Required — the AI model is several GB and downloading it once is how the app stays free of any cloud dependency afterwards. Resumes if interrupted.</td>
+              <td>Your IP address and which model files were requested.</td>
+              <td>Hugging Face (the public model repository and its CDN) — see §3.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Update check</strong></td>
+              <td>Only if you start one ("Check for Updates…" menu item) or switch on automatic weekly checks. <strong>Off by default.</strong></td>
+              <td>Your IP address and the app/updater version (in the request's user-agent), i.e., "some Mac at this address runs version X."</td>
+              <td>Us (sovernity.com).</td>
+            </tr>
+            <tr>
+              <td><strong>3. Model-recommendation check</strong></td>
+              <td>Same single opt-in switch as updates: a small signed file telling the app whether a better model is available for your hardware. <strong>Off by default.</strong></td>
+              <td>Your IP address and the requested file.</td>
+              <td>Us (sovernity.com).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Every request fetches a static, signed file. There are no query parameters derived from your data, no cookies, no identifiers. Connections 2 and 3 share one switch, set during onboarding (unchecked) and changeable anytime in Settings. In the app's default configuration, it performs <strong>zero</strong> automatic network activity after setup.</p>
+      <p>You don't have to take our word for it: the full product works in airplane mode after setup, and the app's network behavior can be verified by anyone with standard packet-capture tools. We will publish a step-by-step packet-capture walkthrough you can repeat.</p>
+
+      <h2>3. Third party: Hugging Face</h2>
+      <p>The first-run model download is served by Hugging Face's repository and CDN. Like any web server, Hugging Face can log the request (IP address, requested files, user-agent) under its own privacy policy (<a href="https://huggingface.co/privacy">https://huggingface.co/privacy</a>). We chose a download from the public source over running the traffic through ourselves so that we learn nothing — not even that you installed the app. We receive no information about your download.</p>
+
+      <h2>4. Our servers (updates and model recommendations)</h2>
+      <p><strong>Today, these endpoints do not exist.</strong> As of this version, the update and model-recommendation endpoints are not live, and the app — by a built-in switch, independent of your settings — makes no request to them, manual or automatic, until they are. Before the first one goes live, we will update this policy with the concrete log-retention period for it. (Our website is a set of static pages served by a hosting service — see §6. It is not one of these endpoints, and the app never contacts it in any configuration.)</p>
+      <p>When connections 2 and 3 do go live and you use them, our server will see what any web server sees: IP address, request time, requested file, and user-agent (app version). We will use standard server logs solely to serve the files and protect the service from abuse.</p>
+      <ul>
+        <li>No analytics will be run on these logs, and they will never be sold, shared, or combined with anything else (there is nothing to combine them with — we have no user records).</li>
+      </ul>
+      <p>Legal bases where GDPR applies: performance of your request and our legitimate interest in operating the service securely.</p>
+
+      <h2>5. Your data on your device</h2>
+      <p>All app data lives in the app's local container on your Mac — a SQLite store (chats, messages, file-activity log, folder-access records) and an attachments store — plus the downloaded model files. It is yours, under your control, protected by your Mac's own protections (we recommend turning on FileVault and using a strong login password).</p>
+      <p><strong>Deleting data:</strong></p>
+      <ul>
+        <li>Deleting a chat in the app permanently removes its messages, its attachments (when no other chat references them), and its file-activity entries, followed by a secure-delete pass on the database so the content isn't recoverable from database free space.</li>
+        <li>Revoking a folder's access immediately deletes its search index.</li>
+        <li>Settings → Data → "Delete All Data" removes, in one action, everything in the SQLite store and the attachments store — every chat and message, all attachments, the file-activity log, folder-access records, search indexes, undo history and Sovernity Trash copies — followed by the same secure-delete pass. It does <strong>not</strong> remove the model files. Those are the AI model itself: the same bytes for everyone on your model tier, containing nothing about you or anything you did, and keeping them means the app never has to download anything again as a result of your deleting your data. If you want them gone too, delete the app's container folder (see "Uninstalling" below).</li>
+        <li>Uninstalling: delete the app and its container folder (<code>~/Library/Containers/com.sovernity.chat</code>). Nothing remains anywhere else, because nothing was ever anywhere else.</li>
+      </ul>
+      <p>Note: your own backups (e.g., Time Machine) may retain copies of app data under your control, like for any app.</p>
+
+      <h2>6. Website</h2>
+      <p>Our website, sovernity.com, is a set of static pages — a landing page and this policy — served by a static hosting service. It:</p>
+      <ul>
+        <li>runs no analytics and no tracking of any kind,</li>
+        <li>sets no cookies,</li>
+        <li>has no accounts, forms, or sign-ups — nothing on it asks for or accepts your data,</li>
+        <li>and is never contacted by the app, in any configuration.</li>
+      </ul>
+      <p>Like any web host, the hosting service that serves the pages can keep standard server logs (IP address, requested page, time, user-agent) under its own privacy policy in the course of delivering them. We add nothing on top: no analytics scripts, no fingerprinting, no identifiers — nothing on the site can tell us who you are.</p>
+      <p>App downloads are served from GitHub (github.com), which can likewise log the download request under GitHub's privacy policy (<a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a>). We receive no information about your download.</p>
+
+      <h2>7. Children</h2>
+      <p>Sovernity Chat is a general-audience productivity tool, not directed at children, and collects no personal information from anyone — including children.</p>
+
+      <h2>8. Your rights (GDPR, CCPA, and similar laws)</h2>
+      <p>For everything you do <strong>in the app</strong>, we are not a data controller or processor — your data never reaches us, so rights of access, deletion, portability, and the rest are satisfied directly and instantly by you, on your device (see §5: the app gives you deletion and export, and there is nothing to request from us).</p>
+      <p>For the sliver of personal data processed around the edges — <strong>IP addresses in server logs</strong> (§2–4) and in the website host's delivery logs (§6) — you have whatever rights your local law provides (access, deletion, objection). In practice the logs are short-lived and not tied to any identity we could look you up by; contact us and we'll do what we can within those limits. We do not sell or share personal information as defined by the CCPA/CPRA, and we have no advertising relationships.</p>
+
+      <h2>9. Changes</h2>
+      <p>If this policy changes materially, the new version ships with the app update that occasions it, is published at sovernity.com, and the change is described plainly. Beyond that, we can't notify you individually — we don't know who you are.</p>
+
+      <h2>10. Contact</h2>
+      <p>Milo Shieber, doing business as Sovernity · <a href="mailto:milo.sovernity@shieber.com">milo.sovernity@shieber.com</a></p>
+
+      <!-- END GENERATED PRIVACY POLICY -->
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="static-note">No cookies. No analytics. No tracking — this site is static files. <a href="privacy.html">Privacy policy</a></p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="mailto:milo.sovernity@shieber.com">Contact</a>
+      </nav>
+      <p class="copyright">© 2026 Milo Shieber, doing business as Sovernity.</p>
+    </div>
+  </footer>
+</body>
+</html>
