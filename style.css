@@ -246,11 +246,18 @@ figcaption {
   background: var(--surface-raised);
 }
 
+/* The shots are 2084px-wide full-window captures. Left to fill .wrap they
+   render ~476px per column — a quarter scale, which is both visually
+   dominant and too small to read. Capping the gallery keeps them as a
+   gallery rather than four hero images; the figure is the cap, not the
+   image width, so the two-column rhythm and the captions stay intact. */
 .shot-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-top: 28px;
+  max-width: 760px;      /* -> ~370px per shot on desktop */
+  margin-inline: auto;
 }
 
 /* ---- How it works ---- */
@@ -392,6 +399,10 @@ figcaption {
 /* ---- Responsive ---- */
 @media (max-width: 760px) {
   .shot-grid, .claim-grid, .steps { grid-template-columns: 1fr; }
+  /* One column: without a cap a shot stretches to the full container
+     (~712px at this breakpoint), which is larger than it ever renders
+     on desktop — the opposite of what a narrow viewport wants. */
+  .shot img { max-width: 420px; margin-inline: auto; }
   .hero { padding: 56px 0 48px; }
   section { padding: 44px 0; }
 }
