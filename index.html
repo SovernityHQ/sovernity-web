@@ -83,31 +83,42 @@
       <div class="wrap">
         <h2 id="see-heading">See the app</h2>
 
-        <!-- FB-3 DELIVERS THE SCREENSHOTS. Four slots, each 16:10 (macOS main
-             window). Deliver 2880x1800 PNG (@2x) per slot, fixture content
-             only. Suggested subjects, matching DESIGN_SPEC surfaces:
-             1. Conversation with a pending approval card (diff visible)
-             2. Folders pane (grant rows, indexing status)
-             3. Activity pane (audit trail)
-             4. Sources row expanded (visible retrieval)
-             Alt text below is placeholder-neutral now; FB-3 writes real alt
-             text describing what each screenshot shows (ban-list checked). -->
+        <!-- SCREENSHOTS DELIVERED 2026-09-11, founder-accepted; shot list SUBSTITUTED
+             from the original four (ANNOUNCE_KIT §4 records the substitution and the
+             caption resolution). Native @2x window captures, 2084x1444.
+
+             CAPTIONS ARE CLAIM STRINGS. Every caption below is an EXISTING approved
+             line quoted verbatim — claim #8, ANNOUNCE_KIT §6 G-4, WEBSITE_COPY_KIT §2's
+             folder-grant line, and claim #4 — so none is newly authored and none
+             required a CLAIMS §4 routing. The delete shot carries NO caption
+             deliberately: claim #3 was available and rejected, because it generalises
+             over "files" while the dialog in the frame says files in your folders are
+             not affected. Do not add one.
+
+             The approval-card shot is editing footage, so it implies the 16 GB+ tier;
+             the requirements block on this page carries that line (kit §5 rule).
+
+             ALT TEXT is neutral-descriptive (category (b)) — it states what is on
+             screen and makes no privacy, security, deletion or capability claim. -->
         <div class="shot-grid">
-          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: conversation with an approval card">
-            <img class="watermark" src="assets/mark-mono.svg" alt="">
-            <span class="slot-label">Screenshot — conversation &amp; approval card</span>
+          <figure class="shot">
+            <img src="assets/shot-approval.png" width="2084" height="1444" loading="lazy" decoding="async"
+                 alt="The chat view. A pending change to a Markdown file is shown as a line-by-line diff, with Deny and Approve buttons beneath it.">
+            <figcaption>Every change is previewed, approved by you, logged, and undoable — and deletes go to a recoverable trash.</figcaption>
           </figure>
-          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: Folders pane">
-            <img class="watermark" src="assets/mark-mono.svg" alt="">
-            <span class="slot-label">Screenshot — Folders</span>
+          <figure class="shot">
+            <img src="assets/shot-folders.png" width="2082" height="1448" loading="lazy" decoding="async"
+                 alt="The Folders pane, listing granted folders with their access setting, indexing status, and a control to revoke access.">
+            <figcaption>You choose which folders the app can see, using the standard macOS folder picker. Folder access is enforced by macOS itself — the App Sandbox — not just by our code.</figcaption>
           </figure>
-          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: Activity pane">
-            <img class="watermark" src="assets/mark-mono.svg" alt="">
-            <span class="slot-label">Screenshot — Activity</span>
+          <figure class="shot">
+            <img src="assets/shot-activity.png" width="2086" height="1444" loading="lazy" decoding="async"
+                 alt="The Activity pane, listing file actions by date with the file changed and links to view the diff or undo it.">
+            <figcaption>The Activity pane: a record of every file action.</figcaption>
           </figure>
-          <figure class="media-slot ratio-16x10" role="img" aria-label="Placeholder for app screenshot: sources shown with an answer">
-            <img class="watermark" src="assets/mark-mono.svg" alt="">
-            <span class="slot-label">Screenshot — answers with sources</span>
+          <figure class="shot">
+            <img src="assets/shot-delete.png" width="2086" height="1440" loading="lazy" decoding="async"
+                 alt="A confirmation dialog asking whether to delete a chat, describing what deleting it removes.">
           </figure>
         </div>
       </div>

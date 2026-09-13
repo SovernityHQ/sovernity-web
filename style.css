@@ -234,6 +234,18 @@ figcaption {
   margin-top: 10px;
 }
 
+.shot {
+  margin: 0;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-raised);
+}
+
 .shot-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
