@@ -14,6 +14,6 @@ Static site for **Sovernity Chat**, and the host for its release download.
 > on the next publish — and worse, it would be a claim that never passed the
 > checks, on the surface where claims matter most.
 
-Published from source commit `780e8d5`.
+Published from source commit `b08d241`.
 
 No cookies, no analytics, no tracking — these are static files.

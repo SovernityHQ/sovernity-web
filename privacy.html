@@ -37,6 +37,39 @@
        no claims — detached surfaces carry no qualifier). -->
   <title>Privacy Policy — Sovernity Chat</title>
   <meta name="description" content="The privacy policy for the Sovernity Chat app and sovernity.com.">
+
+  <!-- Link-preview (Open Graph + Twitter card). ADDED 2026-09-13.
+       Before this, the page carried NO og:* tags at all, so scrapers fell back
+       to "first <img> on the page" — which became the approval-card screenshot
+       the moment the shots landed. That was never a choice; it was a default.
+       It also gets centre-cropped, because cards are 1.91:1 and the shots are
+       1.44:1.
+
+       og:title and og:description are CLAIM STRINGS on a public surface, so
+       both are the page's already-approved <title> and <meta description>,
+       quoted verbatim — nothing new is authored here and nothing needed a
+       CLAIMS §4 routing.
+
+       The image carries NO TEXT, deliberately: text baked into an image is a
+       claim string that no ban-list grep can read, and claim #1's required
+       qualifier cannot be kept "within eye-shot" inside a 1200x630 graphic.
+       The card already renders title and description beside the image — the
+       image's job is recognition, not explanation. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sovernity Chat">
+  <meta property="og:url" content="https://sovernity.com/privacy.html">
+  <meta property="og:title" content="Privacy Policy — Sovernity Chat">
+  <meta property="og:description" content="The privacy policy for the Sovernity Chat app and sovernity.com.">
+  <meta property="og:image" content="https://sovernity.com/assets/og-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Sovernity Chat app icon.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy Policy — Sovernity Chat">
+  <meta name="twitter:description" content="The privacy policy for the Sovernity Chat app and sovernity.com.">
+  <meta name="twitter:image" content="https://sovernity.com/assets/og-card.png">
+  <meta name="twitter:image:alt" content="The Sovernity Chat app icon.">
   <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
   <link rel="stylesheet" href="style.css">
 </head>
