@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sovernity folded-S mark, web edition (favicon + header).
+  Derived from docs/design/icon-production/appicon-small.svg (concept e2,
+  flat-fold small master) with the viewBox cropped to the 824-unit plate.
+  Mark status is PROVISIONAL (see icon-production/NOTES.md): a future mark
+  swap replaces this file without touching page markup.
+  No claim strings on this canvas, by design (B5).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 100 824 824">
+  <defs>
+    <linearGradient id="field" x1="0" y1="100" x2="0" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3E6E5F"/>
+      <stop offset="1" stop-color="#2B5044"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185.4" fill="url(#field)"/>
+  <g fill="none" stroke-linecap="round" stroke-width="96">
+    <!-- receded ends: dim paper -->
+    <path d="M416 304H800" stroke="#D9DDD3"/>
+    <path d="M416 688H800" stroke="#D9DDD3"/>
+    <!-- folds in transit: intermediate paper -->
+    <path d="M416 304 224 496" stroke="#E7E9E0"/>
+    <path d="M608 496 800 688" stroke="#E7E9E0"/>
+    <!-- forward bar: full paper, top of z-order -->
+    <path d="M224 496H608" stroke="#F5F4EF"/>
+  </g>
+</svg>
