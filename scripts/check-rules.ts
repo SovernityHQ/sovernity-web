@@ -14,8 +14,12 @@ export const OUTBOUND_HOSTS: readonly string[] = [
   'www.obdev.at', 'objective-see.org', 'support.apple.com', 'www.apple.com', 'apps.apple.com',
   'opensource.org', 'openfontlicense.org', 'www.apache.org', 'ai.google.dev',
 ];
+/** Extra hosts for Chat pages only: its generated privacy policy (§6) links GitHub's privacy policy. */
+export const CHAT_OUTBOUND_HOSTS: readonly string[] = ['docs.github.com'];
 const GITHUB_PATH = '/SovernityHQ/sovernity-web';
 const SUPPORT_MAILBOX = 'support@sovernity.com';
+/** Chat's contact address, named in its generated privacy policy (§10), which is copied verbatim from Chat's master. Chat pages only. */
+const CHAT_MAILBOX = 'milo.sovernity@shieber.com';
 
 /** Regex sources, matched with word boundaries; inflections included (therapists, diagnosis, treatments). */
 const URSA_BANNED_WORDS = ['companions?', 'therap(?:y|ies)', 'therapists?', 'diagnos\\w*', 'treatments?', 'zodiac'];
@@ -239,7 +243,7 @@ function attributeText(tags: { name: string; attrs: [string, string][] }[]): str
   return tags.flatMap(({ name, attrs }) => attrs.filter(([k]) =>
     k === 'alt' || k === 'title' || k === 'placeholder' || k === 'value' || k.startsWith('aria-') || (k === 'content' && name === 'meta')).map(([, v]) => v));
 }
-const hostAllowed = (u: URL): boolean => OUTBOUND_HOSTS.includes(u.hostname) &&
+const hostAllowed = (u: URL, group: 'ursa' | 'chat'): boolean => (group === 'chat' && CHAT_OUTBOUND_HOSTS.includes(u.hostname)) || OUTBOUND_HOSTS.includes(u.hostname) &&
   (u.hostname !== 'github.com' || u.pathname === GITHUB_PATH || u.pathname.startsWith(`${GITHUB_PATH}/`));
 
 export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: string }): Promise<CheckResult> {
@@ -276,9 +280,10 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
     if (group === 'chat') for (const h of findBanned(stripComments(src), 'chat')) banned.add(h);
     for (const hit of banned) err('banned', rel, `"${hit}"`);
 
+    // "Secure" is a studio/Ursa/legal rule (Global Constraints); Chat's policy text ("secure-delete pass") is Chat's own.
     const noSvgSrc = stripComments(src).replace(/<svg\b[\s\S]*?<\/svg\s*>/gi, ' ');
     const secureText = [visibleText(noSvgSrc), ...attributeText(tagsOf(noSvgSrc))].join(' \n ');
-    if (/secure/i.test(secureText)) err('secure', rel, '"secure" in body text or attributes (allowed in the seal only)');
+    if (group !== 'chat' && /secure/i.test(secureText)) err('secure', rel, '"secure" in body text or attributes (allowed in the seal only)');
 
     for (const ref of findResourceRefs(src)) {
       if (!isSameOriginRef(ref)) err('root-absolute', rel, `not a root-absolute same-origin reference: ${ref}`);
@@ -305,15 +310,19 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
         let good = false;
         if (href.includes('\\')) good = false;
         else if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) good = true;
-        else if (/^mailto:/i.test(href)) good = href.slice(7).split('?')[0].toLowerCase() === SUPPORT_MAILBOX;
+        else if (/^mailto:/i.test(href)) {
+          const box = href.slice(7).split('?')[0].toLowerCase();
+          good = box === SUPPORT_MAILBOX || (group === 'chat' && box === CHAT_MAILBOX);
+        }
         else if (/^https?:\/\//i.test(href)) {
-          try { good = hostAllowed(new URL(href)); } catch { good = false; }
+          try { good = hostAllowed(new URL(href), group); } catch { good = false; }
         }
         if (!good) err('outbound', rel, `href not allowed (root-absolute, #anchor, allowlisted https host or ${SUPPORT_MAILBOX} only): ${href}`);
       }
     }
 
-    if (src.includes('/releases/latest')) err('latest', rel, 'contains /releases/latest');
+    // Comments don't ship a link (Chat's D-060 note mentions the old form); markup, attributes and scripts do.
+    if (stripComments(src).includes('/releases/latest')) err('latest', rel, 'contains /releases/latest');
 
     const inline = findInlineScripts(src);
     if (inline.length !== 1 || inline[0] !== THEME_BOOT) {

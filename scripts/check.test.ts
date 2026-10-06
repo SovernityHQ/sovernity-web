@@ -199,3 +199,36 @@ test('checkSite: js-network scans .mjs and protocol-relative strings', async () 
   assert.ok(r.errors.some((e) => e.startsWith('js-network: a.mjs')));
   assert.ok(r.errors.some((e) => e.startsWith('js-network: b.js') && e.includes('//')));
 });
+
+test('checkSite: Chat pages may link docs.github.com and Chat\'s contact mailbox; other pages may not', async () => {
+  const chatLinks = '<a href="https://docs.github.com/privacy">g</a><a href="mailto:milo.sovernity@shieber.com">m</a>';
+  const dir = await site({ ...ursaPages(), 'chat/privacy/index.html': page({ body: chatLinks }), 'x/index.html': page({ body: '<a href="mailto:milo.sovernity@shieber.com">m</a>' }) });
+  const r = await R.checkSite(dir, { draft: false });
+  assert.deepEqual(r.errors.filter((e) => e.includes('chat/privacy/index.html')), []);
+  assert.ok(r.errors.some((e) => e.startsWith('outbound: x/index.html') && e.includes('milo.sovernity@shieber.com')));
+  const other = await site({ 'chat/index.html': page({ body: '<a href="mailto:someone@shieber.com">m</a><a href="https://github.com/SovernityHQ/SovernityChat">s</a>' }) });
+  assert.equal((await R.checkSite(other, { draft: false })).errors.filter((e) => e.startsWith('outbound: chat/index.html')).length, 2);
+});
+
+test('checkSite: "secure" is a studio, Ursa and legal rule; Chat pages keep their policy wording', async () => {
+  const body = '<p>followed by a secure-delete pass</p>';
+  const dir = await site({ ...ursaPages(), 'chat/privacy/index.html': page({ body }), 'about/index.html': page({ body }) });
+  const r = await R.checkSite(dir, { draft: false });
+  assert.deepEqual(r.errors.filter((e) => e.startsWith('secure:')), ['secure: about/index.html: "secure" in body text or attributes (allowed in the seal only)']);
+});
+
+test('checkSite: docs.github.com is a Chat-only host', async () => {
+  const link = '<a href="https://docs.github.com/privacy">g</a>';
+  const dir = await site({ ...ursaPages(), 'chat/privacy/index.html': page({ body: link }), 'about/index.html': page({ body: link }) });
+  const out = (await R.checkSite(dir, { draft: false })).errors.filter((e) => e.startsWith('outbound:'));
+  assert.equal(out.length, 1);
+  assert.ok(out[0].startsWith('outbound: about/index.html') && out[0].includes('docs.github.com'));
+});
+
+test('checkSite: latest ignores HTML comments but not live hrefs', async () => {
+  const pinned = '<!-- The /releases/latest form keeps the link stable --><a href="https://github.com/SovernityHQ/sovernity-web/releases/tag/v1.0.0-beta.3">d</a>';
+  const ok = await site({ 'chat/index.html': page({ body: pinned }) });
+  assert.deepEqual((await R.checkSite(ok, { draft: false })).errors.filter((e) => e.startsWith('latest:')), []);
+  const live = await site({ 'chat/index.html': page({ body: '<a href="https://github.com/SovernityHQ/sovernity-web/releases/latest">d</a>' }) });
+  assert.ok((await R.checkSite(live, { draft: false })).errors.some((e) => e.startsWith('latest: chat/index.html')));
+});
