@@ -144,6 +144,20 @@ function rafCounter(): void {
   window.requestAnimationFrame = (cb: FrameRequestCallback) => raf((t) => { times.push(performance.now()); cb(t); });
 }
 
+/**
+ * Puts every animation in its finished state for the screenshots. `captureBeyondViewport` resizes the
+ * viewport to the full page for each capture (a `resize` fires), and at desktop widths Chromium then
+ * restarts the CSS animations on SVG elements (Dipper stars, the margin seal), so the capture painted
+ * their first frame, e.g. `st-kindle`'s `scale(.6)`. A huge negative delay makes any animation,
+ * restarted or not, start in its after phase; one iteration ends the infinite ones at rest.
+ */
+function finishAnimations(): void {
+  const style = document.createElement('style');
+  style.textContent = '*,*::before,*::after{animation-delay:-3600s!important;animation-iteration-count:1!important;transition-duration:0s!important;transition-delay:0s!important}';
+  document.head.append(style);
+  for (const a of document.getAnimations()) { try { a.finish(); } catch { /* infinite: the style above ended it */ } }
+}
+
 type TextSample = { what: string; color: string; opacity: number; layers: string[]; image: boolean; px: number; weight: number };
 
 function probe(rafWindow: number): object {
@@ -333,6 +347,9 @@ async function shoot(cdp: Cdp, base: string, shot: Shot, outDir: string): Promis
     }
     if (is404 && statuses.get(`${origin}/assets/css/tokens.css`) !== 200) failures.push('404 page: /assets/css/tokens.css did not load');
 
+    // After the assertions, which measure the page as it runs: shots show finished states.
+    await evaluate(`(${finishAnimations.toString()})()`);
+    await sleep(100);
     const metrics = await s('Page.getLayoutMetrics');
     const full = Math.ceil(metrics.cssContentSize.height);
     const capture = async (y: number, h: number, file: string) => {
