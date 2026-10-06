@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- include:head -->
+<link rel="stylesheet" href="/assets/css/studio.css">
+<link rel="stylesheet" href="/assets/css/legal.css">
+<title>Support · Sovernity Ursa</title>
+<meta name="description" content="Setting up Sovernity Ursa, connecting your iPhone, keeping your data safe, and how to reach us.">
+</head>
+<body data-page="legal">
+<!-- include:seal-defs -->
+<!-- include:studio-header -->
+<!-- include:ursa-subnav -->
+<main id="main" class="legal">
+  <div class="wrap lg-grid">
+
+    <aside class="lg-toc" aria-label="Contents">
+      <p class="lg-toc-label">Contents</p>
+      <ol>
+        <li><a href="#start"><span class="lg-tn">1</span><span>Getting started on your Mac</span></a></li>
+        <li><a href="#pair"><span class="lg-tn">2</span><span>Connecting your iPhone</span></a></li>
+        <li><a href="#reach"><span class="lg-tn">3</span><span>If your iPhone can't reach your Mac</span></a></li>
+        <li><a href="#away"><span class="lg-tn">4</span><span>Away from home with Tailscale</span></a></li>
+        <li><a href="#updating"><span class="lg-tn">5</span><span>Updating</span></a></li>
+        <li><a href="#backup"><span class="lg-tn">6</span><span>Backup, restore and export</span></a></li>
+        <li><a href="#delete"><span class="lg-tn">7</span><span>Deleting your data</span></a></li>
+        <li><a href="#uninstall"><span class="lg-tn">8</span><span>Uninstalling</span></a></li>
+        <li><a href="#unsupported"><span class="lg-tn">9</span><span>If your Mac isn't supported</span></a></li>
+        <li><a href="#crisis"><span class="lg-tn">10</span><span>Help in a crisis</span></a></li>
+        <li><a href="#report"><span class="lg-tn">11</span><span>Reporting a problem</span></a></li>
+      </ol>
+    </aside>
+
+    <article class="lg-article">
+      <p class="lg-kicker">Sovernity Ursa</p>
+      <h1 class="lg-h1">Support</h1>
+      <p class="lg-lede">Setting up Sovernity Ursa, connecting your iPhone, keeping your data safe, and how to reach us.</p>
+
+      <section class="lg-help lg-contact" aria-labelledby="contact-h">
+        <h2 id="contact-h">Contact</h2>
+        <ul>
+          <li><strong>Email:</strong> <a href="mailto:support@sovernity.com">support@sovernity.com</a></li>
+          <li>One person reads it, Milo Shieber, who makes Ursa. Replies usually come within a few days.</li>
+          <li>Ursa sends us nothing, so we only know what you tell us. Please don't paste your conversations; describe what happened instead.</li>
+          <li><strong>If you're in crisis, don't wait for an email:</strong> call or text 988, or call 911. Email isn't watched around the clock.</li>
+        </ul>
+      </section>
+
+      <details class="lg-toc-m" open>
+        <summary>Contents</summary>
+        <ol>
+          <li><a href="#start">Getting started on your Mac</a></li>
+          <li><a href="#pair">Connecting your iPhone</a></li>
+          <li><a href="#reach">If your iPhone can't reach your Mac</a></li>
+          <li><a href="#away">Away from home with Tailscale</a></li>
+          <li><a href="#updating">Updating</a></li>
+          <li><a href="#backup">Backup, restore and export</a></li>
+          <li><a href="#delete">Deleting your data</a></li>
+          <li><a href="#uninstall">Uninstalling</a></li>
+          <li><a href="#unsupported">If your Mac isn't supported</a></li>
+          <li><a href="#crisis">Help in a crisis</a></li>
+          <li><a href="#report">Reporting a problem</a></li>
+        </ol>
+      </details>
+
+      <section class="lg-sec" id="start" aria-labelledby="start-h">
+        <h2 id="start-h"><span class="lg-hn">01</span><span>Getting started on your Mac</span></h2>
+        <ol>
+          <li><strong>Download</strong> Sovernity Ursa from the Sovernity Ursa page (<a href="/ursa/">/ursa/</a>) and open the DMG. Drag Ursa to your Applications folder. <mark class="ph">[[S6: confirm the DMG layout and this step]]</mark></li>
+          <li><strong>Open it.</strong> macOS asks you to confirm the first time.</li>
+          <li><strong>The model download.</strong> Ursa needs a one-time download of about 7 GB: Gemma 4 12B and a small search model. If it's interrupted, choose <strong>Resume download</strong>: what has downloaded so far is kept. Ursa checks every file before using it. Already have the files? Choose <strong>I already have the files…</strong>. After this download, Ursa never goes online.</li>
+          <li><strong>The Introduction (optional).</strong> While the model downloads, Ursa offers to get to know you with a few questions. It helps Ursa understand you from day one. You can skip it with <strong>Maybe later</strong> and do it any time from <em>What I know about you</em>, or Settings › Data.</li>
+        </ol>
+        <p>Need: a Mac with Apple silicon and 16 GB of memory or more, macOS 15 or later, and about 7 GB of free space.</p>
+      </section>
+
+      <section class="lg-sec" id="pair" aria-labelledby="pair-h">
+        <h2 id="pair-h"><span class="lg-hn">02</span><span>Connecting your iPhone</span></h2>
+        <p>Do this once, at home, with both devices on the same Wi-Fi.</p>
+        <ol>
+          <li>On your Mac, open Ursa and go to <strong>Settings › Phone › Pair an iPhone</strong>. Your Mac shows a code.</li>
+          <li>On your iPhone, open Ursa and tap <strong>Scan the code</strong>, then point the camera at the code on your Mac. Ursa uses the camera only to read this code.
+            <ul>
+              <li>Can't scan? On your Mac, choose <strong>Copy code</strong>, then on your iPhone tap <strong>Paste the code instead</strong>.</li>
+            </ul>
+          </li>
+          <li>iOS asks to find devices on your network. <strong>Allow it</strong>, so your iPhone can reach your Mac on your Wi-Fi.</li>
+          <li><strong>Check the three words.</strong> Your iPhone and your Mac each show three words. If they're the same, confirm on your Mac with Touch ID or your password. If they don't match, choose Cancel: nothing is paired.</li>
+        </ol>
+        <p>Codes last five minutes. If yours expired, make a new one on your Mac.</p>
+        <p>The connection is encrypted, and no server is involved. Your iPhone keeps only an encrypted draft of a message you haven't sent yet; everything else stays on your Mac.</p>
+        <p><strong>Tip:</strong> on your Mac, <strong>Stay available while plugged in</strong> (Settings › Phone) keeps Ursa reachable while it charges.</p>
+        <p><strong>If you said no to Local Network access:</strong> Ursa shows "Ursa can't see your network". Open your iPhone's <strong>Settings › Privacy &amp; Security › Local Network</strong>, turn on Ursa, then try again.</p>
+        <p><strong>If the camera is off for Ursa:</strong> paste the code instead, or allow the camera for Ursa in your iPhone's Settings.</p>
+      </section>
+
+      <section class="lg-sec" id="reach" aria-labelledby="reach-h">
+        <h2 id="reach-h"><span class="lg-hn">03</span><span>If your iPhone can't reach your Mac</span></h2>
+        <p>Your iPhone tells you which of these it is:</p>
+        <ul>
+          <li><strong>"[Your Mac] is out of reach."</strong> Make sure your Mac is awake, Ursa is open on it, and your iPhone is on the same Wi-Fi, or set up Tailscale for away from home (section 4).</li>
+          <li><strong>"Your Mac is busy right now."</strong> For example while Ursa is being set up. Your chats show again when it's ready.</li>
+          <li><strong>"Ursa can't see your network."</strong> Allow Ursa under Settings › Privacy &amp; Security › Local Network.</li>
+          <li><strong>"Your Mac no longer recognises this iPhone."</strong> The iPhone was removed on your Mac. Tap <strong>Pair this iPhone again</strong>.</li>
+          <li><strong>"Update Ursa on your Mac"</strong> or <strong>"Update Ursa on your iPhone"</strong>. One of them is older than the other; update it (section 5).</li>
+        </ul>
+        <p>While your Mac is out of reach, what you've typed is kept as an encrypted draft on your iPhone.</p>
+        <p><strong>To remove a paired iPhone:</strong> on your Mac, Settings › Phone › Paired iPhones › Remove…; or on the iPhone, Settings › Your Mac › Unpair this iPhone. Unpairing removes the pairing and any unsent message from that iPhone.</p>
+      </section>
+
+      <section class="lg-sec" id="away" aria-labelledby="away-h">
+        <h2 id="away-h"><span class="lg-hn">04</span><span>Away from home with Tailscale</span></h2>
+        <p>At home, your iPhone finds your Mac over your Wi-Fi. Away from home, it needs Tailscale: a free, private network between the devices you own.</p>
+        <ol>
+          <li>Install Tailscale on your Mac and your iPhone, from the App Store. On your Mac, Ursa's guide is at <strong>Settings › Phone › Use Ursa away from home › Show steps…</strong>; on your iPhone, <strong>Settings › Your Mac › Use Ursa away from home</strong>.</li>
+          <li>Sign in on both with the same Tailscale account.</li>
+          <li>That's it. Your iPhone learns the way back the next time it connects at home.</li>
+        </ol>
+        <p class="lg-fixed">Tailscale can see that your devices exist, never what they say.</p>
+        <p>Your chats and what Ursa knows stay on your Mac. Running your own Headscale server instead? That works too: Ursa only looks for the address your tailnet gives your Mac.</p>
+      </section>
+
+      <section class="lg-sec" id="updating" aria-labelledby="updating-h">
+        <h2 id="updating-h"><span class="lg-hn">05</span><span>Updating</span></h2>
+        <ul>
+          <li><strong>Mac:</strong> download the new version from the Sovernity Ursa page and replace the app in your Applications folder. Your data stays where it is, and the model isn't downloaded again unless the release notes say so. Ursa never updates itself.</li>
+          <li><strong>iPhone:</strong> updates come from the App Store.</li>
+          <li>Keep both up to date. If one is too far behind, your iPhone says which one to update.</li>
+        </ul>
+      </section>
+
+      <section class="lg-sec" id="backup" aria-labelledby="backup-h">
+        <h2 id="backup-h"><span class="lg-hn">06</span><span>Backup, restore and export</span></h2>
+        <p>All in <strong>Settings › Data</strong> on your Mac.</p>
+        <ul>
+          <li><strong>Back up…</strong> saves everything Ursa has, your chats and what it knows about you, to one file locked with a password you choose (at least 8 characters). Save it wherever you like. Ursa never uploads it. <strong>Keep the password safe: without it, nobody can open the backup, including us.</strong></li>
+          <li><strong>Restore…</strong> replaces everything on this Mac with a backup. Your current data is set aside on this Mac, not deleted, and <strong>Restore it…</strong> brings it back if you change your mind.</li>
+          <li><strong>Export…</strong> saves a readable copy of your chats and profile for your own records. The export is not encrypted: anyone who can open the file can read your chats and what Ursa has learned about you.</li>
+        </ul>
+        <p><strong>Moving to a new Mac:</strong> back up on the old Mac, install Ursa on the new one, then restore. Pair your iPhone again from the new Mac. <mark class="ph">[[S6: confirm the restore path on a fresh install, before or after the model download]]</mark></p>
+      </section>
+
+      <section class="lg-sec" id="delete" aria-labelledby="delete-h">
+        <h2 id="delete-h"><span class="lg-hn">07</span><span>Deleting your data</span></h2>
+        <ul>
+          <li><strong>One fact:</strong> in <em>What I know about you</em>, delete or correct it.</li>
+          <li><strong>One chat:</strong> delete it from your chats. <span class="lg-fixed">Deleting a chat deletes the chat and the facts learned only from it. Your broader profile is managed in <em>What I know about you</em>.</span></li>
+          <li><strong>Talk without Ursa learning:</strong> turn off learning for that chat. It shows "Not learning from this chat".</li>
+          <li><strong>Everything:</strong> Settings › Data › <strong>Delete everything…</strong>. This deletes every chat and everything Ursa knows about you, and unpairs your iPhones. The model files stay on your Mac. This can't be undone.</li>
+        </ul>
+      </section>
+
+      <section class="lg-sec" id="uninstall" aria-labelledby="uninstall-h">
+        <h2 id="uninstall-h"><span class="lg-hn">08</span><span>Uninstalling</span></h2>
+        <h3>Mac</h3>
+        <ol>
+          <li>In Ursa, Settings › Data › Delete everything… (optional, but it removes your data right away).</li>
+          <li><mark class="ph">[[S6: uninstall steps: quit Ursa, move it to the Trash, and the folders to remove for the model files and any leftover data, with exact paths]]</mark></li>
+          <li><mark class="ph">[[S6: whether the Keychain item needs removing, and how]]</mark></li>
+        </ol>
+        <h3>iPhone</h3>
+        <ul>
+          <li>Unpair first if you can (Settings › Your Mac › Unpair this iPhone), then delete the app like any other. <mark class="ph">[[S6: confirm whether the pairing in the iPhone Keychain survives deleting the app]]</mark></li>
+        </ul>
+        <p>Backups and exports you saved are your own files; delete them where you saved them.</p>
+      </section>
+
+      <section class="lg-sec" id="unsupported" aria-labelledby="unsupported-h">
+        <h2 id="unsupported-h"><span class="lg-hn">09</span><span>If your Mac isn't supported</span></h2>
+        <p>Ursa runs its AI model on your Mac, and that takes a Mac with <strong>Apple silicon and 16 GB of memory or more</strong>.</p>
+        <ul>
+          <li><strong>Intel Macs</strong> can't run Ursa. It's built for Apple silicon only.</li>
+          <li><strong>Macs with 8 GB of memory:</strong> Ursa checks before downloading anything and tells you "Ursa needs a Mac with at least 16 GB of memory." Nothing is downloaded.</li>
+          <li><strong>macOS 14 or earlier:</strong> Ursa needs macOS 15 or later.</li>
+        </ul>
+        <p>Ursa for iPhone needs a Mac running Ursa; it doesn't run the AI on the iPhone.</p>
+      </section>
+
+      <section class="lg-sec" id="crisis" aria-labelledby="crisis-h">
+        <h2 id="crisis-h"><span class="lg-hn">10</span><span>Help in a crisis</span></h2>
+        <ul>
+          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is out of reach.</li>
+          <li><strong>On Mac:</strong> <mark class="ph">[[S4: Help › Help in a crisis, once it ships]]</mark></li>
+          <li><strong>Call or text 988</strong>, the 988 Suicide &amp; Crisis Lifeline, or <strong>call 911</strong> if you're in immediate danger. Outside the US, call your local emergency number.</li>
+          <li class="lg-fixed">Ursa is an AI, not a person or a therapist.</li>
+          <li>It can miss things, and it can't contact anyone for you.</li>
+          <li>How Ursa responds to signs of a crisis: the crisis protocol (<a href="/ursa/crisis-protocol/">/ursa/crisis-protocol/</a>).</li>
+        </ul>
+      </section>
+
+      <section class="lg-sec" id="report" aria-labelledby="report-h">
+        <h2 id="report-h"><span class="lg-hn">11</span><span>Reporting a problem</span></h2>
+        <p>Email <a href="mailto:support@sovernity.com">support@sovernity.com</a>. It helps to include:</p>
+        <ul>
+          <li>The Ursa version (Mac: Settings › About; iPhone: Settings, at the bottom).</li>
+          <li>Your Mac model, its memory, and your macOS version; your iOS version if it's about the iPhone.</li>
+          <li>What you did, what you expected, and what happened.</li>
+        </ul>
+        <p>Ursa doesn't send logs or crash reports to us, so there's nothing on our side to look up.</p>
+        <p><strong>A reply that seemed unsafe</strong>, or crisis help that showed when it shouldn't have (or didn't when it should): please tell us. Describe it in your own words; you don't need to paste the conversation, and please leave out anything you'd rather keep to yourself. If you're in crisis right now, call or text 988, or call 911, first.</p>
+      </section>
+    </article>
+  </div>
+</main>
+<!-- include:ursa-footer -->
+</body>
+</html>

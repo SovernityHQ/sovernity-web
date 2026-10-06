@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- include:head -->
+<link rel="stylesheet" href="/assets/css/studio.css">
+<link rel="stylesheet" href="/assets/css/legal.css">
+<title>Crisis protocol · Sovernity Ursa</title>
+<meta name="description" content="How Sovernity Ursa responds when a conversation shows signs of a crisis, what it shows you, and what it can't do.">
+</head>
+<body data-page="legal">
+<!-- include:seal-defs -->
+<!-- include:studio-header -->
+<!-- include:ursa-subnav -->
+<main id="main" class="legal">
+  <div class="wrap lg-grid">
+
+    <aside class="lg-toc" aria-label="Contents">
+      <p class="lg-toc-label">Contents</p>
+      <ol>
+        <li><a href="#when"><span class="lg-tn">1</span><span>When Ursa shows crisis help</span></a></li>
+        <li><a href="#how"><span class="lg-tn">2</span><span>How Ursa looks for signs of a crisis</span></a></li>
+        <li><a href="#card"><span class="lg-tn">3</span><span>What the card shows</span></a></li>
+        <li><a href="#keeps"><span class="lg-tn">4</span><span>If it keeps coming up</span></a></li>
+        <li><a href="#any-time"><span class="lg-tn">5</span><span>Help in a crisis, any time</span></a></li>
+        <li><a href="#cant"><span class="lg-tn">6</span><span>What Ursa can't do</span></a></li>
+        <li><a href="#count"><span class="lg-tn">7</span><span>How many times the card has shown</span></a></li>
+        <li><a href="#report"><span class="lg-tn">8</span><span>Reporting a problem with a reply</span></a></li>
+        <li><a href="#about"><span class="lg-tn">9</span><span>About this page</span></a></li>
+      </ol>
+    </aside>
+
+    <article class="lg-article">
+      <p class="lg-kicker">Sovernity Ursa</p>
+      <h1 class="lg-h1">Crisis protocol</h1>
+      <p class="lg-lede">How Sovernity Ursa responds when a conversation shows signs of a crisis, what it shows you, and what it can't do.</p>
+      <p class="lg-meta"><span>Last updated <mark class="ph">[[S4: date of publication]]</mark></span><span>Our reading of the law, not legal advice.</span></p>
+
+      <section class="lg-help" aria-labelledby="help-h">
+        <h2 id="help-h">If you need help now</h2>
+        <ul>
+          <li><span class="lg-num" aria-hidden="true">988</span><p><strong>Call or text 988</strong>, the 988 Suicide &amp; Crisis Lifeline, any time. Or visit <a href="https://988lifeline.org">988lifeline.org</a>.</p></li>
+          <li><span class="lg-num" aria-hidden="true">911</span><p><strong>Call 911</strong> if you're in immediate danger.</p></li>
+        </ul>
+        <p class="lg-note">US numbers. Elsewhere, call your local emergency number.</p>
+      </section>
+
+      <section class="lg-glance" aria-labelledby="glance-h">
+        <h2 id="glance-h">At a glance</h2>
+        <ul>
+          <li>Ursa checks each message for signs of a crisis. The check runs on your Mac.</li>
+          <li>When it sees them, a card under Ursa's reply shows ways to reach a person: call or text 988, or call 911.</li>
+          <li>The card is part of the app, not the AI's reply, so the AI can't remove it.</li>
+          <li>Ursa can miss things, and it can't contact anyone for you.</li>
+          <li>Ursa sends us nothing, so we can't count how often the card appears.</li>
+        </ul>
+      </section>
+
+      <details class="lg-toc-m" open>
+        <summary>Contents</summary>
+        <ol>
+          <li><a href="#when">When Ursa shows crisis help</a></li>
+          <li><a href="#how">How Ursa looks for signs of a crisis</a></li>
+          <li><a href="#card">What the card shows</a></li>
+          <li><a href="#keeps">If it keeps coming up</a></li>
+          <li><a href="#any-time">Help in a crisis, any time</a></li>
+          <li><a href="#cant">What Ursa can't do</a></li>
+          <li><a href="#count">How many times the card has shown</a></li>
+          <li><a href="#report">Reporting a problem with a reply</a></li>
+          <li><a href="#about">About this page</a></li>
+        </ol>
+      </details>
+
+      <section class="lg-sec" id="when" aria-labelledby="when-h">
+        <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
+        <p>Before Ursa writes a reply, it checks your message for signs that you might be thinking about suicide or might hurt yourself. The check runs on your Mac, like everything else in Ursa. Your words aren't sent anywhere to be checked.</p>
+        <p>If the check finds those signs, Ursa answers carefully. It asks how you are, shows the crisis card under its reply, and stays on that. While it does, it doesn't draw on what it knows about you, and it never learns from those messages.</p>
+        <p>Ursa stays in this careful mode while any of your last three messages showed those signs. <mark class="ph">[[S4: today's code uses this message plus the two before it (<code>ReplyService.crisisLookback = 2</code>); reconfirm against the shipped build]]</mark></p>
+      </section>
+
+      <section class="lg-sec" id="how" aria-labelledby="how-h">
+        <h2 id="how-h"><span class="lg-hn">02</span><span>How Ursa looks for signs of a crisis</span></h2>
+        <dl class="lg-dl">
+          <dt>Method:</dt>
+          <dd><mark class="ph">[[S4: name of the evidence-based method used to measure suicidal ideation, and its source]]</mark></dd>
+          <dt>How we tested it:</dt>
+          <dd><mark class="ph">[[S4: the test set, how it was graded (locally), and the date]]</mark></dd>
+          <dt>Recall <small>(how often it caught the signs when they were there):</small></dt>
+          <dd><mark class="ph">[[S4: recall]]</mark></dd>
+          <dt>False positives <small>(how often it showed the card when they weren't):</small></dt>
+          <dd><mark class="ph">[[S4: false-positive rate]]</mark></dd>
+        </dl>
+        <p>No check like this is perfect. Ursa can miss signs of a crisis, and it can show the card when you didn't need it. We chose to lean towards showing it.</p>
+        <p><mark class="ph">[[S4: confirm "lean towards showing it" matches the tuned threshold, or drop the sentence]]</mark></p>
+      </section>
+
+      <section class="lg-sec" id="card" aria-labelledby="card-h">
+        <h2 id="card-h"><span class="lg-hn">03</span><span>What the card shows</span></h2>
+        <p>The first time Ursa sees signs of a crisis in a conversation, a card appears under its reply:</p>
+        <div class="lg-card" role="group" aria-label="The crisis card, as text">
+          <p class="lg-card-t">Talk with a person now</p>
+          <p>Call or text 988, the Suicide &amp; Crisis Lifeline, any time, day or night.</p>
+          <p class="lg-btns"><span class="lg-btns-l">Buttons:</span> <span class="lg-pill">Call 988</span> <span class="lg-pill">Text 988</span></p>
+          <p><strong>In immediate danger?</strong> <strong>Call 911</strong></p>
+          <p class="lg-cap">US numbers. Elsewhere, call your local emergency number. Ursa is an AI and can't contact anyone for you.</p>
+        </div>
+        <p><mark class="ph">[[S4: whether the card also carries a 988lifeline.org link, which OR SB 1546 asks for from 2027-01-01]]</mark></p>
+        <p>On a Mac, calls and texts go through your iPhone, with FaceTime and Messages. If your Mac can't place the call, the numbers stay on screen so you can dial them from any phone.</p>
+        <p>The card is drawn by the app, not written by the AI. The AI can't hide it, change it or leave it out. If you stop a reply early, the card still appears. Deleting a reply doesn't remove a card that has already shown.</p>
+      </section>
+
+      <section class="lg-sec" id="keeps" aria-labelledby="keeps-h">
+        <h2 id="keeps-h"><span class="lg-hn">04</span><span>If it keeps coming up</span></h2>
+        <p>If signs of a crisis continue later in the same conversation, every reply after the first one carries a shorter line with the same numbers:</p>
+        <p class="lg-row" role="group" aria-label="The shorter line, as text"><strong>Crisis line, any time</strong> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Text 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 911</span></p>
+        <p>(on screen the row uses phone and message icons beside the numbers). This is Ursa's further step after the first referral.</p>
+        <p><mark class="ph">[[S4: the exact continued-ideation behaviour as shipped: when the compact row shows, whether the full card ever repeats, and how the reply itself changes]]</mark></p>
+      </section>
+
+      <section class="lg-sec" id="any-time" aria-labelledby="any-time-h">
+        <h2 id="any-time-h"><span class="lg-hn">05</span><span>Help in a crisis, any time</span></h2>
+        <p>You don't need to wait for the card.</p>
+        <ul>
+          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is off or out of reach.</li>
+          <li><strong>On Mac:</strong> Help › Help in a crisis, with the numbers set large so you can dial them from any phone.</li>
+        </ul>
+      </section>
+
+      <section class="lg-sec" id="cant" aria-labelledby="cant-h">
+        <h2 id="cant-h"><span class="lg-hn">06</span><span>What Ursa can't do</span></h2>
+        <ul>
+          <li class="lg-fixed">Ursa is an AI, not a person or a therapist.</li>
+          <li>It can't call, text or alert anyone for you, including emergency services.</li>
+          <li>It can't tell whether you called or texted, or what happened next.</li>
+          <li>It can miss signs of a crisis.</li>
+          <li>It isn't medical or mental health care, and it isn't built for emergencies.</li>
+        </ul>
+      </section>
+
+      <section class="lg-sec" id="count" aria-labelledby="count-h">
+        <h2 id="count-h"><span class="lg-hn">07</span><span>How many times the card has shown</span></h2>
+        <p>Some state laws ask companies like us to report or publish how many times their app referred people to a crisis line each year.</p>
+        <p>We can't know that number. Ursa sends us nothing: no messages, no usage data, no counts. What happens in Ursa stays on your Mac and iPhone. We chose not to add reporting just for this, so we have no count to publish.</p>
+        <p><mark class="ph">[[Founder: revisit before 2027-07-01, per the showcase-release scope decision (accepted risk)]]</mark></p>
+      </section>
+
+      <section class="lg-sec" id="report" aria-labelledby="report-h">
+        <h2 id="report-h"><span class="lg-hn">08</span><span>Reporting a problem with a reply</span></h2>
+        <p>If a reply from Ursa seemed unsafe, or the card showed when it shouldn't have (or didn't when it should), please tell us at <a href="mailto:support@sovernity.com">support@sovernity.com</a>.</p>
+        <p>Ursa doesn't send us anything, so we only see what you choose to write. Describe what happened in your own words. You don't need to paste the conversation, and please leave out anything you'd rather keep to yourself.</p>
+        <p>If you're in crisis right now, please call or text 988, or call 911, before writing to us. Email isn't watched around the clock.</p>
+      </section>
+
+      <section class="lg-sec" id="about" aria-labelledby="about-h">
+        <h2 id="about-h"><span class="lg-hn">09</span><span>About this page</span></h2>
+        <p>This page describes Sovernity Ursa's crisis protocol, as California asks of AI chat apps (CA SB 243, Business and Professions Code §22602(b)). Oregon (SB 1546) and Washington (ESHB 2225) add requirements from 2027-01-01, and we plan to meet them with an update before then, including signs of an eating disorder in the check and the card. <mark class="ph">[[S4: confirm the 1.0.x scope and timing]]</mark></p>
+        <p>This is our reading of these laws, not legal advice.</p>
+        <p class="lg-fixed">For adults 18+. May not be suitable for some minors.</p>
+        <p class="lg-quiet">Last updated: <mark class="ph">[[S4: date of publication]]</mark></p>
+      </section>
+    </article>
+  </div>
+</main>
+<!-- include:ursa-footer -->
+</body>
+</html>

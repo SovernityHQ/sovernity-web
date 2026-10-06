@@ -1,0 +1,191 @@
+/* Legal and support pages (crisis protocol, privacy, terms, support): the studio frame with the
+   Ursa sub-nav and a "Sovernity Ursa" product tag. Ported from canvas R2Crisis.css (.r2c-*);
+   container queries became @media (max-width: 1000px | 700px). */
+
+/* Studio tokens the canvas adds for these pages (R2Crisis renderVals: band, surface, faint, ul). */
+:root { --lg-band: #EFECE5; --lg-surface: #FBFAF7; --lg-faint: #6F6A62; --lg-ul: #A9A398; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --lg-band: #1C1B18; --lg-surface: #1F1E1B; --lg-faint: #8F897F; --lg-ul: #6E6A62; }
+}
+:root[data-theme="dark"] { --lg-band: #1C1B18; --lg-surface: #1F1E1B; --lg-faint: #8F897F; --lg-ul: #6E6A62; }
+
+/* ---------- frame on legal pages ---------- */
+/* The sub-nav sits on the canvas product band. */
+body[data-page="legal"] .ursa-subnav { background: var(--lg-band); border-bottom-color: var(--line); }
+/* Its tracker is not driven here: it rests on the finished figure (all stars lit, all lines drawn,
+   no halo, no counter), so nothing animates on these pages. */
+body[data-page="legal"] .r2u-tl { stroke-dashoffset: 0; stroke-opacity: .95; }
+body[data-page="legal"] .r2u-ts { fill: var(--mem); fill-opacity: 1; transform: none; }
+body[data-page="legal"] .r2u-th, body[data-page="legal"] .r2u-count { display: none; }
+
+/* ---------- layout ---------- */
+.legal { padding: 72px 0 96px; font-size: 17px; line-height: 1.7; }
+.legal a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--lg-ul); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.legal a:hover { text-decoration-color: var(--ink); }
+.lg-grid { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 72px; align-items: start; }
+.lg-article { max-width: 68ch; min-width: 0; }
+
+/* ---------- title block ---------- */
+.lg-kicker {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 18px;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.lg-kicker::before { content: ""; width: 18px; height: 2px; border-radius: 2px; background: var(--vermilion); }
+.lg-h1 { font-family: var(--font-display); font-weight: 400; font-size: 64px; line-height: 1.04; letter-spacing: -0.02em; }
+.lg-lede { max-width: 34em; margin-top: 22px; font-size: 21px; line-height: 1.55; }
+.lg-meta { margin-top: 20px; font-size: 14px; color: var(--muted); }
+.lg-meta span + span::before { content: "·"; margin: 0 10px; color: var(--lg-faint); }
+
+/* ---------- help now / contact: calm, plain text ---------- */
+.lg-help { margin-top: 48px; padding: 26px 0 24px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+.lg-help h2 {
+  margin: 0 0 14px;
+  font-size: 13px; font-weight: 700; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.lg-help ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.lg-help li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 20px; align-items: baseline; }
+.lg-num { font-family: var(--font-display); font-size: 30px; line-height: 1.1; letter-spacing: -0.01em; }
+.lg-help .lg-note { margin-top: 16px; font-size: 15px; color: var(--muted); }
+.lg-help.lg-contact ul { gap: 10px; }
+.lg-help.lg-contact li { display: block; }
+
+/* ---------- at a glance / in short ---------- */
+.lg-glance { margin-top: 40px; padding: 28px 32px 26px; border: 1px solid var(--line); border-radius: 14px; background: var(--lg-surface); }
+.lg-glance h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; }
+.lg-glance ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lg-glance li { position: relative; padding-left: 22px; font-size: 16.5px; line-height: 1.6; }
+.lg-glance li::before {
+  content: ""; position: absolute; left: 2px; top: .72em;
+  width: 7px; height: 7px; border: 1.5px solid var(--ink); border-radius: 50%;
+}
+
+/* ---------- contents ---------- */
+.lg-toc { position: sticky; top: 92px; font-size: 14px; line-height: 1.45; }
+.lg-toc-label { margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lg-toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.legal .lg-toc a {
+  display: grid; grid-template-columns: 22px 1fr; gap: 6px;
+  padding: 7px 0 7px 16px; margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--muted); text-decoration: none;
+}
+.legal .lg-toc a:hover { color: var(--ink); border-left-color: var(--line); }
+.lg-tn { font-variant-numeric: tabular-nums; color: var(--lg-faint); }
+.lg-toc-m { display: none; }
+
+/* ---------- sections ---------- */
+.lg-sec { padding-top: 56px; }
+.lg-sec + .lg-sec { margin-top: 40px; border-top: 1px solid var(--line); }
+.lg-sec h2 {
+  display: flex; gap: 16px; align-items: baseline;
+  margin: 0 0 18px;
+  font-family: var(--font-display); font-weight: 400; font-size: 34px; line-height: 1.15; letter-spacing: -0.015em;
+}
+.lg-hn {
+  min-width: 24px; flex: none;
+  font-family: var(--font-text); font-size: 14px; font-weight: 700; letter-spacing: .04em;
+  font-variant-numeric: tabular-nums; color: var(--lg-faint);
+}
+.lg-sec h3 { margin: 24px 0 8px; font-size: 17px; font-weight: 700; line-height: 1.5; }
+.lg-sec p { margin: 0 0 16px; }
+.lg-sec ul, .lg-sec ol { margin: 0 0 18px; padding-left: 22px; }
+.lg-sec li { margin: 0 0 8px; padding-left: 4px; }
+.lg-sec li > ul { margin: 8px 0 0; }
+.lg-sec li::marker { color: var(--lg-faint); }
+.lg-sec ol > li::marker { font-weight: 700; font-variant-numeric: tabular-nums; }
+.lg-fixed { font-weight: 700; }
+.lg-quiet { font-size: 15px; color: var(--muted); }
+
+.lg-dl { display: grid; grid-template-columns: 230px minmax(0, 1fr); margin: 0 0 18px; border-top: 1px solid var(--line); }
+.lg-dl dt, .lg-dl dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.lg-dl dt { padding-right: 16px; font-size: 15px; font-weight: 700; }
+.lg-dl dt small { display: block; font-size: 13.5px; font-weight: 500; color: var(--muted); }
+.lg-dl dd { font-size: 16px; }
+
+/* The crisis card and the shorter line, transcribed as text. */
+.lg-card { margin: 6px 0 20px; padding: 22px 26px; border: 1px solid var(--line); border-radius: 14px; background: var(--lg-surface); }
+.lg-sec .lg-card p { margin: 0 0 12px; font-size: 16px; }
+.lg-sec .lg-card .lg-card-t { margin-bottom: 6px; font-family: var(--font-display); font-size: 22px; line-height: 1.25; }
+.lg-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; font-size: 14px; }
+.lg-btns .lg-pill { padding: 5px 14px; border: 1px solid var(--line); border-radius: 999px; font-weight: 700; }
+.lg-btns .lg-btns-l { color: var(--muted); }
+.lg-sec .lg-card .lg-cap { margin: 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.lg-sec .lg-row {
+  display: inline-flex; flex-wrap: wrap; gap: 6px 12px;
+  margin: 6px 0 20px; padding: 9px 20px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--lg-surface);
+  font-size: 15px;
+}
+.lg-row .lg-sep { color: var(--lg-faint); }
+
+/* Tables scroll inside their own box on narrow screens. */
+.lg-table { margin: 0 0 20px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--lg-surface); }
+.lg-table table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 15.5px; line-height: 1.55; }
+/* break-word, not the base anywhere: words keep their min-content width, so a narrow screen scrolls the box
+   instead of breaking "download" mid-word. */
+.lg-table th, .lg-table td { padding: 12px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: break-word; }
+.lg-table thead th { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lg-table tbody tr:last-child > * { border-bottom: 0; }
+.lg-table tbody th { font-weight: 700; }
+
+/* Long strings wrap at phone width. */
+.lg-article a, .lg-article code { overflow-wrap: anywhere; }
+.legal code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .86em; }
+
+/* Placeholder holes: left as the literal [[X: …]] text, set off so nobody mistakes them for copy. */
+mark.ph {
+  padding: 1px 7px;
+  border: 1px dashed var(--lg-faint);
+  border-radius: 6px;
+  background: var(--lg-band);
+  color: var(--muted);
+  font-size: .88em;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+mark.ph code { font-size: 1em; }
+
+/* ---------- narrow ---------- */
+@media (max-width: 1000px) {
+  .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .lg-toc { display: none; }
+  .lg-toc-m { display: block; margin-top: 36px; border: 1px solid var(--line); border-radius: 14px; background: var(--lg-surface); }
+  .lg-toc-m summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; list-style: none; cursor: pointer;
+    font-size: 15px; font-weight: 700;
+  }
+  .lg-toc-m summary::-webkit-details-marker { display: none; }
+  .lg-toc-m summary::after { content: "+"; font-size: 20px; font-weight: 500; line-height: 1; color: var(--muted); }
+  .lg-toc-m[open] summary::after { content: "\2212"; }
+  .lg-toc-m ol { margin: 0; padding: 4px 20px 16px 44px; font-size: 15px; line-height: 1.5; }
+  .lg-toc-m li { padding: 5px 0; }
+  .lg-toc-m li::marker { color: var(--lg-faint); }
+  .legal .lg-toc-m a { text-decoration: none; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 700px) {
+  .legal { padding: 40px 0 64px; font-size: 16.5px; line-height: 1.68; }
+  .lg-h1 { font-size: 42px; }
+  .lg-lede { font-size: 18.5px; }
+  .lg-meta span { display: block; }
+  .lg-meta span + span::before { content: none; }
+  .lg-help { margin-top: 36px; }
+  .lg-help li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .lg-num { font-size: 26px; }
+  .lg-glance { margin-top: 28px; padding: 22px 20px 20px; }
+  .lg-glance h2 { font-size: 22px; }
+  .lg-sec { padding-top: 40px; }
+  .lg-sec + .lg-sec { margin-top: 32px; }
+  .lg-sec h2 { gap: 12px; font-size: 27px; }
+  .lg-dl { grid-template-columns: minmax(0, 1fr); }
+  .lg-dl dt { padding-bottom: 0; border-bottom: 0; }
+  .lg-dl dd { padding-top: 2px; }
+  .lg-card { padding: 18px; }
+  .lg-sec .lg-row { border-radius: 14px; }
+  .lg-row .lg-sep { display: none; }
+}
