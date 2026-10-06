@@ -22,4 +22,5 @@ test('current step is the last section above 55% of the viewport', () => {
   assert.equal(currentStep([0, 300, 900, 1600], 1000, false), 2);
   assert.equal(currentStep([800, 1600], 1000, false), 1);
   assert.equal(currentStep([0, 300], 1000, true), 9);
+  assert.equal(currentStep([0, 300], 1000, true, 5), 5);
 });

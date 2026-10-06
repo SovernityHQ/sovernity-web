@@ -5,7 +5,7 @@
 
 .ursa { font-family: var(--font-system); font-weight: 400; font-size: 17px; line-height: 1.6; color: var(--ink-u); }
 .ursa :where(ul) { list-style: none; margin: 0; padding: 0; }
-.ursa a { color: var(--accentText); }
+.ursa :where(a) { color: var(--accentText); } /* only .ursa counts, so the later .r2u-btn keeps --onAccent on button links */
 .ursa :where(a, button, summary):focus-visible { outline-color: var(--accent); }
 .ursa .night-u :where(a, button, summary):focus-visible { outline-color: var(--focus); }
 

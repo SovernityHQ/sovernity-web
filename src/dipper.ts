@@ -28,10 +28,10 @@ export function trackerState(step: number, total = TOTAL): TrackerState {
 
 /**
  * The step of the last section (in page order, steps 1…n) whose top is above 55% of the viewport;
- * 1 when none is, and the last step when the page is scrolled to the bottom.
+ * 1 when none is, and `total` (the last step) when the page is scrolled to the bottom.
  */
-export function currentStep(sectionTops: number[], viewportH: number, atBottom: boolean): number {
-  if (atBottom) return TOTAL;
+export function currentStep(sectionTops: number[], viewportH: number, atBottom: boolean, total = TOTAL): number {
+  if (atBottom) return total;
   let step = 1;
   sectionTops.forEach((top, i) => { if (top < viewportH * 0.55) step = i + 1; });
   return step;
