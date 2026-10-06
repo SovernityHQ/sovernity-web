@@ -31,7 +31,8 @@ export async function startServer(dir: string, port: number): Promise<{ url: str
       res.end(req.method === 'HEAD' ? undefined : body);
     };
     try {
-      const path = decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname);
+      const url = new URL(req.url ?? '/', 'http://x');
+      const path = decodeURIComponent(url.pathname);
       const file = resolve(root, '.' + path);
       if (file === root || file.startsWith(root + sep)) {
         if (path.endsWith('/')) {
@@ -39,7 +40,7 @@ export async function startServer(dir: string, port: number): Promise<{ url: str
         } else if (await isFile(file)) {
           return await send(200, file);
         } else if (await isFile(join(file, 'index.html'))) {
-          res.writeHead(301, { location: path + '/' });
+          res.writeHead(301, { location: url.pathname + '/' + url.search });
           return res.end();
         }
       }

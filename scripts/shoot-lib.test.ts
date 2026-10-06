@@ -14,3 +14,10 @@ test('large text thresholds', () => {
   assert.ok(isLargeText(24, 400)); assert.ok(isLargeText(19, 700)); assert.ok(!isLargeText(18, 400));
 });
 test('matrix size', () => { assert.equal(matrix(Array.from({ length: 10 }, (_, i) => `/p${i}/`)).length, 80); });
+test('matrix composition', () => {
+  const m = matrix(Array.from({ length: 10 }, (_, i) => `/p${i}/`));
+  assert.equal(m.filter((s) => !s.js).length, 20);
+  assert.equal(m.filter((s) => s.motion === 'reduce').length, 20);
+  assert.equal(m.filter((s) => s.motion === 'reduce' && !s.js).length, 0);
+  assert.equal(m.filter((s) => s.js && s.motion === 'full').length, 40);
+});
