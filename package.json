@@ -1,0 +1,20 @@
+{
+  "name": "sovernity-web",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts && tsc -p tsconfig.json",
+    "check": "node scripts/check.ts",
+    "test": "node --test \"scripts/**/*.test.ts\" \"src/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p scripts/tsconfig.json",
+    "serve": "node scripts/serve.ts",
+    "shoot": "node scripts/shoot.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "typescript": "7.0.2"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2022", "module": "es2022", "moduleResolution": "bundler",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "rootDir": "src", "outDir": "_site/assets/js",
+    "strict": true, "noUncheckedIndexedAccess": true, "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true, "rewriteRelativeImportExtensions": true,
+    "sourceMap": false, "removeComments": true
+  },
+  "include": ["src/**/*.ts"], "exclude": ["src/**/*.test.ts"]
+}
