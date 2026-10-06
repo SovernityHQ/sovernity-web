@@ -29,7 +29,7 @@ npm run serve                             # local server that mimics GitHub Page
 npm run shoot                             # screenshot matrix and visual assertions; needs local Chrome, not run in CI
 ```
 
-`check` fails while any `[[...]]` placeholder is left in a page; `--draft` turns those into warnings. CI uses `--draft` on pull requests and strict mode on `main`.
+`check` fails while any `[[...]]` placeholder is left in a page; `--draft` turns those into warnings. CI runs the check strict on every non-pull-request run (pushes to `main` and manual runs) and with `--draft` on pull requests.
 
 ## Copy rules
 
