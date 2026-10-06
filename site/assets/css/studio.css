@@ -1,0 +1,245 @@
+/* Studio frame: header, Ursa sub-nav, footers, theme toggle, phone Menu.
+   Ported from canvas R2SealHome.css and R2Ursa.css (header, sub-nav, footer rules). */
+
+/* On the Ursa page the frame sits on Dusk paper (R2Ursa.css .r2u-studio uses the Dusk tokens). */
+body[data-page="ursa"] {
+  --paper: var(--bg);
+  --line: var(--line-u);
+  --ink: var(--ink-u);
+  --muted: var(--muted-u);
+  background: var(--bg);
+  color: var(--ink-u);
+}
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30; /* above the sub-nav, so the open Menu panel covers it */
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+/* Under a sticky Ursa sub-nav the header scrolls away and the sub-nav sticks. */
+.site-header:has(+ .ursa-subnav) { position: relative; }
+
+.site-bar { display: flex; align-items: center; gap: 24px; }
+.site-header .site-bar { min-height: 72px; }
+
+.site-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.site-seal { width: 40px; height: 40px; flex: none; color: var(--vermilion); }
+.night .site-seal { color: var(--seal); }
+.site-wm {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 1;
+  letter-spacing: -0.008em;
+  white-space: nowrap;
+}
+
+.site-nav { margin-left: auto; }
+.site-nav ul { display: flex; gap: 36px; font-size: 15px; font-weight: 500; }
+.site-nav a {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1.5px solid transparent;
+  transition: border-color .25s;
+}
+.site-nav a:hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--ink); }
+
+/* ---------- pill buttons: theme toggle, Menu ---------- */
+.theme-toggle, .menu-btn {
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.theme-toggle svg, .menu-btn svg { width: 16px; height: 16px; flex: none; }
+.menu-btn { font-size: 15px; padding: 0 16px; }
+.theme-toggle:hover, .menu-btn:hover { border-color: var(--ink); }
+
+/* The toggle needs JS, so it shows only with html.js; the Menu stays hidden without JS. */
+.theme-toggle { display: none; }
+html.js .site-header .theme-toggle { display: inline-flex; }
+
+/* ---------- Ursa sub-nav ---------- */
+.ursa-subnav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line-u);
+  color: var(--ink-u);
+}
+.ursa-subnav .site-bar { min-height: 60px; justify-content: space-between; }
+.ursa-brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink-u); text-decoration: none; }
+.ursa-brand-name {
+  font-family: var(--font-ursa);
+  font-weight: 400;
+  font-size: 23px;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+.r2u-count {
+  padding-left: 12px;
+  border-left: 1px solid var(--line-u);
+  font-family: var(--font-system);
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+}
+.ursa-subnav ul { display: flex; gap: 6px; font-family: var(--font-system); font-size: 15px; font-weight: 400; }
+.ursa-subnav ul a {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  color: var(--muted-u);
+  text-decoration: none;
+}
+.ursa-subnav ul a:hover { color: var(--ink-u); }
+.ursa-subnav ul a[aria-current="page"] { background: var(--accentSoft); color: var(--ink-u); }
+
+/* Tracker Dipper (static here; dipper.ts drives the classes). */
+.r2u-trk { width: 84px; height: 48px; overflow: visible; flex: none; }
+.r2u-tg {
+  fill: none; stroke: var(--faint); stroke-opacity: .55; stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .1 9;
+}
+.r2u-tl {
+  fill: none; stroke: var(--accent); stroke-opacity: .8; stroke-width: 3.6; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+.r2u-tl.on { stroke-dashoffset: 0; }
+.r2u-ts {
+  fill: var(--ink-u); fill-opacity: .24;
+  transform-box: fill-box; transform-origin: center; transform: scale(.62);
+}
+.r2u-ts.on { fill: var(--mem); fill-opacity: 1; transform: none; }
+.r2u-th { fill: none; stroke: var(--mem); stroke-width: 2.4; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.r2u-trk.is-done .r2u-tl { stroke-opacity: .95; }
+html.js .r2u-tl { transition: stroke-dashoffset 1.6s cubic-bezier(.42, 0, .58, 1); }
+html.js .r2u-ts { transition: fill .9s ease, fill-opacity .9s ease, transform 1s cubic-bezier(.3, 1.7, .45, 1); }
+html.js .r2u-th.on { animation: r2u-halo 3.4s ease-out infinite; }
+@keyframes r2u-halo { 0% { opacity: .75; transform: scale(.45); } 100% { opacity: 0; transform: scale(1.7); } }
+
+/* ---------- footers ---------- */
+.site-footer {
+  padding: 64px 0 56px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+.foot-top { display: flex; align-items: center; justify-content: space-between; gap: 24px 32px; flex-wrap: wrap; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 12px 32px; font-size: 16px; font-weight: 600; }
+.foot-links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.foot-links a:hover { border-bottom-color: var(--ink); }
+.site-footer .site-seal { width: 34px; height: 34px; }
+.site-footer .site-wm { font-size: 26px; }
+.foot-small {
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  margin-top: 44px; font-size: 14px; color: var(--muted);
+}
+.foot-theme { display: none; margin-top: 32px; }
+
+/* Ursa footer: a Dusk night panel with the product tag (R2Ursa.css .r2u-foot). */
+.ursa-footer {
+  padding: 72px 0 64px;
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--muted-u);
+  border-top-color: var(--line-u);
+}
+.ursa-footer .foot-top { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--line-u); flex-wrap: nowrap; }
+.ursa-footer .site-home { color: var(--ink-u); }
+.ursa-footer .site-seal { width: 32px; height: 32px; }
+.ursa-footer .site-wm { font-size: 23px; }
+.foot-id { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 22px; }
+.product-tag {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 5px 14px 5px 10px;
+  border: 1px solid var(--line-u); border-radius: 999px;
+  color: var(--ink-u); text-decoration: none;
+  font-family: var(--font-ursa); font-size: 16px; line-height: 1.2; letter-spacing: -0.01em;
+}
+.product-tag svg { width: 44px; height: 26px; flex: none; overflow: visible; }
+.product-tag path {
+  fill: none; stroke: var(--accent); stroke-opacity: .72; stroke-width: 1.1;
+  vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
+}
+.product-tag circle { fill: var(--mem); transform-box: fill-box; transform-origin: center; transform: scale(1.5); }
+.ursa-footer .foot-links { gap: 8px 28px; font-family: var(--font-system); font-size: 15px; font-weight: 400; }
+.ursa-footer .foot-links a { color: var(--ink-u); border-bottom: 0; padding-bottom: 0; }
+.ursa-footer .foot-links a:hover { text-decoration: underline; }
+.foot-notes { font-family: var(--font-system); }
+.foot-notes p + p { margin-top: 8px; }
+.foot-notes .fx { color: var(--ink-u); }
+.ursa-footer .theme-toggle { border-color: var(--line-u); color: var(--ink-u); }
+
+/* ---------- studio breakpoints ---------- */
+@media (max-width: 860px) {
+  .site-nav ul { gap: 28px; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 700px) {
+  .site-header .site-bar { min-height: 58px; gap: 8px 12px; flex-wrap: wrap; padding-top: 10px; padding-bottom: 10px; }
+  .site-seal { width: 34px; height: 34px; }
+  .site-wm { font-size: 23px; }
+  .site-home { gap: 11px; }
+
+  /* Without JS the nav links wrap under the logo. */
+  .site-nav { flex-basis: 100%; margin-left: 0; }
+  .site-nav ul { flex-wrap: wrap; gap: 4px 24px; }
+
+  /* With JS they collapse behind Menu. */
+  html.js .site-header .site-bar { flex-wrap: nowrap; padding-top: 0; padding-bottom: 0; }
+  html.js .site-header .theme-toggle { display: none; }
+  html.js .menu-btn { display: inline-flex; margin-left: auto; }
+  html.js .site-header { position: sticky; }
+  html.js .site-header:has(+ .ursa-subnav) { position: relative; }
+  html.js .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 20px 16px;
+  }
+  html.js .site-nav.is-open { display: block; }
+  html.js .site-nav ul { flex-direction: column; gap: 0; font-size: 17px; }
+  html.js .site-nav a { padding: 10px 0; }
+
+  .ursa-subnav .site-bar { min-height: 54px; gap: 8px; }
+  .r2u-trk { width: 70px; height: 40px; }
+  .ursa-brand-name, .r2u-count { display: none; }
+  .ursa-subnav ul { gap: 2px; font-size: 14px; }
+  .ursa-subnav ul a { padding: 4px 10px; }
+
+  .site-footer { padding: 48px 0 40px; }
+  .foot-top, .ursa-footer .foot-top { flex-direction: column; align-items: flex-start; }
+  .foot-small { flex-direction: column; margin-top: 32px; }
+  .ursa-footer { padding: 56px 0 48px; }
+  .foot-id { gap: 14px 16px; }
+  html.js .foot-theme { display: block; }
+  html.js .foot-theme .theme-toggle { display: inline-flex; }
+}

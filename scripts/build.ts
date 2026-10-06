@@ -31,6 +31,7 @@ function pageUrl(rel: string): string {
 async function walk(dir: string): Promise<string[]> {
   const out: string[] = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
+    if (e.name.startsWith('.')) continue; // .gitkeep, .DS_Store
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...await walk(p)); else out.push(p);
   }

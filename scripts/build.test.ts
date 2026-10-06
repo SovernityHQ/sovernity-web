@@ -36,3 +36,22 @@ test('buildSite copies assets, skips _partials, expands pages', async () => {
   assert.equal(await readFile(join(out, 'assets', 'x.css'), 'utf8'), 'a{}');
   await assert.rejects(access(join(out, '_partials')));
 });
+test('buildSite skips dotfiles and marks current links by page URL', async () => {
+  const src = await mkdtemp(join(tmpdir(), 'sw-src-')); const out = await mkdtemp(join(tmpdir(), 'sw-out-'));
+  await mkdir(join(src, '_partials')); await mkdir(join(src, 'x'));
+  await writeFile(join(src, '.gitkeep'), '');
+  await writeFile(join(src, 'x', '.DS_Store'), '');
+  await writeFile(join(src, '_partials', 'nav.html'),
+    '<a href="/" data-current="exact">H</a><a href="/x/" data-current="section">X</a><a href="/404.html" data-current="exact">N</a>');
+  for (const p of ['index.html', 'x/index.html', '404.html']) await writeFile(join(src, p), '<!-- include:nav -->');
+  const pages = await buildSite(src, out);
+  assert.deepEqual(pages, ['404.html', 'index.html', 'x/index.html']);
+  await assert.rejects(access(join(out, '.gitkeep')));
+  await assert.rejects(access(join(out, 'x', '.DS_Store')));
+  assert.equal(await readFile(join(out, 'index.html'), 'utf8'),
+    '<a href="/" aria-current="page">H</a><a href="/x/">X</a><a href="/404.html">N</a>');
+  assert.equal(await readFile(join(out, 'x', 'index.html'), 'utf8'),
+    '<a href="/">H</a><a href="/x/" aria-current="page">X</a><a href="/404.html">N</a>');
+  assert.equal(await readFile(join(out, '404.html'), 'utf8'),
+    '<a href="/">H</a><a href="/x/">X</a><a href="/404.html" aria-current="page">N</a>');
+});
