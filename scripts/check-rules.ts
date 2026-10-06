@@ -99,6 +99,14 @@ export function isSameOriginRef(ref: string): boolean {
   return (ref.startsWith('/') && !ref.startsWith('//')) || ref.startsWith('#') || ref.toLowerCase().startsWith('data:');
 }
 
+const SITE_ORIGIN = 'https://sovernity.com';
+/** An absolute URL on this site (`https://sovernity.com/` plus a root path). Allowed only where a crawler needs one:
+ *  `<link rel="canonical">` and the og:url / og:image / twitter:image meta content. Never a fetched resource. */
+export function isSiteUrl(ref: string): boolean {
+  return ref.startsWith(`${SITE_ORIGIN}/`) && isSameOriginRef(ref.slice(SITE_ORIGIN.length));
+}
+const SITE_URL_METAS = ['og:url', 'og:image', 'twitter:image'];
+
 function attrsOf(tag: string): [string, string][] {
   const out: [string, string][] = [];
   const re = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
@@ -115,14 +123,16 @@ function srcsetCandidates(v: string): string[] {
   return v.split(',').map((c) => c.trim().split(/\s+/)[0]).filter(Boolean);
 }
 
-/** Every resource reference: `src`, `srcset` candidates, `<link href>`, plus CSS urls in `<style>` blocks and `style` attributes. */
+const isCanonical = (attrs: [string, string][]) => attrs.some(([k, v]) => k === 'rel' && v.toLowerCase() === 'canonical');
+
+/** Every resource reference (`<link rel="canonical">` names the page, it isn't fetched): `src`, `srcset` candidates, `<link href>`, plus CSS urls in `<style>` blocks and `style` attributes. */
 export function findResourceRefs(html: string): string[] {
   const refs: string[] = [];
   for (const { name, attrs } of tagsOf(html)) {
     for (const [k, v] of attrs) {
       if (k === 'src') refs.push(v);
       else if (k === 'srcset') refs.push(...srcsetCandidates(v));
-      else if (k === 'href' && name === 'link') refs.push(v);
+      else if (k === 'href' && name === 'link' && !isCanonical(attrs)) refs.push(v);
       else if (k === 'poster' || (k === 'data' && name === 'object')) refs.push(v);
       else if ((k === 'href' || k === 'xlink:href') && ['image', 'use', 'feimage'].includes(name)) refs.push(v);
       else if (k === 'style') refs.push(...findCssUrls(v));
@@ -343,6 +353,32 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
     if (title === null || !visibleText(title)) err('meta', rel, '<title> missing or empty');
     if (!tags.some((t) => t.name === 'meta' && t.attrs.some(([k, v]) => k === 'name' && v.toLowerCase() === 'description') &&
       t.attrs.some(([k, v]) => k === 'content' && v.trim()))) err('meta', rel, '<meta name="description"> missing');
+    // Social cards and canonical: every indexable page carries the set; a noindex page (404) carries none of it.
+    const metaKey = (t: { attrs: [string, string][] }) => t.attrs.find(([k]) => k === 'property' || k === 'name')?.[1].toLowerCase() ?? '';
+    const metaVal = (key: string) => tags.find((t) => t.name === 'meta' && metaKey(t) === key)?.attrs.find(([k]) => k === 'content')?.[1];
+    const canonicals = tags.filter((t) => t.name === 'link' && isCanonical(t.attrs));
+    const social = tags.filter((t) => t.name === 'meta' && /^(og|twitter):/.test(metaKey(t)));
+    const noindex = /\bnoindex\b/i.test(metaVal('robots') ?? '');
+    for (const t of tags.filter((x) => x.name === 'meta')) {
+      const v = t.attrs.find(([k]) => k === 'content')?.[1] ?? '';
+      if (/^(https?:)?\/\//i.test(v) && !(SITE_URL_METAS.includes(metaKey(t)) && isSiteUrl(v))) {
+        err('meta', rel, `absolute URL allowed only as https://sovernity.com/… in og:url, og:image, twitter:image: ${metaKey(t)}=${v}`);
+      }
+    }
+    if (noindex) {
+      if (canonicals.length || social.length) err('meta', rel, 'a noindex page carries no canonical, og: or twitter: tags');
+    } else {
+      const self = `${SITE_ORIGIN}/${rel.replace(/index\.html$/, '')}`;
+      const canonical = canonicals.length === 1 ? canonicals[0].attrs.find(([k]) => k === 'href')?.[1] : undefined;
+      if (canonical !== self) err('meta', rel, `expected one <link rel="canonical" href="${self}"> (found ${canonicals.length === 1 ? canonical : `${canonicals.length}`})`);
+      if (metaVal('og:url') !== self) err('meta', rel, `og:url must be ${self}`);
+      for (const k of ['og:type', 'og:site_name', 'og:image:width', 'og:image:height']) if (!metaVal(k)) err('meta', rel, `${k} missing`);
+      if (title === null || metaVal('og:title') !== decodeEntities(title).trim()) err('meta', rel, 'og:title must equal <title>');
+      if (metaVal('og:description') === undefined || metaVal('og:description') !== metaVal('description')) err('meta', rel, 'og:description must equal the meta description');
+      const image = metaVal('og:image') ?? '';
+      if (!isSiteUrl(image) || !resolves(image.slice(SITE_ORIGIN.length))) err('meta', rel, `og:image must be a https://sovernity.com/ file that exists (${image || 'missing'})`);
+      if (metaVal('twitter:card') !== 'summary_large_image') err('meta', rel, 'twitter:card must be summary_large_image');
+    }
     const h1s = tags.filter((t) => t.name === 'h1').length;
     if (h1s !== 1) err('meta', rel, `expected one <h1>, found ${h1s}`);
     for (const t of tags.filter((x) => x.name === 'img')) {

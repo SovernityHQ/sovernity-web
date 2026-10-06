@@ -28,6 +28,14 @@ test('same-origin refs', () => {
   for (const ok of ['/assets/a.css', '#x', 'data:image/png;base64,AA']) assert.ok(R.isSameOriginRef(ok), ok);
   for (const bad of ['https://fonts.googleapis.com/x', '//cdn.x/y', 'http://a', 'a.png', '/\\evil.com', '\\evil/']) assert.ok(!R.isSameOriginRef(bad), bad);
 });
+test('site URLs: https://sovernity.com/ plus a root path, nothing else', () => {
+  for (const ok of ['https://sovernity.com/', 'https://sovernity.com/ursa/', 'https://sovernity.com/assets/img/og-ursa.png']) assert.ok(R.isSiteUrl(ok), ok);
+  for (const bad of ['https://sovernity.com', 'http://sovernity.com/', 'https://sovernity.com.evil.example/', 'https://evil.example/sovernity.com/', 'https://sovernity.com//evil', 'https://sovernity.com/\\x', '/ursa/']) assert.ok(!R.isSiteUrl(bad), bad);
+  assert.ok(!R.isSameOriginRef('https://sovernity.com/assets/a.css'), 'isSameOriginRef stays strict');
+});
+test('resource refs skip <link rel="canonical"> (a name, not a fetch)', () => {
+  assert.deepEqual(R.findResourceRefs('<link rel="canonical" href="https://sovernity.com/"><link rel="stylesheet" href="https://sovernity.com/a.css">'), ['https://sovernity.com/a.css']);
+});
 test('resource refs include srcset candidates and link hrefs, not anchors', () => {
   assert.deepEqual(R.findResourceRefs('<img src="/a.png" srcset="/a.png 1x, /b.png 2x"><link rel="icon" href="/f.svg"><a href="https://x.com">x</a>'), ['/a.png', '/a.png', '/b.png', '/f.svg']);
 });
@@ -52,15 +60,24 @@ test('page groups', () => {
 
 const AI = 'Ursa is an AI, not a person or a therapist.';
 const ADULT = 'For adults 18+. May not be suitable for some minors.';
-function page(opts: { head?: string; body?: string; footer?: string; title?: string } = {}): string {
-  return `<!doctype html><html lang="en"><head><title>${opts.title ?? 'T'}</title><meta name="description" content="d">${R.THEME_BOOT}${opts.head ?? ''}</head><body><main><h1>H</h1>${opts.body ?? ''}</main>${opts.footer ?? ''}</body></html>`;
+const SELF = '{{SELF}}'; // site() swaps in the page's own https://sovernity.com/ URL
+function og(title: string, desc = 'd'): string {
+  return `<link rel="canonical" href="${SELF}"><meta property="og:type" content="website"><meta property="og:site_name" content="Sovernity">` +
+    `<meta property="og:url" content="${SELF}"><meta property="og:title" content="${title}"><meta property="og:description" content="${desc}">` +
+    '<meta property="og:image" content="https://sovernity.com/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">' +
+    '<meta name="twitter:card" content="summary_large_image">';
+}
+function page(opts: { head?: string; body?: string; footer?: string; title?: string; og?: string | false } = {}): string {
+  const title = opts.title ?? 'T';
+  const social = opts.og === false ? '' : opts.og ?? og(title);
+  return `<!doctype html><html lang="en"><head><title>${title}</title><meta name="description" content="d">${social}${R.THEME_BOOT}${opts.head ?? ''}</head><body><main><h1>H</h1>${opts.body ?? ''}</main>${opts.footer ?? ''}</body></html>`;
 }
 const ursaFooter = `<footer><p>${ADULT}</p>${['privacy', 'terms', 'crisis-protocol', 'support'].map((s) => `<a href="/ursa/${s}/">${s}</a>`).join('')}</footer>`;
 async function site(files: Record<string, string>): Promise<string> {
   const dir = await mkdtemp(join(tmpdir(), 'check-'));
-  for (const [rel, body] of Object.entries(files)) {
+  for (const [rel, body] of Object.entries({ 'og.png': '', ...files })) {
     await mkdir(dirname(join(dir, rel)), { recursive: true });
-    await writeFile(join(dir, rel), body);
+    await writeFile(join(dir, rel), body.replaceAll(SELF, `https://sovernity.com/${rel.replace(/index\.html$/, '')}`));
   }
   return dir;
 }
@@ -231,4 +248,34 @@ test('checkSite: latest ignores HTML comments but not live hrefs', async () => {
   assert.deepEqual((await R.checkSite(ok, { draft: false })).errors.filter((e) => e.startsWith('latest:')), []);
   const live = await site({ 'chat/index.html': page({ body: '<a href="https://github.com/SovernityHQ/sovernity-web/releases/latest">d</a>' }) });
   assert.ok((await R.checkSite(live, { draft: false })).errors.some((e) => e.startsWith('latest: chat/index.html')));
+});
+
+test('checkSite: meta requires the social set, equal to <title> and description, with own-page canonical', async () => {
+  const good = await site({ 'index.html': page(), 'a/index.html': page({ title: 'A &amp; B', og: og('A &amp; B') }) });
+  assert.deepEqual((await R.checkSite(good, { draft: false })).errors, []);
+  const bad = await site({
+    'none/index.html': page({ og: false }),
+    'title/index.html': page({ og: og('Other') }),
+    'desc/index.html': page({ og: og('T', 'other') }),
+    'host/index.html': page({ og: og('T').replaceAll(SELF, 'https://evil.example/host/') }),
+    'wrong/index.html': page({ og: og('T').replaceAll(SELF, 'https://sovernity.com/') }),
+    'img/index.html': page({ og: og('T').replace('/og.png', '/gone.png') }),
+    'card/index.html': page({ og: og('T').replace('summary_large_image', 'summary') }),
+    'extra/index.html': page({ head: '<meta property="og:audio" content="https://sovernity.com/a.mp3"><meta name="x" content="https://evil.example/">' }),
+  });
+  const errs = (await R.checkSite(bad, { draft: false })).errors;
+  for (const p of ['none', 'title', 'desc', 'host', 'wrong', 'img', 'card', 'extra']) {
+    assert.ok(errs.some((e) => e.startsWith(`meta: ${p}/index.html`)), p);
+  }
+  assert.ok(errs.some((e) => e.startsWith('meta: extra/index.html') && e.includes('a.mp3')));
+  assert.ok(errs.some((e) => e.startsWith('meta: extra/index.html') && e.includes('evil.example')));
+  assert.deepEqual(ruleIds(errs), ['meta']);
+});
+
+test('checkSite: a noindex page (404) carries no canonical, og or twitter tags', async () => {
+  const noindex = '<meta name="robots" content="noindex">';
+  const ok = await site({ '404.html': page({ og: false, head: noindex }) });
+  assert.deepEqual((await R.checkSite(ok, { draft: false })).errors, []);
+  const bad = await site({ '404.html': page({ head: noindex }) });
+  assert.ok((await R.checkSite(bad, { draft: false })).errors.some((e) => e.startsWith('meta: 404.html')));
 });
