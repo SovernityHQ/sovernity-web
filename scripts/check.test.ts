@@ -18,12 +18,15 @@ test('banned words with the allowed therapist phrases', () => {
   assert.deepEqual(R.findBanned('Your AI companion', 'ursa'), ['companion']);
   assert.deepEqual(R.findBanned('Nothing leaves your iPhone', 'ursa'), ['nothing leaves your iphone']);
   assert.deepEqual(R.findBanned('fully open-source', 'chat'), ['open-source']);
-  assert.deepEqual(R.findBanned('treatments', 'ursa'), []);
+  assert.deepEqual(R.findBanned('treatments', 'ursa'), ['treatments']);
+  assert.deepEqual(R.findBanned('therapists and a diagnosis', 'ursa'), ['therapists', 'diagnosis']);
+  assert.deepEqual(R.findBanned('companions, diagnosed', 'ursa'), ['companions', 'diagnosed']);
+  assert.deepEqual(R.findBanned('psychotherapy', 'ursa'), []);
   assert.deepEqual(R.findBanned('It’s not a therapist', 'ursa'), []);
 });
 test('same-origin refs', () => {
   for (const ok of ['/assets/a.css', '#x', 'data:image/png;base64,AA']) assert.ok(R.isSameOriginRef(ok), ok);
-  for (const bad of ['https://fonts.googleapis.com/x', '//cdn.x/y', 'http://a', 'a.png']) assert.ok(!R.isSameOriginRef(bad), bad);
+  for (const bad of ['https://fonts.googleapis.com/x', '//cdn.x/y', 'http://a', 'a.png', '/\\evil.com', '\\evil/']) assert.ok(!R.isSameOriginRef(bad), bad);
 });
 test('resource refs include srcset candidates and link hrefs, not anchors', () => {
   assert.deepEqual(R.findResourceRefs('<img src="/a.png" srcset="/a.png 1x, /b.png 2x"><link rel="icon" href="/f.svg"><a href="https://x.com">x</a>'), ['/a.png', '/a.png', '/b.png', '/f.svg']);
@@ -136,4 +139,63 @@ test('checkSite: chat-policy compares the generated block to the master', async 
   assert.ok(r.errors.filter((e) => e.startsWith('chat-policy')).length >= 2);
   const none = await R.checkSite(ok, { draft: false });
   assert.ok(none.warnings.includes('chat-policy skipped (needs the private Chat repo)'));
+});
+
+test('resource refs: poster, object data, svg image/use, image-set strings', () => {
+  assert.deepEqual(R.findResourceRefs('<video poster="/p.png"></video><object data="/o.svg"></object><svg><image href="/i.png"/><use xlink:href="/u.svg#a"/></svg>'), ['/p.png', '/o.svg', '/i.png', '/u.svg#a']);
+  assert.deepEqual(R.findCssUrls('a{background:image-set("/a.png" 1x, url(/b.png) 2x)} b{background:-webkit-image-set(\'https://x/c.png\' 1x)}'), ['/b.png', '/a.png', 'https://x/c.png']);
+});
+test('network apis: workers and service workers', () => {
+  assert.deepEqual(R.findNetworkApis('new Worker("/w.js"); navigator.serviceWorker.register("/s.js")'), ['newWorker(', 'serviceWorker.register']);
+});
+
+test('checkSite: attribute text feeds banned, secure and vera', async () => {
+  const dir = await site({ ...ursaPages(), 'x/index.html': page({
+    head: '<meta property="og:description" content="Your AI companion">',
+    body: '<img src="/x.png" alt="VERA-MH 34.3"><img src="/x.png" alt="secure chat"><svg><title>Secure</title></svg><svg aria-label="secure seal"></svg>', }), 'x.png': '' });
+  const r = await R.checkSite(dir, { draft: false });
+  assert.ok(r.errors.some((e) => e.startsWith('banned: x/index.html: "companion"')));
+  assert.ok(r.errors.some((e) => e.startsWith('vera: x/index.html')));
+  assert.ok(r.errors.some((e) => e.startsWith('secure: x/index.html')));
+  const seal = await site({ ...ursaPages(), 'y/index.html': page({ body: '<svg aria-label="Secure seal"><title>Secure</title></svg>' }) });
+  assert.deepEqual((await R.checkSite(seal, { draft: false })).errors, []);
+});
+
+test('checkSite: chat scans raw markup with the chat list', async () => {
+  const dir = await site({ 'chat/index.html': page({ body: '<div data-x="open-source"></div><script type="application/ld+json">{"d":"audited"}</script>' }) });
+  const r = await R.checkSite(dir, { draft: false });
+  const banned = r.errors.filter((e) => e.startsWith('banned:')).join('\n');
+  assert.match(banned, /open-source/);
+  assert.match(banned, /audited/);
+});
+
+test('checkSite: outbound is an allowlist', async () => {
+  const bad = ['tel:+1555', 'javascript:alert(1)', ' https://evil.example/', '\\\\evil/', 'https://github.com/other/repo', 'mailto:x@y.com', 'rel/path', '//cdn.x/y'];
+  const dir = await site({ ...ursaPages(), 'z/index.html': page({ body: bad.map((h) => `<a href="${h}">x</a>`).join('') + '<a href="/ursa/">ok</a><a href="#a">ok</a><a href="https://988lifeline.org/">ok</a><a href="mailto:support@sovernity.com?subject=hi">ok</a>' }) });
+  const r = await R.checkSite(dir, { draft: false });
+  const out = r.errors.filter((e) => e.startsWith('outbound: z/index.html'));
+  // ' https://evil.example/' is trimmed by the attribute parser, then rejected on host
+  assert.equal(out.length, bad.length);
+  assert.ok(r.errors.some((e) => e.startsWith('inline-script: z/index.html') && e.includes('javascript:')));
+});
+
+test('checkSite: root-absolute and internal-links cover extra attributes and inline CSS', async () => {
+  const dir = await site({ ...ursaPages(), 'w/index.html': page({
+    head: '<style>a{background:url(/gone.png)} b{background:image-set("https://x/y.png" 1x)}</style>',
+    body: '<video poster="rel.png"></video><div style="background:url(/gone2.png)"></div><a href="/bad%zz">x</a><img src="/\\evil.png" alt="a">' }) });
+  const r = await R.checkSite(dir, { draft: false });
+  const has = (id: string, needle: string) => assert.ok(r.errors.some((e) => e.startsWith(`${id}: w/index.html`) && e.includes(needle)), `${id} ${needle}`);
+  has('root-absolute', 'rel.png');
+  has('root-absolute', 'https://x/y.png');
+  has('root-absolute', '/\\evil.png');
+  has('internal-links', '/gone.png');
+  has('internal-links', '/gone2.png');
+  has('internal-links', '/bad%zz');
+});
+
+test('checkSite: js-network scans .mjs and protocol-relative strings', async () => {
+  const dir = await site({ 'a.mjs': 'new Worker("/w.js")', 'b.js': 'const u = "//evil.example/x";' });
+  const r = await R.checkSite(dir, { draft: false });
+  assert.ok(r.errors.some((e) => e.startsWith('js-network: a.mjs')));
+  assert.ok(r.errors.some((e) => e.startsWith('js-network: b.js') && e.includes('//')));
 });

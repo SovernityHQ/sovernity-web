@@ -6,7 +6,7 @@ const args = process.argv.slice(2);
 const draft = args.includes('--draft');
 const i = args.indexOf('--chat-repo');
 const chatRepo = (i >= 0 ? args[i + 1] : undefined) ?? process.env.CHAT_REPO ?? undefined;
-if (i >= 0 && !args[i + 1]) { console.error('--chat-repo needs a path'); process.exit(2); }
+if (i >= 0 && (!args[i + 1] || args[i + 1].startsWith('--'))) { console.error('--chat-repo needs a path'); process.exit(2); }
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const { errors, warnings, ok } = await checkSite(resolve(root, '_site'), { draft, chatRepo: chatRepo || undefined });

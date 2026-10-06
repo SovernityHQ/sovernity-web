@@ -17,7 +17,8 @@ export const OUTBOUND_HOSTS: readonly string[] = [
 const GITHUB_PATH = '/SovernityHQ/sovernity-web';
 const SUPPORT_MAILBOX = 'support@sovernity.com';
 
-const URSA_BANNED_WORDS = ['companion', 'therapy', 'therapist', 'diagnose', 'treatment', 'zodiac'];
+/** Regex sources, matched with word boundaries; inflections included (therapists, diagnosis, treatments). */
+const URSA_BANNED_WORDS = ['companions?', 'therap(?:y|ies)', 'therapists?', 'diagnos\\w*', 'treatments?', 'zodiac'];
 const URSA_BANNED_PHRASES = [
   'off the record', 'nothing leaves your iphone', 'on-device dictation', 'private dictation',
   'you are not alone', 'the stars say',
@@ -82,12 +83,15 @@ export function findBanned(text: string, group: 'ursa' | 'chat'): string[] {
     return hits;
   }
   for (const p of ALLOWED_PHRASES) t = t.split(p).join(' ');
-  for (const w of URSA_BANNED_WORDS) if (new RegExp(`\\b${w}\\b`).test(t)) hits.push(w);
+  for (const w of URSA_BANNED_WORDS) {
+    for (const m of t.matchAll(new RegExp(`\\b${w}\\b`, 'g'))) if (!hits.includes(m[0])) hits.push(m[0]);
+  }
   for (const p of URSA_BANNED_PHRASES) if (t.includes(p)) hits.push(p);
   return hits;
 }
 
 export function isSameOriginRef(ref: string): boolean {
+  if (ref.includes('\\')) return false;
   return (ref.startsWith('/') && !ref.startsWith('//')) || ref.startsWith('#') || ref.toLowerCase().startsWith('data:');
 }
 
@@ -95,7 +99,7 @@ function attrsOf(tag: string): [string, string][] {
   const out: [string, string][] = [];
   const re = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
   const body = tag.replace(/^<[^\s>/]+/, '');
-  for (const m of body.matchAll(re)) out.push([m[1].toLowerCase(), decodeEntities(m[2] ?? m[3] ?? m[4] ?? '')]);
+  for (const m of body.matchAll(re)) out.push([m[1].toLowerCase(), decodeEntities(m[2] ?? m[3] ?? m[4] ?? '').trim()]);
   return out;
 }
 function tagsOf(html: string): { name: string; attrs: [string, string][]; raw: string }[] {
@@ -115,6 +119,8 @@ export function findResourceRefs(html: string): string[] {
       if (k === 'src') refs.push(v);
       else if (k === 'srcset') refs.push(...srcsetCandidates(v));
       else if (k === 'href' && name === 'link') refs.push(v);
+      else if (k === 'poster' || (k === 'data' && name === 'object')) refs.push(v);
+      else if ((k === 'href' || k === 'xlink:href') && ['image', 'use', 'feimage'].includes(name)) refs.push(v);
       else if (k === 'style') refs.push(...findCssUrls(v));
     }
   }
@@ -125,12 +131,17 @@ export function findResourceRefs(html: string): string[] {
 export function findCssUrls(css: string): string[] {
   const out: string[] = [];
   const re = /url\(\s*(?:"([^"]*)"|'([^']*)'|([^)\s]*))\s*\)|@import\s+(?:"([^"]*)"|'([^']*)')/gi;
-  for (const m of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(re)) out.push(m[1] ?? m[2] ?? m[3] ?? m[4] ?? m[5]);
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const m of clean.matchAll(re)) out.push(m[1] ?? m[2] ?? m[3] ?? m[4] ?? m[5]);
+  // image-set("/a.png" 1x, ...) takes bare strings; url(...) inside it was collected above.
+  for (const set of clean.matchAll(/(?:-webkit-)?image-set\(((?:[^()]|\([^)]*\))*)\)/gi)) {
+    for (const m of set[1].replace(/url\([^)]*\)/gi, ' ').matchAll(/"([^"]*)"|'([^']*)'/g)) out.push(m[1] ?? m[2]);
+  }
   return out;
 }
 
 export function findNetworkApis(js: string): string[] {
-  return js.match(/\b(fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\b|\bimport\s*\(/g)?.map((s) => s.replace(/\s+/g, '')) ?? [];
+  return js.match(/\b(fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\b|\bimport\s*\(|\bnew\s+(?:Shared)?Worker\s*\(|\bserviceWorker\s*\.\s*register\b/g)?.map((s) => s.replace(/\s+/g, '')) ?? [];
 }
 
 /** Hrefs of `<a>`/`<area>` that leave the site: http(s), protocol-relative, or mailto. */
@@ -223,6 +234,14 @@ function block(html: string, tag: string): string | null {
   return m ? m[1] : null;
 }
 
+/** Text carried by attributes: every meta content, alt, title, aria-*, placeholder, value. */
+function attributeText(tags: { name: string; attrs: [string, string][] }[]): string[] {
+  return tags.flatMap(({ name, attrs }) => attrs.filter(([k]) =>
+    k === 'alt' || k === 'title' || k === 'placeholder' || k === 'value' || k.startsWith('aria-') || (k === 'content' && name === 'meta')).map(([, v]) => v));
+}
+const hostAllowed = (u: URL): boolean => OUTBOUND_HOSTS.includes(u.hostname) &&
+  (u.hostname !== 'github.com' || u.pathname === GITHUB_PATH || u.pathname.startsWith(`${GITHUB_PATH}/`));
+
 export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: string }): Promise<CheckResult> {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -235,7 +254,8 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
   const html = new Map<string, string>();
   for (const p of pages) html.set(p, await readFile(join(dir, p), 'utf8'));
   const resolves = (url: string): boolean => {
-    const path = decodeURIComponent(url.replace(/[?#].*$/, '')).replace(/^\//, '');
+    let path: string;
+    try { path = decodeURIComponent(url.replace(/[?#].*$/, '')).replace(/^\//, ''); } catch { return false; }
     if (path === '') return fileSet.has('index.html');
     if (path.endsWith('/')) return fileSet.has(`${path}index.html`);
     return fileSet.has(path) || fileSet.has(`${path}/index.html`);
@@ -249,42 +269,48 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       (opts.draft ? warnings : errors).push(`placeholders: ${rel}: ${ph}`);
     }
 
-    const attrText = tags.flatMap(({ name, attrs }) => attrs.filter(([k]) =>
-      k === 'alt' || k === 'title' || k === 'aria-label' ||
-      (k === 'content' && name === 'meta' && attrs.some(([a, v]) => a === 'name' && v.toLowerCase() === 'description'))).map(([, v]) => v));
-    for (const hit of findBanned([text, ...attrText].join(' \n '), pageGroup(rel) === 'chat' ? 'chat' : 'ursa')) {
-      err('banned', rel, `"${hit}"`);
-    }
+    const attrText = attributeText(tags);
+    const group = pageGroup(rel) === 'chat' ? 'chat' : 'ursa';
+    const banned = new Set(findBanned([text, ...attrText].join(' \n '), group));
+    // Old gate 3 grepped the whole comment-stripped file, so chat also scans raw markup, data-*, scripts, JSON-LD.
+    if (group === 'chat') for (const h of findBanned(stripComments(src), 'chat')) banned.add(h);
+    for (const hit of banned) err('banned', rel, `"${hit}"`);
 
-    const noSvg = visibleText(stripComments(src).replace(/<svg\b[\s\S]*?<\/svg\s*>/gi, ' '));
-    if (/secure/i.test(noSvg)) err('secure', rel, '"secure" in body text (allowed in the seal only)');
+    const noSvgSrc = stripComments(src).replace(/<svg\b[\s\S]*?<\/svg\s*>/gi, ' ');
+    const secureText = [visibleText(noSvgSrc), ...attributeText(tagsOf(noSvgSrc))].join(' \n ');
+    if (/secure/i.test(secureText)) err('secure', rel, '"secure" in body text or attributes (allowed in the seal only)');
 
     for (const ref of findResourceRefs(src)) {
       if (!isSameOriginRef(ref)) err('root-absolute', rel, `not a root-absolute same-origin reference: ${ref}`);
     }
 
     const seen = new Set<string>();
+    const linked: string[] = [...findResourceRefs(src)];
     for (const { attrs } of tags) {
       for (const [k, v] of attrs) {
-        const urls = k === 'srcset' ? srcsetCandidates(v) : k === 'href' || k === 'src' ? [v] : [];
-        for (const u of urls) {
-          if (!u.startsWith('/') || u.startsWith('//') || seen.has(u)) continue;
-          seen.add(u);
-          if (!resolves(u)) err('internal-links', rel, `no file for ${u}`);
-        }
+        if (k === 'srcset') linked.push(...srcsetCandidates(v));
+        else if (k === 'href' || k === 'src') linked.push(v);
       }
     }
+    for (const u of linked) {
+      if (!u.startsWith('/') || u.startsWith('//') || u.includes('\\') || seen.has(u)) continue;
+      seen.add(u);
+      if (!resolves(u)) err('internal-links', rel, `no file for ${u}`);
+    }
 
-    for (const href of findOutboundLinks(src)) {
-      if (/^mailto:/i.test(href)) {
-        if (href.slice(7).split('?')[0].toLowerCase() !== SUPPORT_MAILBOX) err('outbound', rel, `mailto not allowed: ${href}`);
-        continue;
+    for (const { name, attrs } of tags) {
+      if (name !== 'a' && name !== 'area') continue;
+      for (const [k, href] of attrs) {
+        if (k !== 'href') continue;
+        let good = false;
+        if (href.includes('\\')) good = false;
+        else if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) good = true;
+        else if (/^mailto:/i.test(href)) good = href.slice(7).split('?')[0].toLowerCase() === SUPPORT_MAILBOX;
+        else if (/^https?:\/\//i.test(href)) {
+          try { good = hostAllowed(new URL(href)); } catch { good = false; }
+        }
+        if (!good) err('outbound', rel, `href not allowed (root-absolute, #anchor, allowlisted https host or ${SUPPORT_MAILBOX} only): ${href}`);
       }
-      let u: URL | null = null;
-      try { u = new URL(href, 'https://invalid.example'); } catch { /* reported below */ }
-      const hostOk = u !== null && !href.startsWith('//') && OUTBOUND_HOSTS.includes(u.hostname) &&
-        (u.hostname !== 'github.com' || u.pathname === GITHUB_PATH || u.pathname.startsWith(`${GITHUB_PATH}/`));
-      if (!hostOk) err('outbound', rel, `link not on the allowlist: ${href}`);
     }
 
     if (src.includes('/releases/latest')) err('latest', rel, 'contains /releases/latest');
@@ -294,7 +320,12 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       err('inline-script', rel, `inline scripts must be exactly the theme boot script (found ${inline.length})`);
     }
     for (const { name, attrs } of tags) {
-      for (const [k] of attrs) if (/^on[a-z]+$/.test(k)) err('inline-script', rel, `<${name}> has an ${k} attribute`);
+      for (const [k, v] of attrs) {
+        if (/^on[a-z]+$/.test(k)) err('inline-script', rel, `<${name}> has an ${k} attribute`);
+        if (/^javascript:/i.test(v.replace(/[\s\u0000-\u001f]/g, '')) && ['href', 'src', 'action', 'formaction', 'data', 'xlink:href'].includes(k)) {
+          err('inline-script', rel, `<${name}> has a javascript: ${k}`);
+        }
+      }
     }
 
     const htmlTag = tags.find((t) => t.name === 'html');
@@ -312,7 +343,7 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       else if (alt[1] === '' && !presentation) err('meta', rel, `<img> with empty alt needs role="presentation": ${t.raw.slice(0, 80)}`);
     }
 
-    if (/\b34\.3\b/.test(text)) err('vera', rel, 'the VERA-MH score "34.3" must not appear');
+    if (/\b34\.3\b/.test([text, ...attrText].join(' \n '))) err('vera', rel, 'the VERA-MH score "34.3" must not appear');
   }
 
   // Page-specific rules.
@@ -356,13 +387,15 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
         else if (u.startsWith('/') && !resolves(u)) err('internal-links', f, `no file for ${u}`);
       }
     }
-    if (f.endsWith('.css') || f.endsWith('.js')) {
+    const isJs = f.endsWith('.js') || f.endsWith('.mjs');
+    if (f.endsWith('.css') || isJs) {
       if ((await readFile(join(dir, f), 'utf8')).includes('/releases/latest')) err('latest', f, 'contains /releases/latest');
     }
-    if (f.endsWith('.js')) {
+    if (isJs) {
       const js = await readFile(join(dir, f), 'utf8');
       for (const api of new Set(findNetworkApis(js))) err('js-network', f, `uses ${api}`);
       if (/https?:/i.test(js)) err('js-network', f, 'contains an http: or https: string');
+      if (/["'`]\/\//.test(js)) err('js-network', f, 'contains a string starting with // (protocol-relative URL)');
     }
   }
 
