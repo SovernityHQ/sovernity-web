@@ -64,3 +64,23 @@ export function initSectionSeal(seal: SVGElement, sections: HTMLElement[], words
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
 }
+
+/**
+ * Studio pages (home, About): the margin tracker (`[data-seal-tracker] .seal-tracker`) plus a copy
+ * mounted in the header slot (`[data-header-track]`), both following `sections`. Each section's
+ * `data-seal-word` names its ring word, so the words live in the HTML. Both seals stamp on load.
+ */
+export function initStudioTracker(sections: HTMLElement[]): void {
+  const tracker = document.querySelector<SVGElement>('[data-seal-tracker] .seal-tracker');
+  if (!tracker) return;
+  const words = sections.map((s) => s.dataset.sealWord ?? '');
+  const slot = document.querySelector('[data-header-track]');
+  if (slot) {
+    const small = tracker.cloneNode(true) as SVGElement;
+    slot.append(small);
+    initSectionSeal(small, sections, words);
+    stampOnLoad(small);
+  }
+  initSectionSeal(tracker, sections, words);
+  stampOnLoad(tracker);
+}

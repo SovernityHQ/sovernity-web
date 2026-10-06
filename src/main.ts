@@ -1,6 +1,7 @@
 import { initThemeToggle } from './theme.ts';
 import { initMenu } from './nav.ts';
 import { initHome } from './home.ts';
+import { initAbout } from './about.ts';
 
 const root = document.documentElement;
 root.classList.add('js');
@@ -20,5 +21,6 @@ if (menu && menuNav) initMenu(menu, menuNav);
 /** Page modules, keyed by `<body data-page>`. Later tasks add theirs here with a static import. */
 const pages: Record<string, () => void> = {
   home: initHome,
+  about: initAbout,
 };
 pages[document.body.dataset.page ?? '']?.();
