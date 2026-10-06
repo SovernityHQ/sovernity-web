@@ -11,6 +11,9 @@ body[data-page="ursa"] {
   color: var(--ink-u);
 }
 
+/* Frame lists: no bullets (page content lists keep theirs). */
+.site-nav ul, .ursa-subnav ul, .foot-links { list-style: none; margin: 0; padding: 0; }
+
 /* ---------- header ---------- */
 .site-header {
   position: sticky;
@@ -33,7 +36,7 @@ body[data-page="ursa"] {
   text-decoration: none;
 }
 .site-seal { width: 40px; height: 40px; flex: none; color: var(--vermilion); }
-.night .site-seal { color: var(--seal); }
+.night-u .site-seal { color: var(--seal); }
 .site-wm {
   font-family: var(--font-display);
   font-weight: 400;
@@ -51,8 +54,8 @@ body[data-page="ursa"] {
   color: var(--ink);
   text-decoration: none;
   border-bottom: 1.5px solid transparent;
-  transition: border-color .25s;
 }
+html.js .site-nav a { transition: border-color .25s; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--ink); }
 
 /* ---------- pill buttons: theme toggle, Menu ---------- */
@@ -213,8 +216,6 @@ html.js .r2u-th.on { animation: r2u-halo 3.4s ease-out infinite; }
   html.js .site-header .site-bar { flex-wrap: nowrap; padding-top: 0; padding-bottom: 0; }
   html.js .site-header .theme-toggle { display: none; }
   html.js .menu-btn { display: inline-flex; margin-left: auto; }
-  html.js .site-header { position: sticky; }
-  html.js .site-header:has(+ .ursa-subnav) { position: relative; }
   html.js .site-nav {
     display: none;
     position: absolute;

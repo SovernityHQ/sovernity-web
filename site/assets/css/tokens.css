@@ -120,9 +120,21 @@
   --seal: #E25C40;
 }
 
-/* ---------- night panels: night values in both themes ---------- */
+/* ---------- night panels: night values in both themes ----------
+   .night   = studio night (R2SealHome.css .rsp-night: --panel/--pink/--pmut/--pverm).
+   .night-u = Dusk night for Ursa (R2Ursa.css .r2u-night). */
 .night {
-  /* Dusk night (R2Ursa.css .r2u-night) */
+  --paper: var(--night);
+  --ink: var(--night-ink);
+  --muted: #B3AEA3;
+  --line: #34322E;
+  --vermilion: #E8705A;
+  --focus: var(--night-ink);
+  color-scheme: dark;
+  background: var(--night);
+  color: var(--night-ink);
+}
+.night-u {
   --bg: #0F1017;
   --sidebar: #0B0C12;
   --surface: #1D1F28;
@@ -139,12 +151,6 @@
   --memSoft: #3A301D;
   --connected: #6FCB8E;
   --seal: #E25C40;
-  /* studio names, for studio content on a night panel (R2SealHome --panel/--pink/--pmut/--pverm) */
-  --paper: var(--night);
-  --ink: var(--night-ink);
-  --muted: #B3AEA3;
-  --line: #34322E;
-  --vermilion: #E8705A;
   --focus: #AAC1EE;
   color-scheme: dark;
   background: var(--bg);
@@ -170,7 +176,6 @@ img { height: auto; }
 a { color: inherit; text-underline-offset: 3px; }
 button { font: inherit; color: inherit; }
 :where(h1, h2, h3, h4, p, figure, blockquote) { margin: 0; }
-:where(nav ul, ul[class], ol[class]) { list-style: none; margin: 0; padding: 0; }
 code, kbd, td, th { overflow-wrap: anywhere; }
 [id] { scroll-margin-top: 96px; }
 
