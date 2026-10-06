@@ -286,6 +286,9 @@ html.js .home-track { display: block; }
   display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
 .seal-tracker { width: 136px; height: 151px; overflow: visible; }
+/* Header slot (studio-header partial): empty and hidden unless home.ts mounts a seal; shown 701–1320 px. */
+.header-track { display: none; align-items: center; margin-left: auto; }
+.header-track .seal-tracker { width: 42px; height: 46px; }
 .seal-tick, .seal-rules, .seal-dots, .seal-s { fill: var(--vermilion); }
 .seal-disc { fill: var(--paper); }
 .seal-word { fill: var(--ink); fill-opacity: .36; }
@@ -488,7 +491,10 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
 
 /* ---------- studio home breakpoints (canvas container queries → viewport) ---------- */
 @media (max-width: 1320px) {
-  .home-track { display: none !important; }
+  html.js .home-track { display: none; }
+  /* The header carries a smaller turning seal instead (canvas .rsp-chip, without the word label). */
+  html.js .header-track:not(:empty) { display: flex; }
+  html.js .header-track:not(:empty) + .site-nav { margin-left: 0; }
 }
 @media (max-width: 1100px) {
   .st-display { font-size: 96px; }
@@ -502,6 +508,7 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   .home-stamp { justify-self: start; max-width: 260px; }
 }
 @media (max-width: 700px) {
+  html.js .header-track:not(:empty) { display: none; }
   .home-sec { padding: 80px 0; min-height: 0; font-size: 17px; }
   .sec-mark { margin-bottom: 28px; }
   .st-display { font-size: 52px; line-height: 1.02; }

@@ -19,7 +19,9 @@ export function stampOnLoad(el: Element): void {
  * The margin tracker. `words[i]` names the ring word for `sections[i]`; the ring (`.seal-ring`)
  * turns so the current section's word (`.seal-word[data-word]`, centred at `data-angle`) sits under
  * the tick and gets `.is-lit`. A `[data-seal-count]` inside the closest `[data-seal-tracker]` shows
- * the section number. CSS hides the tracker under 700 px and drops the transition with reduced motion.
+ * the section number. Call it once per seal (home: the margin tracker and the header seal). CSS shows the
+ * margin tracker above 1320 px, the header seal at 701–1320 px and neither at 700 px and below, and drops
+ * the transitions with reduced motion.
  */
 export function initSectionSeal(seal: SVGElement, sections: HTMLElement[], words: string[]): void {
   const ring = seal.querySelector<SVGGElement>('.seal-ring');
@@ -48,9 +50,17 @@ export function initSectionSeal(seal: SVGElement, sections: HTMLElement[], words
     go(s);
   };
 
+  // At most one pick per frame, however many scroll events arrive.
+  let queued = false;
+  const schedule = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; pick(); });
+  };
+
   pick();
   // The first position is set without a turn; later changes animate (CSS, under .is-ready).
   requestAnimationFrame(() => requestAnimationFrame(() => seal.classList.add('is-ready')));
-  window.addEventListener('scroll', pick, { passive: true });
-  window.addEventListener('resize', pick);
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
 }

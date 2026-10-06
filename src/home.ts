@@ -6,9 +6,18 @@ export function initHome(): void {
   const sections = Array.from(document.querySelectorAll<HTMLElement>('main [data-seal-word]'));
   revealOnScroll(sections, 'in');
 
+  const words = sections.map((s) => s.dataset.sealWord ?? '');
   const tracker = document.querySelector<SVGElement>('[data-seal-tracker] .seal-tracker');
   if (tracker) {
-    initSectionSeal(tracker, sections, sections.map((s) => s.dataset.sealWord ?? ''));
+    // The header slot (701–1320 px, CSS) gets its own copy of the seal, driven by a second tracker.
+    const slot = document.querySelector('[data-header-track]');
+    if (slot) {
+      const small = tracker.cloneNode(true) as SVGElement;
+      slot.append(small);
+      initSectionSeal(small, sections, words);
+      stampOnLoad(small);
+    }
+    initSectionSeal(tracker, sections, words);
     stampOnLoad(tracker);
   }
 
