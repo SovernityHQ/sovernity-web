@@ -26,7 +26,7 @@
 <main id="main" class="legal">
   <div class="wrap lg-grid">
 
-    <aside class="lg-toc" aria-label="Contents">
+    <aside class="lg-toc" aria-label="Contents" data-toc>
       <p class="lg-toc-label">Contents</p>
       <ol>
         <li><a href="#when"><span class="lg-tn">1</span><span>When Ursa shows crisis help</span></a></li>
@@ -67,7 +67,7 @@
         </ul>
       </section>
 
-      <details class="lg-toc-m" open>
+      <details class="lg-toc-m" open data-toc>
         <summary>Contents</summary>
         <ol>
           <li><a href="#when">When Ursa shows crisis help</a></li>
@@ -86,7 +86,7 @@
         <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
         <p>Before Ursa writes a reply, it checks your message for signs that you might be thinking about suicide or might hurt yourself. The check runs on your Mac, like everything else in Ursa. Your words aren't sent anywhere to be checked.</p>
         <p>If the check finds those signs, Ursa answers carefully. It asks how you are, shows the crisis card under its reply, and stays on that. While it does, it doesn't draw on what it knows about you, and it never learns from those messages.</p>
-        <p>Ursa stays in this careful mode while any of your last three messages showed those signs. <mark class="ph">[[S4: today's code uses this message plus the two before it (<code>ReplyService.crisisLookback = 2</code>); reconfirm against the shipped build]]</mark></p>
+        <p>Ursa stays in this careful mode while any of your last three messages showed those signs. <mark class="ph">[[S4: confirm how many recent messages keep careful mode on]]</mark></p>
       </section>
 
       <section class="lg-sec" id="how" aria-labelledby="how-h">
@@ -124,7 +124,7 @@
         <h2 id="keeps-h"><span class="lg-hn">04</span><span>If it keeps coming up</span></h2>
         <p>If signs of a crisis continue later in the same conversation, every reply after the first one carries a shorter line with the same numbers:</p>
         <p class="lg-row" role="group" aria-label="The shorter line, as text"><strong>Crisis line, any time</strong> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Text 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 911</span></p>
-        <p>(on screen the row uses phone and message icons beside the numbers). This is Ursa's further step after the first referral.</p>
+        <p>This is Ursa's further step after the first referral.</p>
         <p><mark class="ph">[[S4: the exact continued-ideation behaviour as shipped: when the compact row shows, whether the full card ever repeats, and how the reply itself changes]]</mark></p>
       </section>
 
@@ -152,7 +152,7 @@
         <h2 id="count-h"><span class="lg-hn">07</span><span>How many times the card has shown</span></h2>
         <p>Some state laws ask companies like us to report or publish how many times their app referred people to a crisis line each year.</p>
         <p>We can't know that number. Ursa sends us nothing: no messages, no usage data, no counts. What happens in Ursa stays on your Mac and iPhone. We chose not to add reporting just for this, so we have no count to publish.</p>
-        <p><mark class="ph">[[Founder: revisit before 2027-07-01, per the showcase-release scope decision (accepted risk)]]</mark></p>
+        <p><mark class="ph">[[Founder: referral-count wording]]</mark></p>
       </section>
 
       <section class="lg-sec" id="report" aria-labelledby="report-h">

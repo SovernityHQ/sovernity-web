@@ -157,9 +157,10 @@ test('checkSite: chat-policy compares the generated block to the master', async 
     'docs/legal/PRIVACY_POLICY.md': `intro\n**Version 1.0-beta.3 · Effective: 2026-09-01**\n\n## Heading\n- **${longLine}**\n| a | table row that is long enough to be skipped by the check |\n`,
   });
   const good = page({ body: `<p>${line}</p>\n<!-- BEGIN GENERATED PRIVACY POLICY -->\n<p><strong>${line}</strong></p>\n<li><strong>${longLine.replace('and never', 'and&nbsp;never')}</strong></li>\n<!-- END GENERATED PRIVACY POLICY -->` });
-  const ok = await site({ 'chat/privacy/index.html': good });
+  const moved = (l: string) => page({ head: '<meta name="robots" content="noindex">', og: false, body: `<p>The policy (${l}) is now at <a href="/chat/privacy/">/chat/privacy/</a>.</p>` });
+  const ok = await site({ 'chat/privacy/index.html': good, 'privacy.html': moved(line) });
   assert.deepEqual((await R.checkSite(ok, { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy')), []);
-  const stale = await site({ 'chat/privacy/index.html': good.replace('beta.3', 'beta.2').replace('only on', 'mostly on') });
+  const stale = await site({ 'chat/privacy/index.html': good.replace('beta.3', 'beta.2').replace('only on', 'mostly on'), 'privacy.html': moved(line) });
   const r = await R.checkSite(stale, { draft: false, chatRepo: chat });
   assert.ok(r.errors.filter((e) => e.startsWith('chat-policy')).length >= 2);
   const none = await R.checkSite(ok, { draft: false });
@@ -315,4 +316,35 @@ test('checkSite: meta refresh, ping and form targets must be same-origin and res
   has('root-absolute', 'r/index.html', 'https://f.example/');
   has('internal-links', 'r/index.html', '/nowhere/');
   has('internal-links', 's/index.html', '/gone/');
+});
+
+test('checkSite: chat-policy requires /privacy.html to carry the bundled policy line', async () => {
+  const line = 'Version 1.0-beta.3 · Effective: 2026-09-01';
+  const chat = await site({
+    'Resources/Legal/PRIVACY_POLICY.md': `# P\n${line}\n`,
+    'docs/legal/PRIVACY_POLICY.md': `intro\n**${line}**\n`,
+  });
+  const policy = page({ body: `<p>${line}</p>\n<!-- BEGIN GENERATED PRIVACY POLICY -->\n<p><strong>${line}</strong></p>\n<!-- END GENERATED PRIVACY POLICY -->` });
+  const moved = (l: string) => page({ head: '<meta name="robots" content="noindex">', og: false, body: `<p>The policy (${l}) is now at <a href="/chat/privacy/">/chat/privacy/</a>.</p>` });
+  const errs = async (files: Record<string, string>) => (await R.checkSite(await site(files), { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy'));
+  assert.deepEqual(await errs({ 'chat/privacy/index.html': policy, 'privacy.html': moved(line) }), []);
+  const stale = await errs({ 'chat/privacy/index.html': policy, 'privacy.html': moved('Version 1.0-beta.2 · Effective: 2026-08-01') });
+  assert.equal(stale.length, 1);
+  assert.ok(stale[0].startsWith('chat-policy: privacy.html: ') && stale[0].includes(line), stale[0]);
+  const missing = await errs({ 'chat/privacy/index.html': policy });
+  assert.equal(missing.length, 1);
+  assert.ok(missing[0].startsWith('chat-policy: privacy.html: '), missing[0]);
+});
+
+test('checkSite: a noindex redirect page may name its target as canonical, nothing else', async () => {
+  const head = (canonical: string, refresh = '/chat/privacy/') => '<meta name="robots" content="noindex">' +
+    `<meta http-equiv="refresh" content="0; url=${refresh}">` + (canonical ? `<link rel="canonical" href="${canonical}">` : '');
+  const target = { 'chat/privacy/index.html': page() };
+  const metaErrs = async (p: string) => (await R.checkSite(await site({ ...target, 'privacy.html': p }), { draft: false })).errors.filter((e) => e.startsWith('meta: privacy.html'));
+  assert.deepEqual(await metaErrs(page({ og: false, head: head('https://sovernity.com/chat/privacy/') })), []);
+  assert.deepEqual(await metaErrs(page({ og: false, head: head('') })), []);
+  assert.equal((await metaErrs(page({ og: false, head: head('https://sovernity.com/ursa/') }))).length, 1, 'canonical must be the refresh target');
+  assert.equal((await metaErrs(page({ og: false, head: head('https://sovernity.com/chat/privacy/', 'https://sovernity.com/chat/privacy/') }))).length, 1, 'only a root-absolute refresh target');
+  const withOg = page({ og: `<meta property="og:title" content="T">`, head: head('https://sovernity.com/chat/privacy/') });
+  assert.equal((await metaErrs(withOg)).length, 1, 'still no og/twitter tags');
 });

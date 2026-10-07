@@ -389,7 +389,15 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       }
     }
     if (noindex) {
-      if (canonicals.length || social.length) err('meta', rel, 'a noindex page carries no canonical, og: or twitter: tags');
+      // A redirect page (meta refresh to a root path, e.g. /privacy.html -> /chat/privacy/) may name its target as canonical.
+      const refresh = tags.find((t) => t.name === 'meta' && t.attrs.some(([k, v]) => k === 'http-equiv' && v.toLowerCase() === 'refresh'));
+      const target = refresh ? refreshTarget(refresh.attrs.find(([k]) => k === 'content')?.[1] ?? '') : null;
+      const targetUrl = target !== null && target.startsWith('/') && isSiteUrl(`${SITE_ORIGIN}${target}`) ? `${SITE_ORIGIN}${target}` : null;
+      const canonicalOk = canonicals.length === 0 ||
+        (canonicals.length === 1 && targetUrl !== null && canonicals[0].attrs.find(([k]) => k === 'href')?.[1] === targetUrl);
+      if (!canonicalOk || social.length) {
+        err('meta', rel, 'a noindex page carries no og: or twitter: tags, and no canonical unless it redirects (meta refresh) to that same root path');
+      }
     } else {
       const self = `${SITE_ORIGIN}/${rel.replace(/index\.html$/, '')}`;
       const canonical = canonicals.length === 1 ? canonicals[0].attrs.find(([k]) => k === 'href')?.[1] : undefined;
@@ -485,8 +493,16 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
         const bundled = await readFile(join(chatRepo, 'Resources/Legal/PRIVACY_POLICY.md'), 'utf8');
         const want = policyLine(bundled);
         if (want === null) err('chat-policy', rel, 'could not read the Version/Effective line from Resources/Legal/PRIVACY_POLICY.md');
-        else if (!page.includes(want) && !visibleText(page).includes(want)) {
-          err('chat-policy', rel, `page does not carry the shipped build's policy line: ${want} (page has: ${policyLine(page) ?? policyLine(visibleText(page)) ?? '<none found>'})`);
+        else {
+          if (!page.includes(want) && !visibleText(page).includes(want)) {
+            err('chat-policy', rel, `page does not carry the shipped build's policy line: ${want} (page has: ${policyLine(page) ?? policyLine(visibleText(page)) ?? '<none found>'})`);
+          }
+          // Chat's CLAIMS (iii) reads the policy line at https://sovernity.com/privacy.html, the old address that now points here.
+          const moved = html.get('privacy.html');
+          if (moved === undefined) err('chat-policy', 'privacy.html', `missing: Chat's CLAIMS (iii) reads the policy line (${want}) at /privacy.html`);
+          else if (!visibleText(moved).includes(want)) {
+            err('chat-policy', 'privacy.html', `does not carry the shipped build's policy line: ${want} (page has: ${policyLine(visibleText(moved)) ?? '<none found>'})`);
+          }
         }
         const master = await readFile(join(chatRepo, 'docs/legal/PRIVACY_POLICY.md'), 'utf8');
         const have = generatedBlockLines(page);

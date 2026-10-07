@@ -5,6 +5,7 @@ import { initAbout } from './about.ts';
 import { initTracker, initSectionDippers } from './dipper.ts';
 import { initCopyButtons } from './copy.ts';
 import { revealOnScroll } from './motion.ts';
+import { initToc } from './toc.ts';
 
 const root = document.documentElement;
 
@@ -52,3 +53,6 @@ const pages: Record<string, () => void> = {
   ursa: initUrsa,
 };
 pages[document.body.dataset.page ?? '']?.();
+
+// Contents scroll-spy on any page with a Contents list (the legal pages).
+if (document.querySelector('[data-toc]')) initToc(document);

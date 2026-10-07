@@ -9,9 +9,31 @@
 }
 :root[data-theme="dark"] { --lg-band: #1C1B18; --lg-surface: #1F1E1B; --lg-faint: #8F897F; --lg-ul: #6E6A62; }
 
+/* ---------- Ursa skin: Dusk colours for Ursa's own pages (privacy, support) ----------
+   One attribute switches a page: <body data-page="legal" data-skin="ursa">. The frame resolves to Dusk paper as on
+   /ursa/ (studio.css body[data-page="ursa"]); the content takes Fraunces headings and the system text stack, as on /ursa/.
+   Terms and crisis protocol stay on the studio palette. */
+body[data-skin="ursa"] {
+  --paper: var(--bg);
+  --line: var(--line-u);
+  --ink: var(--ink-u);
+  --muted: var(--muted-u);
+  --lg-band: var(--sidebar);
+  --lg-surface: var(--surface);
+  --lg-faint: var(--faint);
+  --lg-ul: var(--faint);
+  --lg-link: var(--accentText);
+  --lg-hi: var(--accent);
+  background: var(--bg);
+  color: var(--ink-u);
+}
+body[data-skin="ursa"] .legal { --font-display: var(--font-ursa); --font-text: var(--font-system); font-family: var(--font-text); font-weight: 400; }
+body[data-skin="ursa"] .lg-num, body[data-skin="ursa"] .lg-sec .lg-card .lg-card-t { font-weight: 400; }
+body[data-skin="ursa"] .lg-kicker::before { background: var(--accent); }
+
 /* ---------- frame on legal pages ---------- */
 /* The sub-nav sits on the canvas product band. */
-body[data-page="legal"] .ursa-subnav { background: var(--lg-band); border-bottom-color: var(--line); }
+body[data-page="legal"]:not([data-skin="ursa"]) .ursa-subnav { background: var(--lg-band); border-bottom-color: var(--line); }
 /* Its tracker is not driven here: it rests on the finished figure (all stars lit, all lines drawn,
    no halo, no counter), so nothing animates on these pages. */
 body[data-page="legal"] .r2u-tl { stroke-dashoffset: 0; stroke-opacity: .95; }
@@ -20,7 +42,7 @@ body[data-page="legal"] .r2u-th, body[data-page="legal"] .r2u-count { display: n
 
 /* ---------- layout ---------- */
 .legal { padding: 72px 0 96px; font-size: 17px; line-height: 1.7; }
-.legal a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--lg-ul); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.legal a { color: var(--lg-link, var(--ink)); text-decoration: underline; text-decoration-color: var(--lg-ul); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .legal a:hover { text-decoration-color: var(--ink); }
 .lg-grid { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 72px; align-items: start; }
 .lg-article { max-width: 68ch; min-width: 0; }
@@ -71,6 +93,12 @@ body[data-page="legal"] .r2u-th, body[data-page="legal"] .r2u-count { display: n
   color: var(--muted); text-decoration: none;
 }
 .legal .lg-toc a:hover { color: var(--ink); border-left-color: var(--line); }
+/* Scroll-spy (toc.ts): the section in view. Without JS the list stays plain. */
+.legal .lg-toc a[aria-current="true"] { color: var(--ink); font-weight: 600; border-left-color: var(--lg-hi, var(--ink)); }
+.legal .lg-toc a[aria-current="true"] .lg-tn { color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .legal .lg-toc a { transition: color .2s ease, border-color .2s ease; }
+}
 .lg-tn { font-variant-numeric: tabular-nums; color: var(--lg-faint); }
 .lg-toc-m { display: none; }
 
@@ -165,6 +193,10 @@ mark.ph code { font-size: 1em; }
   .lg-toc-m li { padding: 5px 0; }
   .lg-toc-m li::marker { color: var(--lg-faint); }
   .legal .lg-toc-m a { text-decoration: none; }
+  .lg-toc-m li { margin-left: -12px; padding-left: 10px; border-left: 2px solid transparent; }
+  .lg-toc-m li:has(> a[aria-current="true"]) { border-left-color: var(--lg-hi, var(--ink)); }
+  .lg-toc-m li:has(> a[aria-current="true"])::marker { color: var(--ink); }
+  .legal .lg-toc-m a[aria-current="true"] { color: var(--ink); font-weight: 600; }
 }
 
 /* ---------- phone ---------- */
