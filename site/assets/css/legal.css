@@ -11,21 +11,15 @@
 
 /* ---------- Ursa skin: Dusk colours for Ursa's own pages (privacy, support) ----------
    One attribute switches a page: <body data-page="legal" data-skin="ursa">. The frame resolves to Dusk paper as on
-   /ursa/ (studio.css body[data-page="ursa"]); the content takes Fraunces headings and the system text stack, as on /ursa/.
+   /ursa/ (shared remap in studio.css); the content takes Fraunces headings and the system text stack, as on /ursa/.
    Terms and crisis protocol stay on the studio palette. */
 body[data-skin="ursa"] {
-  --paper: var(--bg);
-  --line: var(--line-u);
-  --ink: var(--ink-u);
-  --muted: var(--muted-u);
   --lg-band: var(--sidebar);
   --lg-surface: var(--surface);
   --lg-faint: var(--faint);
   --lg-ul: var(--faint);
   --lg-link: var(--accentText);
   --lg-hi: var(--accent);
-  background: var(--bg);
-  color: var(--ink-u);
 }
 body[data-skin="ursa"] .legal { --font-display: var(--font-ursa); --font-text: var(--font-system); font-family: var(--font-text); font-weight: 400; }
 body[data-skin="ursa"] .lg-num, body[data-skin="ursa"] .lg-sec .lg-card .lg-card-t { font-weight: 400; }
@@ -94,7 +88,9 @@ body[data-page="legal"] .r2u-th, body[data-page="legal"] .r2u-count { display: n
 }
 .legal .lg-toc a:hover { color: var(--ink); border-left-color: var(--line); }
 /* Scroll-spy (toc.ts): the section in view. Without JS the list stays plain. */
-.legal .lg-toc a[aria-current="true"] { color: var(--ink); font-weight: 600; border-left-color: var(--lg-hi, var(--ink)); }
+.legal .lg-toc a[aria-current="true"] { color: var(--ink); border-left-color: var(--lg-hi, var(--ink));
+  /* Faux bold: a text-shadow adds weight without changing glyph advances, so entries never re-wrap. */
+  text-shadow: .35px 0 0 currentColor, -.35px 0 0 currentColor; }
 .legal .lg-toc a[aria-current="true"] .lg-tn { color: var(--ink); }
 @media (prefers-reduced-motion: no-preference) {
   .legal .lg-toc a { transition: color .2s ease, border-color .2s ease; }

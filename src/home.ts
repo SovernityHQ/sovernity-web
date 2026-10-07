@@ -7,8 +7,8 @@ export function initHome(): void {
   revealOnScroll(sections, 'in');
   initStudioTracker(sections);
 
-  // The pointer glow runs only while the Ursa panel is in view (CSS animates under `.is-live`).
-  const ursa = document.querySelector('.home-ursa');
+  // The Dipper glows run only while the figure is in view (CSS animates under `.is-live`).
+  const ursa = document.querySelector('.home-dipcol');
   if (ursa && !prefersReducedMotion() && typeof IntersectionObserver !== 'undefined') {
     new IntersectionObserver((entries) => {
       for (const en of entries) en.target.classList.toggle('is-live', en.isIntersecting);

@@ -2,7 +2,7 @@
    Ported from canvas R2SealHome.css and R2Ursa.css (header, sub-nav, footer rules). */
 
 /* On the Ursa page the frame sits on Dusk paper (R2Ursa.css .r2u-studio uses the Dusk tokens). */
-body[data-page="ursa"] {
+body[data-page="ursa"], body[data-skin="ursa"] {
   --paper: var(--bg);
   --line: var(--line-u);
   --ink: var(--ink-u);
@@ -412,8 +412,7 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
 .home-file svg { fill: none; stroke: #FAFAF8; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .home-bars i { display: block; height: 8px; border-radius: 4px; background: rgba(250, 250, 248, .34); }
 .home-bars i + i { width: 62%; margin-top: 9px; background: rgba(250, 250, 248, .18); }
-.home-ok circle { stroke-opacity: .6; stroke-dasharray: 1; transform-box: fill-box; transform-origin: center; transform: rotate(-90deg); }
-.home-ok path { stroke-dasharray: 1; }
+.home-ok circle { stroke-opacity: .6; }
 .home-bars i { transform-origin: left center; }
 
 /* 05 why: a studio night panel in dark mode, a light paper panel in light mode (founder, 2026-10-07;
@@ -494,7 +493,7 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   html.js .home-suite.in .home-points li:nth-child(3),
   html.js .home-suite.in .home-points li:nth-child(3)::before { animation-delay: .36s; }
 
-  html.js .home-ursa.in .dip-line { animation: st-glow 6s ease-in-out infinite; }
+  html.js .home-dipcol.is-live .dip-line { animation: st-glow 6s ease-in-out infinite; }
   html.js .home-ursa.in .dip-star { animation: st-kindle 1.2s ease-out backwards; }
   html.js .home-ursa.in .dip-star.s1 { animation-delay: .1s; }
   html.js .home-ursa.in .dip-star.s2 { animation-delay: .25s; }
@@ -503,9 +502,10 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   html.js .home-ursa.in .dip-star.s5 { animation-delay: .7s; }
   html.js .home-ursa.in .dip-star.s6 { animation-delay: .85s; }
   html.js .home-ursa.in .dip-star.s7 { animation-delay: 1s; }
-  /* .is-live while the panel is in view (home.ts); the cycle restarts each time it comes back. */
-  html.js .home-ursa.is-live .dip-glow { animation: st-ptr-glow 9s 1.4s infinite; }
-  html.js .home-ursa.is-live .polaris-halo { animation: st-polaris 9s 1.4s infinite; }
+  /* .is-live while the Dipper is in view (home.ts); the cycle restarts each time it comes back.
+     The first pointer cycle waits 1.9 s so star s5 (.7 s + 1.2 s kindle) finishes first; glow and halo share it. */
+  html.js .home-dipcol.is-live .dip-glow { animation: st-ptr-glow 9s 1.9s infinite; }
+  html.js .home-dipcol.is-live .polaris-halo { animation: st-polaris 9s 1.9s infinite; }
   html.js .home-ursa.in .home-uline,
   html.js .home-chat.in .home-cline { animation: st-rise 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
   html.js .home-ursa.in .home-app,
@@ -522,6 +522,9 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   html.js .home-chat.in .home-file:nth-child(2) .home-bars i + i { animation-delay: .59s; }
   html.js .home-chat.in .home-file:nth-child(3) .home-bars i { animation-delay: .59s; }
   html.js .home-chat.in .home-file:nth-child(3) .home-bars i + i { animation-delay: .71s; }
+  /* Draw setup only when the draw runs: at rest (no JS, reduced motion) the check rings are plain strokes. */
+  html.js .home-ok circle { stroke-dasharray: 1; transform-box: fill-box; transform-origin: center; transform: rotate(-90deg); }
+  html.js .home-ok path { stroke-dasharray: 1; }
   html.js .home-chat.in .home-ok circle { animation: st-draw .45s cubic-bezier(.5, 0, .3, 1) 1s both; }
   html.js .home-chat.in .home-ok path { animation: st-draw .35s cubic-bezier(.5, 0, .3, 1) 1.35s both; }
   html.js .home-chat.in .home-file:nth-child(2) .home-ok circle { animation-delay: 1.45s; }

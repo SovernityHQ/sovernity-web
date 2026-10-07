@@ -12,10 +12,19 @@ export function currentSection(tops: readonly number[], line: number, atBottom: 
   return current;
 }
 
+/** The fragment id of a link, or null when it is not valid percent-encoding. */
+function hashId(a: HTMLAnchorElement): string | null {
+  try {
+    return decodeURIComponent(a.hash.slice(1));
+  } catch {
+    return null;
+  }
+}
+
 /** Wires every `[data-toc]` list on the page (desktop aside and phone `<details>`) to the sections they link to. */
 export function initToc(doc: Document): void {
-  const links = Array.from(doc.querySelectorAll<HTMLAnchorElement>('[data-toc] a[href^="#"]'));
-  const ids = [...new Set(links.map((a) => decodeURIComponent(a.hash.slice(1))))];
+  const links = Array.from(doc.querySelectorAll<HTMLAnchorElement>('[data-toc] a[href^="#"]')).filter((a) => hashId(a) !== null);
+  const ids = [...new Set(links.map((a) => hashId(a) ?? ''))];
   const sections = ids.map((id) => doc.getElementById(id)).filter((el): el is HTMLElement => el !== null);
   if (sections.length === 0) return;
   const subnav = doc.querySelector<HTMLElement>('.ursa-subnav');
@@ -33,7 +42,7 @@ export function initToc(doc: Document): void {
     if (id === shown) return;
     shown = id;
     for (const a of links) {
-      if (id && decodeURIComponent(a.hash.slice(1)) === id) a.setAttribute('aria-current', 'true');
+      if (id && hashId(a) === id) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     }
   };
