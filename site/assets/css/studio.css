@@ -195,6 +195,7 @@ html.js .r2u-th.on { animation: r2u-halo 3.4s ease-out infinite; }
 .foot-notes p + p { margin-top: 8px; }
 .foot-notes .fx { color: var(--ink-u); }
 .ursa-footer .theme-toggle { border-color: var(--line-u); color: var(--ink-u); }
+.ursa-footer .theme-toggle:hover { border-color: var(--ink-u); }
 
 /* ---------- studio breakpoints ---------- */
 @media (max-width: 860px) {
