@@ -446,20 +446,22 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
 @keyframes st-fadeup { from { opacity: .35; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 @keyframes st-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes st-kindle { 0% { transform: scale(.6); } 65% { transform: scale(1.14); } 100% { transform: scale(1); } }
-/* Follow the pointers: the pointer stars lift, the dotted pointer reveals upward, the north star blooms, then twinkles. */
+/* Follow the pointers: the pointer stars lift, the dotted pointer reveals upward, the north star blooms, then twinkles.
+   Timing lives in the motion block (--ptr-d and the --t-* offsets). */
 @keyframes st-point {
   0%, 100% { scale: 1; filter: none; }
-  45% { scale: 1.28; filter: brightness(1.22) drop-shadow(0 0 3px #F6E2B0); }
+  45% { scale: 1.24; filter: brightness(1.2) drop-shadow(0 0 3px #F6E2B0); }
 }
 @keyframes st-ptr-reveal { from { stroke-dashoffset: 1.25; } to { stroke-dashoffset: .05; } }
 @keyframes st-pol-lift { from { opacity: .35; } to { opacity: 1; } }
+/* One bloom: swells to its peak at 55 %, then eases back without overshoot (the animation itself runs linear). */
 @keyframes st-pol-bloom {
-  0% { transform: scale(.6); fill-opacity: .3; }
-  50% { transform: scale(1.6); fill-opacity: .85; }
+  0% { transform: scale(.6); fill-opacity: .3; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
+  55% { transform: scale(1.45); fill-opacity: .8; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
   100% { transform: scale(1); fill-opacity: .5; }
 }
-@keyframes st-twinkle-o { 0%, 100% { opacity: 1; } 50% { opacity: .85; } }
-@keyframes st-twinkle-s { 0%, 100% { scale: 1; } 30% { scale: 1.03; } 70% { scale: .97; } }
+@keyframes st-twinkle-o { 0%, 100% { opacity: 1; } 50% { opacity: .9; } }
+@keyframes st-twinkle-s { 0%, 100% { scale: 1; } 30% { scale: 1.015; } 70% { scale: .985; } }
 @keyframes st-settle { from { opacity: .4; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes st-fill { from { transform: scaleX(0); } to { transform: none; } }
 @keyframes st-rule { from { transform: scaleX(.12); } to { transform: scaleX(1); } }
@@ -503,31 +505,43 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   html.js .home-ursa.in .dip-star.s7 { animation-delay: 1s; }
   /* Follow the pointers, once per visit (home.ts): `.is-live` while the Dipper is in view plays it; `.is-armed`, set only
      once the figure has been fully out of the viewport, holds the dim start so the next visit plays again. Without
-     either class (no JS, reduced motion, no observer) the finished picture shows. The first play waits 1.9 s so
-     star s5 (.7 s + 1.2 s kindle) finishes first; later visits (`.is-seen`) wait .4 s.
-     S6 then S5 lift (0–.75 s), the dots reveal upward (.6–2.4 s), the north star blooms (2.1–3 s), then twinkles. */
-  html.js .home-dipcol { --ptr-delay: 1.9s; }
-  html.js .home-dipcol.is-seen { --ptr-delay: .4s; }
+     either class (no JS, reduced motion, no observer) the finished picture shows.
+     Timeline from D (--ptr-d: 1.9 s on first view so the s5 kindle, .7 s + 1.2 s, finishes; .6 s on later visits):
+       D+0    S6 lifts            1.0 s  (peak at 45 %)
+       D+0.7  S5 lifts            1.0 s  (overlaps S6's settle: a hand-off)
+       D+1.5  dots reveal upward  3.2 s  (starts as S5 peaks; ease-in-out into the star, ends D+4.7)
+       D+4.3  north star lifts and blooms once  1.6 s  (overlaps the reveal's last .4 s; rests at D+5.9)
+       D+6.2  twinkle, in view only: 8 s halo opacity and 11 s scale, layered */
+  html.js .home-dipcol {
+    --ptr-d: 1.9s;
+    --t-s6: var(--ptr-d);
+    --t-s5: calc(var(--ptr-d) + .7s);
+    --t-reveal: calc(var(--ptr-d) + 1.5s);
+    --t-star: calc(var(--ptr-d) + 4.3s);
+    --t-twinkle: calc(var(--ptr-d) + 6.2s);
+    --ptr-ease: cubic-bezier(.45, 0, .25, 1);
+  }
+  html.js .home-dipcol.is-seen { --ptr-d: .6s; }
   html.js .home-dipcol.is-armed:not(.is-live) .ptr-reveal { stroke-dasharray: 1.2 3; stroke-dashoffset: 1.25; }
   html.js .home-dipcol.is-armed:not(.is-live) .polaris { opacity: .35; }
   html.js .home-dipcol.is-armed:not(.is-live) .polaris-halo { transform: scale(.6); fill-opacity: .3; }
   html.js .home-ursa.in .home-dipcol.is-live .dip-star.s6 {
-    animation: st-kindle 1.2s ease-out .85s backwards, st-point .5s ease-in-out var(--ptr-delay) both;
+    animation: st-kindle 1.2s ease-out .85s backwards, st-point 1s var(--ptr-ease) var(--t-s6) both;
   }
   html.js .home-ursa.in .home-dipcol.is-live .dip-star.s5 {
-    animation: st-kindle 1.2s ease-out .7s backwards, st-point .5s ease-in-out calc(var(--ptr-delay) + .25s) both;
+    animation: st-kindle 1.2s ease-out .7s backwards, st-point 1s var(--ptr-ease) var(--t-s5) both;
   }
   html.js .home-dipcol.is-live .ptr-reveal {
     stroke-dasharray: 1.2 3;
-    animation: st-ptr-reveal 1.8s cubic-bezier(.45, 0, .3, 1) calc(var(--ptr-delay) + .6s) both;
+    animation: st-ptr-reveal 3.2s var(--ptr-ease) var(--t-reveal) both;
   }
   html.js .home-dipcol.is-live .polaris {
-    animation: st-pol-lift .9s ease-out calc(var(--ptr-delay) + 2.1s) both,
-      st-twinkle-s 7.4s ease-in-out calc(var(--ptr-delay) + 3s) infinite;
+    animation: st-pol-lift 1.6s ease-out var(--t-star) both,
+      st-twinkle-s 11s ease-in-out var(--t-twinkle) infinite;
   }
   html.js .home-dipcol.is-live .polaris-halo {
-    animation: st-pol-bloom .9s ease-out calc(var(--ptr-delay) + 2.1s) both,
-      st-twinkle-o 6.2s ease-in-out calc(var(--ptr-delay) + 3s) infinite;
+    animation: st-pol-bloom 1.6s linear var(--t-star) both,
+      st-twinkle-o 8s ease-in-out var(--t-twinkle) infinite;
   }
   html.js .home-ursa.in .home-uline,
   html.js .home-chat.in .home-cline { animation: st-rise 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
