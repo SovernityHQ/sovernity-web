@@ -37,10 +37,16 @@ Copy comes verbatim from the HQ copy files, and banned words, fixed lines, the o
 
 ## Chat privacy policy
 
-The Chat privacy page must stay equal to the policy bundled in the app. Before any edit to it, run `npm run check -- --chat-repo PATH` against a SovernityChat checkout.
+The Chat privacy page (`site/chat/privacy/`) must stay equal to the policy bundled in the app. Only one check compares them, the `chat-policy` rule, and it runs only when given a SovernityChat checkout:
+
+```
+npm run check -- --chat-repo PATH       # PATH = a SovernityChat checkout
+```
+
+CI never runs it: SovernityChat is private, so in CI the rule is skipped with a warning. Run it yourself, and see it pass, before any edit to that page and before any publish that touches `/chat/privacy/`.
 
 ## Publishing
 
 Pull request, then the founder merges, then the workflow (`.github/workflows/pages.yml`) typechecks, tests, builds, checks and deploys `_site/` to GitHub Pages. Only pushes to `main` deploy.
 
-**Pages is still on the legacy source (`main`, `/`).** Merging to `main` before the source is switched to GitHub Actions would serve the repository root, not `_site/`. Switch the source first. Publishing is in two stages (launch markup in `templates/` goes in at stage 2) and needs founder approval. The order of steps is in the HQ runbook: `knowledge/ledgers/ursa-website/publish-runbook.md` (in SovernityHQ/SovernityUrsa-HQ; written later).
+**Pages is still on the legacy source (`main`, `/`).** Merging to `main` before the source is switched to GitHub Actions would serve the repository root, not `_site/`. Switch the source first. Publishing is in two stages (launch markup in `templates/` goes in at stage 2) and needs founder approval. The order of steps is in the HQ runbook: `knowledge/ledgers/ursa-website/publish-runbook.md` in SovernityHQ/SovernityUrsa-HQ. If the publish touches `/chat/privacy/`, run the `--chat-repo` check above before merging (CI cannot).

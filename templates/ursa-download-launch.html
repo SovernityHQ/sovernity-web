@@ -8,9 +8,13 @@
      site/assets/img/ursa/app-store-badge-black.svg. Do not redraw, recolour or crop it.
   3. In site/ursa/index.html:
      - hero: replace the "Coming soon" button and "The first release is on its way." in .r2u-cta-main
-       with block (a)'s Download link, and add block (a)'s .r2u-cta-phone after .r2u-cta-main;
-     - download section: replace the "Coming soon" button and line in .r2u-dl-main with block (b)'s
-       main part, and put block (b)'s SHA-256 card before the Requirements card in .r2u-dl-side;
+       with block (a)'s Download link, and add block (a)'s .r2u-cta-phone after .r2u-cta-main. Block (a)
+       has no 18+ line: the hero's existing .r2u-age line (after .r2u-cta-row) stays as it is;
+     - download section: in .r2u-dl-main, keep .r2u-head and replace everything after it (the "Coming
+       soon" button, "The first release is on its way." AND the existing .r2u-age 18+ line) with
+       everything in block (b)'s .r2u-dl-main after its .r2u-head stub. Block (b)'s .r2u-age line
+       replaces the existing one, so the section keeps exactly one 18+ line. Then put block (b)'s
+       SHA-256 card before the Requirements card in .r2u-dl-side;
      - <head>: add block (c).
   4. Add the launch styles for .r2u-badge, .r2u-ver, .r2u-btn-sub, .r2u-sumrow, .r2u-sum, .r2u-copy and
      .r2u-code from canvas R2Ursa.css to site/assets/css/ursa.css. copy.ts is already wired by main.ts,
