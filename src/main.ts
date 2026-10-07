@@ -7,7 +7,6 @@ import { initCopyButtons } from './copy.ts';
 import { revealOnScroll } from './motion.ts';
 
 const root = document.documentElement;
-root.classList.add('js');
 
 function storage(): Storage | null {
   try { return window.localStorage; } catch { return null; }
@@ -20,6 +19,11 @@ const menu = document.querySelector<HTMLButtonElement>('button[data-menu]');
 const navId = menu?.getAttribute('aria-controls');
 const menuNav = navId ? document.getElementById(navId) : null;
 if (menu && menuNav) initMenu(menu, menuNav);
+
+// Only now: html.js hides the no-JS fallbacks (wrapped phone nav, no toggle), so it waits until the theme toggles and
+// the Menu are wired. If either throws, the page keeps its complete no-JS layout. Same synchronous module run as
+// before, so the timing against first paint is unchanged.
+root.classList.add('js');
 
 // Theme-aware pictures: `<source data-themed media="(prefers-color-scheme: dark)">` follows a stored
 // Light or Dark too, not only the system.
