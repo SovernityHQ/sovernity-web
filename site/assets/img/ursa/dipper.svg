@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 120" width="210" height="120" role="img" aria-label="Ursa: the seven stars of the Big Dipper">
-<style>.l{stroke:#334770}.s{fill:#C28E34}@media (prefers-color-scheme:dark){.l{stroke:#AAC1EE}.s{fill:#E2B566}}</style>
-<path class="l" d="M12 78 L52 50 L86 56 L128 62 L196 40 L200 92 L142 104 L128 62" fill="none" stroke-opacity="0.55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<g class="s"><circle cx="196" cy="40" r="5.6"/><circle cx="200" cy="92" r="5.1"/><circle cx="142" cy="104" r="5.1"/><circle cx="128" cy="62" r="4.3"/><circle cx="86" cy="56" r="5.6"/><circle cx="52" cy="50" r="5.3"/><circle cx="12" cy="78" r="5.5"/></g>
-</svg>
