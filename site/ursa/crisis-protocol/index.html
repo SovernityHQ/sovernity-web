@@ -31,8 +31,8 @@
       <ol>
         <li><a href="#when"><span class="lg-tn">1</span><span>When Ursa shows crisis help</span></a></li>
         <li><a href="#how"><span class="lg-tn">2</span><span>How Ursa looks for signs of a crisis</span></a></li>
-        <li><a href="#card"><span class="lg-tn">3</span><span>What the card shows</span></a></li>
-        <li><a href="#keeps"><span class="lg-tn">4</span><span>If it keeps coming up</span></a></li>
+        <li><a href="#card"><span class="lg-tn">3</span><span>What Ursa shows</span></a></li>
+        <li><a href="#keeps"><span class="lg-tn">4</span><span>While crisis mode lasts</span></a></li>
         <li><a href="#any-time"><span class="lg-tn">5</span><span>Help in a crisis, any time</span></a></li>
         <li><a href="#cant"><span class="lg-tn">6</span><span>What Ursa can't do</span></a></li>
         <li><a href="#count"><span class="lg-tn">7</span><span>How many times the card has shown</span></a></li>
@@ -59,10 +59,10 @@
       <section class="lg-glance" aria-labelledby="glance-h">
         <h2 id="glance-h">At a glance</h2>
         <ul>
-          <li>Ursa checks each message for signs of a crisis. The check runs on your Mac.</li>
-          <li>When it sees them, a card under Ursa's reply shows ways to reach a person: call or text 988, or call 911.</li>
-          <li>The card is part of the app, not the AI's reply, so the AI can't remove it.</li>
-          <li>Ursa can miss things, and it can't contact anyone for you.</li>
+          <li>Ursa is an AI, not a therapist or a crisis service. It can't contact anyone for you, and it can miss things.</li>
+          <li>Ursa checks every message for signs of a crisis. The check runs on your Mac.</li>
+          <li>When it flags a message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, and a card to call or text 988, or call 911.</li>
+          <li>If it got it wrong, one tap puts Ursa back to normal.</li>
           <li>Ursa sends us nothing, so we can't count how often the card appears.</li>
         </ul>
       </section>
@@ -72,8 +72,8 @@
         <ol>
           <li><a href="#when">When Ursa shows crisis help</a></li>
           <li><a href="#how">How Ursa looks for signs of a crisis</a></li>
-          <li><a href="#card">What the card shows</a></li>
-          <li><a href="#keeps">If it keeps coming up</a></li>
+          <li><a href="#card">What Ursa shows</a></li>
+          <li><a href="#keeps">While crisis mode lasts</a></li>
           <li><a href="#any-time">Help in a crisis, any time</a></li>
           <li><a href="#cant">What Ursa can't do</a></li>
           <li><a href="#count">How many times the card has shown</a></li>
@@ -84,29 +84,33 @@
 
       <section class="lg-sec" id="when" aria-labelledby="when-h">
         <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
-        <p>Before Ursa writes a reply, it checks your message for signs that you might be thinking about suicide or might hurt yourself. The check runs on your Mac, like everything else in Ursa. Your words aren't sent anywhere to be checked.</p>
-        <p>If the check finds those signs, Ursa answers carefully. It asks how you are, shows the crisis card under its reply, and stays on that. While it does, it doesn't draw on what it knows about you, and it never learns from those messages.</p>
-        <p>Ursa stays in this careful mode while any of your last three messages showed those signs.</p>
+        <p>Before Ursa replies, it runs a quick check on your message for signs that you might be thinking about suicide or might hurt yourself. The check also reads your previous message, so it sees the new one in context. It runs on your Mac, like everything else in Ursa. Nothing leaves your Mac to be checked.</p>
+        <p>If the check flags your message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, with the crisis card under it (section 3). This is crisis mode. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>Ursa never learns from what you write in crisis mode, so none of it is added to what it knows about you. Crisis mode ends when you tell Ursa it got it wrong, or after 10 messages in a row that aren't flagged (section 4).</p>
       </section>
 
       <section class="lg-sec" id="how" aria-labelledby="how-h">
         <h2 id="how-h"><span class="lg-hn">02</span><span>How Ursa looks for signs of a crisis</span></h2>
         <dl class="lg-dl">
           <dt>Method:</dt>
-          <dd><mark class="ph">[[S4: name of the evidence-based method used to measure suicidal ideation, and its source]]</mark></dd>
+          <dd>The same AI model that runs Ursa on your Mac is asked whether your message, read with your previous one, shows signs of a crisis. Anything but a clear no counts as a flag. So does a check that fails or takes too long.</dd>
           <dt>How we tested it:</dt>
-          <dd><mark class="ph">[[S4: the test set, how it was graded (locally), and the date]]</mark></dd>
+          <dd>On 44 messages we wrote by hand, each marked in advance as at risk or not. We wrote 16 of them before any tuning and held them back. We also ran 200 everyday messages for false flags. We ran the tests on our own Mac in October 2026.</dd>
           <dt>Recall <small>(how often it caught the signs when they were there):</small></dt>
-          <dd><mark class="ph">[[S4: recall]]</mark></dd>
+          <dd>All 13 at-risk messages (100%) in the set we used while building the check, and 7 of 8 (87.5%) in the set we held back. Both sets are small.</dd>
           <dt>False positives <small>(how often it showed the card when they weren't):</small></dt>
-          <dd><mark class="ph">[[S4: false-positive rate]]</mark></dd>
+          <dd>About 1% of 200 everyday messages (2 of 200; 95% confidence interval 0.3–3.6%). Dark-humour idioms, like "I want to die, I sent that to the wrong person", are flagged more often: 11 of 50 in our set of hard cases.</dd>
         </dl>
-        <p>No check like this is perfect. Ursa can miss signs of a crisis, and it can show the card when you didn't need it. We chose to lean towards showing it.</p>
+        <p>All of this comes from our own small tests. It isn't a clinical evaluation.</p>
+        <p>No check like this is perfect. Ursa can miss signs of a crisis, and it can flag a message when you didn't need help. We chose to lean towards flagging.</p>
       </section>
 
       <section class="lg-sec" id="card" aria-labelledby="card-h">
-        <h2 id="card-h"><span class="lg-hn">03</span><span>What the card shows</span></h2>
-        <p>The first time Ursa sees signs of a crisis in a conversation, a card appears under its reply:</p>
+        <h2 id="card-h"><span class="lg-hn">03</span><span>What Ursa shows</span></h2>
+        <p>When the check flags a message, Ursa shows this message in place of a reply. A person wrote it, and it's the same every time:</p>
+        <!-- RECHECK-S4: verify against product main once the fixed-response PR merges -->
+        <p><strong>"I hear you. I'm an AI, so I'm not the right help for this moment. Please reach a person: call or text 988, the Suicide &amp; Crisis Lifeline, any time. If you're in immediate danger, call 911."</strong></p>
+        <p>Under it is the crisis card:</p>
         <div class="lg-card" role="group" aria-label="The crisis card, as text">
           <p class="lg-card-t">Talk with a person now</p>
           <p>Call or text 988, the Suicide &amp; Crisis Lifeline, any time, day or night.</p>
@@ -116,22 +120,25 @@
         </div>
         <p>The card has no web link: its buttons only call or text.</p>
         <p>On a Mac, calls and texts go through your iPhone, with FaceTime and Messages. If your Mac can't place the call, the numbers stay on screen so you can dial them from any phone.</p>
-        <p>The card is drawn by the app, not written by the AI. The AI can't hide it, change it or leave it out. If you stop a reply early, the card still appears.</p>
+        <p>The message and the card are part of the app. The AI doesn't write them, and it can't change them or leave them out.</p>
       </section>
 
       <section class="lg-sec" id="keeps" aria-labelledby="keeps-h">
-        <h2 id="keeps-h"><span class="lg-hn">04</span><span>If it keeps coming up</span></h2>
-        <p>If signs of a crisis continue later in the same conversation, every reply after the first one carries a shorter line: <strong>Crisis line, any time</strong>, with buttons to call or text 988 and call 911.</p>
-        <p>This is Ursa's further step after the first referral.</p>
-        <p>The full card shows again only if Ursa leaves careful mode and later sees the signs again. Each of these replies is written in careful mode, as in section 1.</p>
+        <h2 id="keeps-h"><span class="lg-hn">04</span><span>While crisis mode lasts</span></h2>
+        <p>Every message you send while crisis mode lasts gets a short fixed line in place of a reply:</p>
+        <!-- RECHECK-S4: verify against product main once the fixed-response PR merges -->
+        <p><strong>"I'm not the right help for this, but 988 is, any time. Call or text."</strong></p>
+        <p>Under it is a shorter row: <strong>Crisis line, any time</strong>, with buttons to call or text 988 and call 911.</p>
+        <p>If Ursa got it wrong, tap <strong>I'm safe</strong> or <strong>I meant something else</strong> under its message, or say so in your own words. Ursa goes back to normal right away. After a tap, it says "Thanks for letting me know." <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>Otherwise, crisis mode ends after 10 messages in a row that aren't flagged. If the check flags a message after that, the full message and card show again.</p>
       </section>
 
       <section class="lg-sec" id="any-time" aria-labelledby="any-time-h">
         <h2 id="any-time-h"><span class="lg-hn">05</span><span>Help in a crisis, any time</span></h2>
-        <p>You don't need to wait for the card.</p>
+        <p>You don't need to wait for Ursa to flag a message.</p>
         <ul>
-          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is off or out of reach.</li>
-          <li><strong>On Mac:</strong> Help › Help in a crisis, with the numbers set large so you can dial them from any phone.</li>
+          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is off or out of reach. Before your iPhone is paired with a Mac, it's on the welcome and pairing screens. <!-- RECHECK-S7b: verify against product main once the ux-polish PR (Help in a crisis on Welcome and pairing) merges --></li>
+          <li><strong>On Mac:</strong> Help › Help in a crisis, or Settings › About › Safety, with the numbers set large so you can dial them from any phone.</li>
         </ul>
       </section>
 
@@ -139,6 +146,7 @@
         <h2 id="cant-h"><span class="lg-hn">06</span><span>What Ursa can't do</span></h2>
         <ul>
           <li class="lg-fixed">Ursa is an AI, not a person or a therapist.</li>
+          <li>It isn't a crisis service, and it doesn't talk you through a crisis. It points you to people who can help.</li>
           <li>It can't call, text or alert anyone for you, including emergency services.</li>
           <li>It can't tell whether you called or texted, or what happened next.</li>
           <li>It can miss signs of a crisis.</li>
@@ -154,7 +162,7 @@
 
       <section class="lg-sec" id="report" aria-labelledby="report-h">
         <h2 id="report-h"><span class="lg-hn">08</span><span>Reporting a problem with a reply</span></h2>
-        <p>If a reply from Ursa seemed unsafe, or the card showed when it shouldn't have (or didn't when it should), please tell us at <a href="mailto:support@sovernity.com">support@sovernity.com</a>.</p>
+        <p>If a reply from Ursa seemed unsafe, or Ursa flagged a message when it shouldn't have (or didn't when it should), please tell us at <a href="mailto:support@sovernity.com">support@sovernity.com</a>.</p>
         <p>Ursa doesn't send us anything, so we only see what you choose to write. Describe what happened in your own words. You don't need to paste the conversation, and please leave out anything you'd rather keep to yourself.</p>
         <p>If you're in crisis right now, please call or text 988, or call 911, before writing to us. Email isn't watched around the clock.</p>
       </section>
