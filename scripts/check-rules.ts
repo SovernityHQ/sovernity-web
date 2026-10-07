@@ -75,6 +75,11 @@ export function findPlaceholders(html: string): string[] {
   return src.match(/\[\[[\s\S]*?\]\]/g) ?? [];
 }
 
+/** `<!-- RECHECK-…: … -->` comments: page text not yet verified against the shipped app. Returns each marker's text. */
+export function findRechecks(html: string): string[] {
+  return [...html.matchAll(/<!--\s*(RECHECK-[\s\S]*?)\s*-->/g)].map((m) => m[1].replace(/\s+/g, ' '));
+}
+
 function normaliseQuotes(s: string): string {
   return s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
 }
@@ -228,7 +233,7 @@ export function missingMasterLines(master: string, have: Set<string>): string[] 
 export interface CheckResult { errors: string[]; warnings: string[]; ok: string[] }
 
 const RULES = [
-  'placeholders', 'banned', 'secure', 'fixed-lines', 'ursa-footer', 'root-absolute', 'internal-links', 'outbound',
+  'placeholders', 'recheck', 'banned', 'secure', 'fixed-lines', 'ursa-footer', 'root-absolute', 'internal-links', 'outbound',
   'latest', 'js-network', 'inline-script', 'meta', 'no-badge-yet', 'vera', 'chat-policy',
 ] as const;
 const AI_LINE = 'Ursa is an AI, not a person or a therapist.';
@@ -304,6 +309,9 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
 
     for (const ph of findPlaceholders(src)) {
       (opts.draft ? warnings : errors).push(`placeholders: ${rel}: ${ph}`);
+    }
+    for (const mark of findRechecks(src)) {
+      (opts.draft ? warnings : errors).push(`recheck: ${rel}: ${mark}`);
     }
 
     const attrText = attributeText(tags);

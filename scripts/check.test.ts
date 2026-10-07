@@ -124,6 +124,29 @@ test('checkSite: third-party link and missing internal link are reported by rule
   assert.ok(r.errors.some((e) => e.startsWith('internal-links: b/index.html')));
 });
 
+test('findRechecks lists RECHECK- comment markers only', () => {
+  assert.deepEqual(R.findRechecks('<p>a <!-- RECHECK-S4: verify X --> b</p><!-- note --><!--RECHECK-S7b: y-->'),
+    ['RECHECK-S4: verify X', 'RECHECK-S7b: y']);
+  assert.deepEqual(R.findRechecks('<p>RECHECK-S4 in text is not a marker</p><!-- recheck later -->'), []);
+});
+
+test('checkSite: RECHECK- markers warn in --draft and fail strict', async () => {
+  const dir = await site({ ...ursaPages('<p>"Quoted." <!-- RECHECK-S4: verify against product main --></p>') });
+  const strict = await R.checkSite(dir, { draft: false });
+  assert.deepEqual(ruleIds(strict.errors), ['recheck']);
+  assert.ok(strict.errors.includes('recheck: ursa/index.html: RECHECK-S4: verify against product main'));
+  const draft = await R.checkSite(dir, { draft: true });
+  assert.deepEqual(draft.errors, []);
+  assert.ok(draft.warnings.includes('recheck: ursa/index.html: RECHECK-S4: verify against product main'));
+  assert.ok(!draft.ok.includes('ok recheck'));
+});
+
+test('checkSite: no RECHECK- marker means recheck is ok', async () => {
+  const r = await R.checkSite(await site({ ...ursaPages('<!-- an ordinary comment -->') }), { draft: false });
+  assert.deepEqual(r.errors, []);
+  assert.ok(r.ok.includes('ok recheck'));
+});
+
 test('checkSite: --draft turns placeholders into warnings', async () => {
   const dir = await site({ ...ursaPages('<p>v [[S6: 1.0.0]]</p>') });
   const strict = await R.checkSite(dir, { draft: false });
