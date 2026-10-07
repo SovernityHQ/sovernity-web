@@ -45,7 +45,7 @@
       <p class="lg-kicker">Sovernity Ursa</p>
       <h1 class="lg-h1">Crisis protocol</h1>
       <p class="lg-lede">How Sovernity Ursa responds when a conversation shows signs of a crisis, what it shows you, and what it can't do.</p>
-      <p class="lg-meta"><span>Last updated <mark class="ph">[[S4: date of publication]]</mark></span><span>Our reading of the law, not legal advice.</span></p>
+      <p class="lg-meta"><span>Last updated <mark class="ph">[[Publish: date of publication]]</mark></span><span>Our reading of the law, not legal advice.</span></p>
 
       <section class="lg-help" aria-labelledby="help-h">
         <h2 id="help-h">If you need help now</h2>
@@ -61,8 +61,8 @@
         <ul>
           <li>Ursa is an AI, not a therapist or a crisis service. It can't contact anyone for you, and it can miss things.</li>
           <li>Ursa checks every message for signs of a crisis. The check runs on your Mac.</li>
-          <li>When it flags a message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, and a card to call or text 988, or call 911.</li>
-          <li>If it got it wrong, one tap puts Ursa back to normal.</li>
+          <li>When it flags a message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, and a card to call or text 988, or call 911. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></li>
+          <li>If it got it wrong, one tap puts Ursa back to normal. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></li>
           <li>Ursa sends us nothing, so we can't count how often the card appears.</li>
         </ul>
       </section>
@@ -86,7 +86,7 @@
         <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
         <p>Before Ursa replies, it runs a quick check on your message for signs that you might be thinking about suicide or might hurt yourself. The check also reads your previous message, so it sees the new one in context. It runs on your Mac, like everything else in Ursa. Nothing leaves your Mac to be checked.</p>
         <p>If the check flags your message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, with the crisis card under it (section 3). This is crisis mode. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>Ursa never learns from what you write in crisis mode, so none of it is added to what it knows about you. Crisis mode ends when you tell Ursa it got it wrong, or after 10 messages in a row that aren't flagged (section 4).</p>
+        <p>Ursa never learns from what you write in crisis mode, so none of it is added to what it knows about you. Crisis mode ends when you tell Ursa you're safe or that it got it wrong, or on the 10th message in a row that isn't flagged (section 4).</p>
       </section>
 
       <section class="lg-sec" id="how" aria-labelledby="how-h">
@@ -98,8 +98,8 @@
           <dd>On 44 messages we wrote by hand, each marked in advance as at risk or not. We wrote 16 of them before any tuning and held them back. We also ran 200 everyday messages for false flags. We ran the tests on our own Mac in October 2026.</dd>
           <dt>Recall <small>(how often it caught the signs when they were there):</small></dt>
           <dd>All 13 at-risk messages (100%) in the set we used while building the check, and 7 of 8 (87.5%) in the set we held back. Both sets are small.</dd>
-          <dt>False positives <small>(how often it showed the card when they weren't):</small></dt>
-          <dd>About 1% of 200 everyday messages (2 of 200; 95% confidence interval 0.3–3.6%). Dark-humour idioms, like "I want to die, I sent that to the wrong person", are flagged more often: 11 of 50 in our set of hard cases.</dd>
+          <dt>False positives <small>(how often it flagged a message when the signs weren't there):</small></dt>
+          <dd>About 1% of 200 everyday messages (2 of 200; 95% confidence interval 0.3–3.6%). Hard cases, like dark-humour idioms ("I want to die, I sent that to the wrong person"), are flagged more often: 11 of 50 in our set of hard cases.</dd>
         </dl>
         <p>All of this comes from our own small tests. It isn't a clinical evaluation.</p>
         <p>No check like this is perfect. Ursa can miss signs of a crisis, and it can flag a message when you didn't need help. We chose to lean towards flagging.</p>
@@ -125,12 +125,12 @@
 
       <section class="lg-sec" id="keeps" aria-labelledby="keeps-h">
         <h2 id="keeps-h"><span class="lg-hn">04</span><span>While crisis mode lasts</span></h2>
-        <p>Every message you send while crisis mode lasts gets a short fixed line in place of a reply:</p>
+        <p>Every message you send while crisis mode lasts gets a short fixed line in place of a reply: <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
         <!-- RECHECK-S4: verify against product main once the fixed-response PR merges -->
         <p><strong>"I'm not the right help for this, but 988 is, any time. Call or text."</strong></p>
         <p>Under it is a shorter row: <strong>Crisis line, any time</strong>, with buttons to call or text 988 and call 911.</p>
-        <p>If Ursa got it wrong, tap <strong>I'm safe</strong> or <strong>I meant something else</strong> under its message, or say so in your own words. Ursa goes back to normal right away. After a tap, it says "Thanks for letting me know." <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>Otherwise, crisis mode ends after 10 messages in a row that aren't flagged. If the check flags a message after that, the full message and card show again.</p>
+        <p>If Ursa got it wrong, tap <strong>I'm safe</strong> or <strong>I meant something else</strong> under its message, and Ursa goes back to normal right away. Or say so in your own words, and Ursa goes back to normal once it's clear. After a tap, it says "Thanks for letting me know." <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>Otherwise, crisis mode ends on the 10th message in a row that isn't flagged: that message gets a normal reply. If the check flags a message after that, the full message and card show again.</p>
       </section>
 
       <section class="lg-sec" id="any-time" aria-labelledby="any-time-h">
@@ -172,7 +172,7 @@
         <p>This page describes Sovernity Ursa's crisis protocol, as California asks of AI chat apps (CA SB 243, Business and Professions Code §22602(b)). Oregon (SB 1546) and Washington (ESHB 2225) add requirements from 2027-01-01.</p>
         <p>This is our reading of these laws, not legal advice.</p>
         <p class="lg-fixed">For adults 18+. May not be suitable for some minors.</p>
-        <p class="lg-quiet">Last updated: <mark class="ph">[[S4: date of publication]]</mark></p>
+        <p class="lg-quiet">Last updated: <mark class="ph">[[Publish: date of publication]]</mark></p>
       </section>
     </article>
   </div>
