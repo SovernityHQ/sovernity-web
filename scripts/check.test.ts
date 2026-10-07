@@ -8,6 +8,17 @@ import * as R from './check-rules.ts';
 test('visibleText drops comments, scripts, styles and tags', () => {
   assert.equal(R.visibleText('<!-- therapy --><p>Hi&nbsp;<b>there</b></p><script>x</script><style>p{}</style>'), 'Hi there');
 });
+test('visibleText drops the doctype', () => {
+  assert.equal(R.visibleText('<!doctype html><html><p>x</p></html>'), 'x');
+  assert.equal(R.visibleText('<!DOCTYPE html>\n<p>x</p>'), 'x');
+});
+test('resource refs: meta refresh targets, ping, form action and formaction', () => {
+  assert.deepEqual(R.findResourceRefs('<meta http-equiv="refresh" content="0; url=https://evil.example/">'), ['https://evil.example/']);
+  assert.deepEqual(R.findResourceRefs("<meta http-equiv=\"Refresh\" content=\"5;URL='/ursa/'\">"), ['/ursa/']);
+  assert.deepEqual(R.findResourceRefs('<meta http-equiv="refresh" content="30">'), []);
+  assert.deepEqual(R.findResourceRefs('<a href="/x/" ping="https://t.example/p /q">x</a>'), ['https://t.example/p', '/q']);
+  assert.deepEqual(R.findResourceRefs('<form action="https://f.example/"><button formaction="//g.example/">b</button></form>'), ['https://f.example/', '//g.example/']);
+});
 test('placeholders found in text and attributes', () => {
   assert.deepEqual(R.findPlaceholders('<p>v [[S6: 1.0.0]]</p><img alt="[[F2: x]]">'), ['[[S6: 1.0.0]]', '[[F2: x]]']);
 });
@@ -46,9 +57,6 @@ test('network apis', () => {
   assert.deepEqual(R.findNetworkApis('const r = await fetch(u); new WebSocket(a); import("x")'), ['fetch', 'WebSocket', 'import(']);
   assert.deepEqual(R.findNetworkApis('el.dataset.fetched = 1'), []);
 });
-test('outbound links', () => {
-  assert.deepEqual(R.findOutboundLinks('<a href="https://988lifeline.org/">988</a><a href="/ursa/">u</a><a href="mailto:support@sovernity.com">m</a>'), ['https://988lifeline.org/', 'mailto:support@sovernity.com']);
-});
 test('inline scripts: whole tags, src scripts excluded', () => {
   assert.deepEqual(R.findInlineScripts(`<script src="/a.js"></script>${R.THEME_BOOT}<!-- <script>x</script> -->`), [R.THEME_BOOT]);
 });
@@ -82,7 +90,7 @@ async function site(files: Record<string, string>): Promise<string> {
   return dir;
 }
 const ursaPages = (extra: string = '') => ({
-  'ursa/index.html': page({ body: `<p>${AI}</p><p>${ADULT}</p><p>${ADULT}</p>${extra}`, footer: ursaFooter }),
+  'ursa/index.html': page({ body: `<section class="night-u r2u-hero"><p>${AI}</p><p>${ADULT}</p></section><section class="r2u-dl" id="download"><p>${ADULT}</p></section>${extra}`, footer: ursaFooter }),
   'ursa/privacy/index.html': page({ footer: ursaFooter }),
   'ursa/terms/index.html': page({ footer: ursaFooter }),
   'ursa/crisis-protocol/index.html': page({ body: `<p>${ADULT}</p>`, footer: ursaFooter }),
@@ -187,7 +195,7 @@ test('checkSite: chat scans raw markup with the chat list', async () => {
 });
 
 test('checkSite: outbound is an allowlist', async () => {
-  const bad = ['tel:+1555', 'javascript:alert(1)', ' https://evil.example/', '\\\\evil/', 'https://github.com/other/repo', 'mailto:x@y.com', 'rel/path', '//cdn.x/y'];
+  const bad = ['http://988lifeline.org/', 'http://github.com/SovernityHQ/sovernity-web', 'tel:+1555', 'javascript:alert(1)', ' https://evil.example/', '\\\\evil/', 'https://github.com/other/repo', 'mailto:x@y.com', 'rel/path', '//cdn.x/y'];
   const dir = await site({ ...ursaPages(), 'z/index.html': page({ body: bad.map((h) => `<a href="${h}">x</a>`).join('') + '<a href="/ursa/">ok</a><a href="#a">ok</a><a href="https://988lifeline.org/">ok</a><a href="mailto:support@sovernity.com?subject=hi">ok</a>' }) });
   const r = await R.checkSite(dir, { draft: false });
   const out = r.errors.filter((e) => e.startsWith('outbound: z/index.html'));
@@ -278,4 +286,33 @@ test('checkSite: a noindex page (404) carries no canonical, og or twitter tags',
   assert.deepEqual((await R.checkSite(ok, { draft: false })).errors, []);
   const bad = await site({ '404.html': page({ head: noindex }) });
   assert.ok((await R.checkSite(bad, { draft: false })).errors.some((e) => e.startsWith('meta: 404.html')));
+});
+
+test('checkSite: the 18+ line must be in both /ursa/ download areas, not only the footer', async () => {
+  const noHero = ursaPages();
+  noHero['ursa/index.html'] = noHero['ursa/index.html'].replace(`<p>${AI}</p><p>${ADULT}</p>`, `<p>${AI}</p>`);
+  const r1 = await R.checkSite(await site(noHero), { draft: false });
+  assert.deepEqual(r1.errors, ['fixed-lines: ursa/index.html: "For adults 18+. May not be suitable for some minors." missing from the hero (.r2u-hero)']);
+  const noDl = ursaPages();
+  noDl['ursa/index.html'] = noDl['ursa/index.html'].replace(`id="download"><p>${ADULT}</p>`, 'id="download"><p>Coming later</p>');
+  const r2 = await R.checkSite(await site(noDl), { draft: false });
+  assert.deepEqual(r2.errors, ['fixed-lines: ursa/index.html: "For adults 18+. May not be suitable for some minors." missing from the download section (#download)']);
+  // Nested sections inside the download area still count as inside it.
+  const nested = ursaPages();
+  nested['ursa/index.html'] = nested['ursa/index.html'].replace(`id="download"><p>${ADULT}</p>`, `id="download"><section><p>x</p></section><div><p>${ADULT}</p></div>`);
+  assert.deepEqual((await R.checkSite(await site(nested), { draft: false })).errors, []);
+});
+
+test('checkSite: meta refresh, ping and form targets must be same-origin and resolve', async () => {
+  const dir = await site({ ...ursaPages(), 'r/index.html': page({
+    head: '<meta http-equiv="refresh" content="0;url=https://evil.example/">',
+    body: '<a href="/ursa/" ping="https://t.example/p">x</a><form action="https://f.example/"><button formaction="/nowhere/">b</button></form>' }),
+    's/index.html': page({ head: '<meta http-equiv="refresh" content="0;url=/gone/">' }) });
+  const r = await R.checkSite(dir, { draft: false });
+  const has = (id: string, pg: string, needle: string) => assert.ok(r.errors.some((e) => e.startsWith(`${id}: ${pg}`) && e.includes(needle)), `${id} ${needle}`);
+  has('root-absolute', 'r/index.html', 'https://evil.example/');
+  has('root-absolute', 'r/index.html', 'https://t.example/p');
+  has('root-absolute', 'r/index.html', 'https://f.example/');
+  has('internal-links', 'r/index.html', '/nowhere/');
+  has('internal-links', 's/index.html', '/gone/');
 });

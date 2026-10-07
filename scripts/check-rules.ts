@@ -62,7 +62,7 @@ function markup(html: string): string {
 
 /** Visible text: no comments, scripts, styles or tags; entities decoded; whitespace collapsed. Block tags separate words, inline tags don't. */
 export function visibleText(html: string): string {
-  const noCode = stripComments(html).replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, ' ');
+  const noCode = stripComments(html).replace(/<![a-zA-Z][^>]*>/g, ' ').replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, ' ');
   const noTags = noCode.replace(TAG, (t) => {
     const name = /^<\/?([a-zA-Z0-9-]+)/.exec(t)?.[1]?.toLowerCase() ?? '';
     return INLINE_TAGS.has(name) ? '' : ' ';
@@ -125,10 +125,22 @@ function srcsetCandidates(v: string): string[] {
 
 const isCanonical = (attrs: [string, string][]) => attrs.some(([k, v]) => k === 'rel' && v.toLowerCase() === 'canonical');
 
-/** Every resource reference (`<link rel="canonical">` names the page, it isn't fetched): `src`, `srcset` candidates, `<link href>`, plus CSS urls in `<style>` blocks and `style` attributes. */
+/** The URL in a `<meta http-equiv="refresh" content="5; url=…">`, or null when it only reloads. */
+function refreshTarget(content: string): string | null {
+  const m = /^\s*[\d.]*\s*[;,]?\s*(?:url\s*=\s*)?(['"]?)(.*?)\1\s*$/i.exec(content);
+  return m && m[2] ? m[2] : null;
+}
+
+/** Every resource reference (`<link rel="canonical">` names the page, it isn't fetched): `src`, `srcset` candidates, `<link href>`,
+ *  plus anything the browser requests or navigates to on its own or by a form: meta refresh targets, `ping`, form `action`
+ *  and `formaction`; and CSS urls in `<style>` blocks and `style` attributes. */
 export function findResourceRefs(html: string): string[] {
   const refs: string[] = [];
   for (const { name, attrs } of tagsOf(html)) {
+    if (name === 'meta' && attrs.some(([k, v]) => k === 'http-equiv' && v.toLowerCase() === 'refresh')) {
+      const target = refreshTarget(attrs.find(([k]) => k === 'content')?.[1] ?? '');
+      if (target !== null) refs.push(target);
+    }
     for (const [k, v] of attrs) {
       if (k === 'src') refs.push(v);
       else if (k === 'srcset') refs.push(...srcsetCandidates(v));
@@ -136,6 +148,8 @@ export function findResourceRefs(html: string): string[] {
       else if (k === 'poster' || (k === 'data' && name === 'object')) refs.push(v);
       else if ((k === 'href' || k === 'xlink:href') && ['image', 'use', 'feimage'].includes(name)) refs.push(v);
       else if (k === 'style') refs.push(...findCssUrls(v));
+      else if (k === 'ping') refs.push(...v.split(/\s+/).filter(Boolean));
+      else if ((k === 'action' && name === 'form') || k === 'formaction') refs.push(v);
     }
   }
   for (const m of stripComments(html).matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/gi)) refs.push(...findCssUrls(m[1]));
@@ -156,16 +170,6 @@ export function findCssUrls(css: string): string[] {
 
 export function findNetworkApis(js: string): string[] {
   return js.match(/\b(fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\b|\bimport\s*\(|\bnew\s+(?:Shared)?Worker\s*\(|\bserviceWorker\s*\.\s*register\b/g)?.map((s) => s.replace(/\s+/g, '')) ?? [];
-}
-
-/** Hrefs of `<a>`/`<area>` that leave the site: http(s), protocol-relative, or mailto. */
-export function findOutboundLinks(html: string): string[] {
-  const out: string[] = [];
-  for (const { name, attrs } of tagsOf(html)) {
-    if (name !== 'a' && name !== 'area') continue;
-    for (const [k, v] of attrs) if (k === 'href' && /^(https?:|\/\/|mailto:)/i.test(v)) out.push(v);
-  }
-  return out;
 }
 
 /** Complete `<script>…</script>` tags without a `src`, exactly as written. */
@@ -240,13 +244,32 @@ async function walk(dir: string, base = ''): Promise<string[]> {
   }
   return out.sort();
 }
-function count(hay: string, needle: string): number {
-  return hay.split(needle).length - 1;
-}
 function block(html: string, tag: string): string | null {
   const m = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)</${tag}\\s*>`, 'i').exec(stripComments(html));
   return m ? m[1] : null;
 }
+/** The inner markup of the first element whose start tag matches, up to its own end tag (same-name nesting counted). */
+function elementBody(html: string, match: (attrs: [string, string][]) => boolean): string | null {
+  const src = markup(html);
+  let name = '';
+  let start = -1;
+  let depth = 0;
+  for (const m of src.matchAll(TAG)) {
+    const t = m[0];
+    const close = t.startsWith('</');
+    const n = /^<\/?([a-zA-Z0-9-]+)/.exec(t)?.[1]?.toLowerCase() ?? '';
+    if (start < 0) {
+      if (!close && match(attrsOf(t))) { name = n; start = m.index + t.length; depth = 1; }
+      continue;
+    }
+    if (n !== name) continue;
+    if (close) { if (--depth === 0) return src.slice(start, m.index); }
+    else if (!t.endsWith('/>')) depth++;
+  }
+  return null;
+}
+const hasClass = (cls: string) => (attrs: [string, string][]) => attrs.some(([k, v]) => k === 'class' && v.split(/\s+/).includes(cls));
+const hasId = (id: string) => (attrs: [string, string][]) => attrs.some(([k, v]) => k === 'id' && v === id);
 
 /** Text carried by attributes: every meta content, alt, title, aria-*, placeholder, value. */
 function attributeText(tags: { name: string; attrs: [string, string][] }[]): string[] {
@@ -325,7 +348,7 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
           good = box === SUPPORT_MAILBOX || (group === 'chat' && box === CHAT_MAILBOX);
         }
         else if (/^https?:\/\//i.test(href)) {
-          try { good = hostAllowed(new URL(href), group); } catch { good = false; }
+          try { const u = new URL(href); good = u.protocol === 'https:' && hostAllowed(u, group); } catch { good = false; }
         }
         if (!good) err('outbound', rel, `href not allowed (root-absolute, #anchor, allowlisted https host or ${SUPPORT_MAILBOX} only): ${href}`);
       }
@@ -400,7 +423,11 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
   } else {
     const t = norm(ursaIndex);
     if (!t.includes(AI_LINE)) err('fixed-lines', 'ursa/index.html', `missing "${AI_LINE}"`);
-    if (count(t, ADULT_LINE) < 2) err('fixed-lines', 'ursa/index.html', `"${ADULT_LINE}" must appear at least twice (found ${count(t, ADULT_LINE)})`);
+    // Beside both download areas, each counted on its own (the footer carries the line too, and is checked below).
+    for (const [where, match] of [['the hero (.r2u-hero)', hasClass('r2u-hero')], ['the download section (#download)', hasId('download')]] as const) {
+      const area = elementBody(ursaIndex, match);
+      if (area === null || !norm(area).includes(ADULT_LINE)) err('fixed-lines', 'ursa/index.html', `"${ADULT_LINE}" missing from ${where}`);
+    }
     if (visibleText(ursaIndex).includes('Coming soon')) {
       for (const [rel, src] of html) {
         if (tagsOf(src).some((x) => x.name === 'meta' && x.attrs.some(([k, v]) => k === 'name' && v === 'apple-itunes-app'))) {
