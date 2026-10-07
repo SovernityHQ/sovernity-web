@@ -79,7 +79,7 @@
       <section class="lg-sec" id="start" aria-labelledby="start-h">
         <h2 id="start-h"><span class="lg-hn">01</span><span>Getting started on your Mac</span></h2>
         <ol>
-          <li><strong>Download</strong> Sovernity Ursa from the Sovernity Ursa page (<a href="/ursa/">/ursa/</a>) and open the DMG. Drag Ursa to your Applications folder. <mark class="ph">[[S6: confirm the DMG layout and this step]]</mark></li>
+          <li><strong>Download</strong> Sovernity Ursa from the Sovernity Ursa page (<a href="/ursa/">/ursa/</a>) and open the DMG. Drag Ursa to your Applications folder.</li>
           <li><strong>Open it.</strong> macOS asks you to confirm the first time.</li>
           <li><strong>The model download.</strong> Ursa needs a one-time download of about 7 GB: Gemma 4 12B and a small search model. If it's interrupted, choose <strong>Resume download</strong>: what has downloaded so far is kept. Ursa checks every file before using it. Already have the files? Choose <strong>I already have the files…</strong>. After this download, Ursa never goes online.</li>
           <li><strong>The Introduction (optional).</strong> While the model downloads, Ursa offers to get to know you with a few questions. It helps Ursa understand you from day one. You can skip it with <strong>Maybe later</strong> and do it any time from <em>What I know about you</em>, or Settings › Data.</li>
@@ -150,7 +150,7 @@
           <li><strong>Restore…</strong> replaces everything on this Mac with a backup. Your current data is set aside on this Mac, not deleted, and <strong>Restore it…</strong> brings it back if you change your mind.</li>
           <li><strong>Export…</strong> saves a readable copy of your chats and profile for your own records. The export is not encrypted: anyone who can open the file can read your chats and what Ursa has learned about you.</li>
         </ul>
-        <p><strong>Moving to a new Mac:</strong> back up on the old Mac, install Ursa on the new one, then restore. Pair your iPhone again from the new Mac. <mark class="ph">[[S6: confirm the restore path on a fresh install, before or after the model download]]</mark></p>
+        <p><strong>Moving to a new Mac:</strong> back up on the old Mac, install Ursa on the new one, then restore. Pair your iPhone again from the new Mac. Restore works before or after the model download: Settings › Data › Restore… is there as soon as you've confirmed you're 18 or older.</p>
       </section>
 
       <section class="lg-sec" id="delete" aria-labelledby="delete-h">
@@ -168,12 +168,12 @@
         <h3>Mac</h3>
         <ol>
           <li>In Ursa, Settings › Data › Delete everything… (optional, but it removes your data right away).</li>
-          <li><mark class="ph">[[S6: uninstall steps: quit Ursa, move it to the Trash, and the folders to remove for the model files and any leftover data, with exact paths]]</mark></li>
-          <li><mark class="ph">[[S6: whether the Keychain item needs removing, and how]]</mark></li>
+          <li>Quit Ursa and move it from your Applications folder to the Trash. Then move the folder <code>~/Library/Containers/com.sovernity.ursa.app</code> to the Trash. It holds the model files and any data Ursa kept. In Finder, Go › Go to Folder… takes you there.</li>
+          <li>Ursa's keys stay in your Mac's Keychain after you uninstall. Without the folder above, they can't unlock anything. <mark class="ph">[[S6: how to remove them, if you want to]]</mark></li>
         </ol>
         <h3>iPhone</h3>
         <ul>
-          <li>Unpair first if you can (Settings › Your Mac › Unpair this iPhone), then delete the app like any other. <mark class="ph">[[S6: confirm whether the pairing in the iPhone Keychain survives deleting the app]]</mark></li>
+          <li>Unpair first if you can (Settings › Your Mac › Unpair this iPhone), then delete the app like any other. If you delete the app without unpairing, the pairing can stay in your iPhone's Keychain, and reinstalling Ursa may find it again. Unpairing first removes it.</li>
         </ul>
         <p>Backups and exports you saved are your own files; delete them where you saved them.</p>
       </section>
@@ -193,7 +193,7 @@
         <h2 id="crisis-h"><span class="lg-hn">10</span><span>Help in a crisis</span></h2>
         <ul>
           <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is out of reach.</li>
-          <li><strong>On Mac:</strong> <mark class="ph">[[S4: Help › Help in a crisis, once it ships]]</mark></li>
+          <li><strong>On Mac:</strong> Help › Help in a crisis. It's built into the Mac app and works without a connection, with the numbers set large so you can dial them from any phone.</li>
           <li><strong>Call or text 988</strong>, the 988 Suicide &amp; Crisis Lifeline, or <strong>call 911</strong> if you're in immediate danger. Outside the US, call your local emergency number.</li>
           <li class="lg-fixed">Ursa is an AI, not a person or a therapist.</li>
           <li>It can miss things, and it can't contact anyone for you.</li>

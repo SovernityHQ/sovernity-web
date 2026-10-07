@@ -86,7 +86,7 @@
         <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
         <p>Before Ursa writes a reply, it checks your message for signs that you might be thinking about suicide or might hurt yourself. The check runs on your Mac, like everything else in Ursa. Your words aren't sent anywhere to be checked.</p>
         <p>If the check finds those signs, Ursa answers carefully. It asks how you are, shows the crisis card under its reply, and stays on that. While it does, it doesn't draw on what it knows about you, and it never learns from those messages.</p>
-        <p>Ursa stays in this careful mode while any of your last three messages showed those signs. <mark class="ph">[[S4: confirm how many recent messages keep careful mode on]]</mark></p>
+        <p>Ursa stays in this careful mode while any of your last three messages showed those signs.</p>
       </section>
 
       <section class="lg-sec" id="how" aria-labelledby="how-h">
@@ -102,7 +102,6 @@
           <dd><mark class="ph">[[S4: false-positive rate]]</mark></dd>
         </dl>
         <p>No check like this is perfect. Ursa can miss signs of a crisis, and it can show the card when you didn't need it. We chose to lean towards showing it.</p>
-        <p><mark class="ph">[[S4: confirm "lean towards showing it" matches the tuned threshold, or drop the sentence]]</mark></p>
       </section>
 
       <section class="lg-sec" id="card" aria-labelledby="card-h">
@@ -115,7 +114,7 @@
           <p><strong>In immediate danger?</strong> <strong>Call 911</strong></p>
           <p class="lg-cap">US numbers. Elsewhere, call your local emergency number. Ursa is an AI and can't contact anyone for you.</p>
         </div>
-        <p><mark class="ph">[[S4: whether the card also carries a 988lifeline.org link, which OR SB 1546 asks for from 2027-01-01]]</mark></p>
+        <p>The card has no web link: its buttons only call or text.</p>
         <p>On a Mac, calls and texts go through your iPhone, with FaceTime and Messages. If your Mac can't place the call, the numbers stay on screen so you can dial them from any phone.</p>
         <p>The card is drawn by the app, not written by the AI. The AI can't hide it, change it or leave it out. If you stop a reply early, the card still appears. Deleting a reply doesn't remove a card that has already shown.</p>
       </section>
@@ -125,7 +124,7 @@
         <p>If signs of a crisis continue later in the same conversation, every reply after the first one carries a shorter line with the same numbers:</p>
         <p class="lg-row" role="group" aria-label="The shorter line, as text"><strong>Crisis line, any time</strong> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Text 988</span> <span class="lg-sep" aria-hidden="true">·</span> <span>Call 911</span></p>
         <p>This is Ursa's further step after the first referral.</p>
-        <p><mark class="ph">[[S4: the exact continued-ideation behaviour as shipped: when the compact row shows, whether the full card ever repeats, and how the reply itself changes]]</mark></p>
+        <p>The full card shows again only if Ursa leaves careful mode and later sees the signs again. Each of these replies is written in careful mode, as in section 1.</p>
       </section>
 
       <section class="lg-sec" id="any-time" aria-labelledby="any-time-h">
@@ -164,7 +163,7 @@
 
       <section class="lg-sec" id="about" aria-labelledby="about-h">
         <h2 id="about-h"><span class="lg-hn">09</span><span>About this page</span></h2>
-        <p>This page describes Sovernity Ursa's crisis protocol, as California asks of AI chat apps (CA SB 243, Business and Professions Code §22602(b)). Oregon (SB 1546) and Washington (ESHB 2225) add requirements from 2027-01-01, and we plan to meet them with an update before then, including signs of an eating disorder in the check and the card. <mark class="ph">[[S4: confirm the 1.0.x scope and timing]]</mark></p>
+        <p>This page describes Sovernity Ursa's crisis protocol, as California asks of AI chat apps (CA SB 243, Business and Professions Code §22602(b)). Oregon (SB 1546) and Washington (ESHB 2225) add requirements from 2027-01-01, and we plan to meet them with an update before then, including signs of an eating disorder in the check and the card.</p>
         <p>This is our reading of these laws, not legal advice.</p>
         <p class="lg-fixed">For adults 18+. May not be suitable for some minors.</p>
         <p class="lg-quiet">Last updated: <mark class="ph">[[S4: date of publication]]</mark></p>
