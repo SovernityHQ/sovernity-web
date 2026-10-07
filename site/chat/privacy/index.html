@@ -8,11 +8,14 @@
   byte-identical in wording to the copy bundled in the concurrently shipped
   build, INCLUDING the Version/Effective line (R1 dev-wiring rule).
 
-  The text in place matches the master at Version 1.0-beta.3 (Effective:
-  2026-08-21) and is wording-identical to the bundled
-  Resources/Legal/PRIVACY_POLICY.md, verified 2026-09-09 by stripping this
-  container and diffing it against the master: the two drifts found were the
-  Version/Effective line and §5's third bullet, and both are corrected.
+  The text in place matches the master at Version 1.0-beta.4 (Effective:
+  2026-10-07; static-hosting wording in §2/§4/§6/§8, Chat branch
+  chat-policy-hosting) and is wording-identical to that branch's bundled
+  Resources/Legal/PRIVACY_POLICY.md. Until a Chat build ships with 1.0-beta.4,
+  this page is NEWER than the policy bundled in the shipped app.
+  (History: verified at 1.0-beta.3 on 2026-09-09 by stripping this container
+  and diffing it against the master: the two drifts found then were the
+  Version/Effective line and §5's third bullet, and both were corrected.)
 
   WHY IT DRIFTED, stated here because the next reader inherits it: this page
   says GENERATED and names its source, but NOTHING GENERATES IT. The master
@@ -82,7 +85,7 @@
       <!-- BEGIN GENERATED PRIVACY POLICY (source: docs/legal/PRIVACY_POLICY.md) -->
 
       <h1>Privacy Policy — Sovernity Chat</h1>
-      <p class="version-line"><strong>Version 1.0-beta.3 · Effective: 2026-08-21</strong></p>
+      <p class="version-line"><strong>Version 1.0-beta.4 · Effective: 2026-10-07</strong></p>
 
       <p>Sovernity Chat is built so that this policy can be short: <strong>the app sends us nothing.</strong> Everything you do in it — every conversation, every file, every search — happens and stays on your Mac.</p>
 
@@ -120,13 +123,13 @@
               <td><strong>2. Update check</strong></td>
               <td>Only if you start one ("Check for Updates…" menu item) or switch on automatic weekly checks. <strong>Off by default.</strong></td>
               <td>Your IP address and the app/updater version (in the request's user-agent), i.e., "some Mac at this address runs version X."</td>
-              <td>Us (sovernity.com).</td>
+              <td>GitHub, which hosts sovernity.com as static files (GitHub Pages) — see §4.</td>
             </tr>
             <tr>
               <td><strong>3. Model-recommendation check</strong></td>
               <td>Same single opt-in switch as updates: a small signed file telling the app whether a better model is available for your hardware. <strong>Off by default.</strong></td>
               <td>Your IP address and the requested file.</td>
-              <td>Us (sovernity.com).</td>
+              <td>GitHub, which hosts sovernity.com as static files (GitHub Pages) — see §4.</td>
             </tr>
           </tbody>
         </table>
@@ -137,13 +140,12 @@
       <h2>3. Third party: Hugging Face</h2>
       <p>The first-run model download is served by Hugging Face's repository and CDN. Like any web server, Hugging Face can log the request (IP address, requested files, user-agent) under its own privacy policy (<a href="https://huggingface.co/privacy">https://huggingface.co/privacy</a>). We chose a download from the public source over running the traffic through ourselves so that we learn nothing — not even that you installed the app. We receive no information about your download.</p>
 
-      <h2>4. Our servers (updates and model recommendations)</h2>
-      <p><strong>Today, these endpoints do not exist.</strong> As of this version, the update and model-recommendation endpoints are not live, and the app — by a built-in switch, independent of your settings — makes no request to them, manual or automatic, until they are. Before the first one goes live, we will update this policy with the concrete log-retention period for it. (Our website is a set of static pages served by a hosting service — see §6. It is not one of these endpoints, and the app never contacts it in any configuration.)</p>
-      <p>When connections 2 and 3 do go live and you use them, our server will see what any web server sees: IP address, request time, requested file, and user-agent (app version). We will use standard server logs solely to serve the files and protect the service from abuse.</p>
+      <h2>4. Updates and model recommendations (static files on sovernity.com)</h2>
+      <p><strong>Today, these files are not published.</strong> As of this version, the update and model-recommendation files are not live, and the app — by a built-in switch, independent of your settings — makes no request for them, manual or automatic, until they are.</p>
+      <p>When connections 2 and 3 do go live and you use them, the app will fetch static files from sovernity.com. Sovernity runs no servers of its own: sovernity.com is a static site hosted on GitHub Pages, so these requests go to GitHub, not to us. Like any web host, GitHub can log the request (IP address, request time, requested file, user-agent) under its own privacy statement (<a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a>).</p>
       <ul>
-        <li>No analytics will be run on these logs, and they will never be sold, shared, or combined with anything else (there is nothing to combine them with — we have no user records).</li>
+        <li>We receive no request logs for these files from GitHub, and we run no analytics on them.</li>
       </ul>
-      <p>Legal bases where GDPR applies: performance of your request and our legitimate interest in operating the service securely.</p>
 
       <h2>5. Your data on your device</h2>
       <p>All app data lives in the app's local container on your Mac — a SQLite store (chats, messages, file-activity log, folder-access records) and an attachments store — plus the downloaded model files. It is yours, under your control, protected by your Mac's own protections (we recommend turning on FileVault and using a strong login password).</p>
@@ -157,14 +159,14 @@
       <p>Note: your own backups (e.g., Time Machine) may retain copies of app data under your control, like for any app.</p>
 
       <h2>6. Website</h2>
-      <p>Our website, sovernity.com, is a set of static pages — a landing page and this policy — served by a static hosting service. It:</p>
+      <p>Our website, sovernity.com, is the Sovernity studio site: static pages about Sovernity's apps, Sovernity Chat among them, including this policy. It is hosted on GitHub Pages; Sovernity runs no servers of its own. The site:</p>
       <ul>
         <li>runs no analytics and no tracking of any kind,</li>
         <li>sets no cookies,</li>
         <li>has no accounts, forms, or sign-ups — nothing on it asks for or accepts your data,</li>
-        <li>and is never contacted by the app, in any configuration.</li>
+        <li>and is not contacted by the app today. Once the files in §4 are live, connections 2 and 3 (both off by default) fetch them from it, and nothing else in the app ever does.</li>
       </ul>
-      <p>Like any web host, the hosting service that serves the pages can keep standard server logs (IP address, requested page, time, user-agent) under its own privacy policy in the course of delivering them. We add nothing on top: no analytics scripts, no fingerprinting, no identifiers — nothing on the site can tell us who you are.</p>
+      <p>GitHub, which serves the pages, can keep standard server logs (IP address, requested page, time, user-agent) under its own privacy statement (<a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a>) in the course of delivering them. We receive no such logs from GitHub, and we add nothing on top: no analytics scripts, no fingerprinting, no identifiers — nothing on the site can tell us who you are.</p>
       <p>App downloads are served from GitHub (github.com), which can likewise log the download request under GitHub's privacy policy (<a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a>). We receive no information about your download.</p>
 
       <h2>7. Children</h2>
@@ -172,7 +174,7 @@
 
       <h2>8. Your rights (GDPR, CCPA, and similar laws)</h2>
       <p>For everything you do <strong>in the app</strong>, we are not a data controller or processor — your data never reaches us, so rights of access, deletion, portability, and the rest are satisfied directly and instantly by you, on your device (see §5: the app gives you deletion and export, and there is nothing to request from us).</p>
-      <p>For the sliver of personal data processed around the edges — <strong>IP addresses in server logs</strong> (§2–4) and in the website host's delivery logs (§6) — you have whatever rights your local law provides (access, deletion, objection). In practice the logs are short-lived and not tied to any identity we could look you up by; contact us and we'll do what we can within those limits. We do not sell or share personal information as defined by the CCPA/CPRA, and we have no advertising relationships.</p>
+      <p>For the sliver of personal data processed around the edges — <strong>IP addresses in the delivery logs of the hosts that serve the downloads, the update files and the website</strong> (Hugging Face, §3; GitHub, §4 and §6) — those hosts process it under their own privacy policies, and you have whatever rights your local law provides (access, deletion, objection) with them. We hold none of those logs, so there is nothing about you we could look up; contact us and we'll do what we can within those limits. We do not sell or share personal information as defined by the CCPA/CPRA, and we have no advertising relationships.</p>
 
       <h2>9. Changes</h2>
       <p>If this policy changes materially, the new version ships with the app update that occasions it, is published at sovernity.com, and the change is described plainly. Beyond that, we can't notify you individually — we don't know who you are.</p>
