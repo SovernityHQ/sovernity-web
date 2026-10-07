@@ -16,8 +16,10 @@ export function expandIncludes(html: string, partials: Map<string, string>): str
 
 export function markCurrent(html: string, pagePath: string): string {
   return html.replace(/<a href="([^"]+)" data-current="(exact|section)"/g, (_m, href: string, mode: string) => {
-    const hit = mode === 'exact' ? href === pagePath : href === '/' ? pagePath === '/' : pagePath.startsWith(href);
-    return hit ? `<a href="${href}" aria-current="page"` : `<a href="${href}"`;
+    // The page itself is "page"; a section link on a page below it (Ursa on /ursa/privacy/) is "true".
+    if (href === pagePath) return `<a href="${href}" aria-current="page"`;
+    const inSection = mode === 'section' && href !== '/' && pagePath.startsWith(href);
+    return inSection ? `<a href="${href}" aria-current="true"` : `<a href="${href}"`;
   });
 }
 

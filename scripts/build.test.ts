@@ -19,7 +19,9 @@ test('include inside a partial is an error', () => {
 test('marks exact and section links', () => {
   const html = '<a href="/ursa/" data-current="section">Ursa</a><a href="/ursa/" data-current="exact">Overview</a><a href="/ursa/privacy/" data-current="exact">Privacy</a>';
   assert.equal(markCurrent(html, '/ursa/privacy/'),
-    '<a href="/ursa/" aria-current="page">Ursa</a><a href="/ursa/">Overview</a><a href="/ursa/privacy/" aria-current="page">Privacy</a>');
+    '<a href="/ursa/" aria-current="true">Ursa</a><a href="/ursa/">Overview</a><a href="/ursa/privacy/" aria-current="page">Privacy</a>');
+  assert.equal(markCurrent(html, '/ursa/'),
+    '<a href="/ursa/" aria-current="page">Ursa</a><a href="/ursa/" aria-current="page">Overview</a><a href="/ursa/privacy/">Privacy</a>');
 });
 test('home section link only matches home', () => {
   assert.equal(markCurrent('<a href="/" data-current="section">S</a>', '/about/'), '<a href="/">S</a>');

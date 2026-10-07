@@ -56,7 +56,7 @@ body[data-page="ursa"] {
   border-bottom: 1.5px solid transparent;
 }
 html.js .site-nav a { transition: border-color .25s; }
-.site-nav a:hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--ink); }
+.site-nav a:hover, .site-nav a[aria-current] { border-bottom-color: var(--ink); }
 
 /* ---------- pill buttons: theme toggle, Menu ---------- */
 .theme-toggle, .menu-btn {
