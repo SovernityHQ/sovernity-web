@@ -182,10 +182,10 @@ test('checkSite: chat-policy compares the generated block to the master', async 
   const good = page({ body: `<p>${line}</p>\n<!-- BEGIN GENERATED PRIVACY POLICY -->\n<p><strong>${line}</strong></p>\n<li><strong>${longLine.replace('and never', 'and&nbsp;never')}</strong></li>\n<!-- END GENERATED PRIVACY POLICY -->` });
   const moved = (l: string) => page({ head: '<meta name="robots" content="noindex">', og: false, body: `<p>The policy (${l}) is now at <a href="/chat/privacy/">/chat/privacy/</a>.</p>` });
   const ok = await site({ 'chat/privacy/index.html': good, 'privacy.html': moved(line) });
-  assert.deepEqual((await R.checkSite(ok, { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy')), []);
+  assert.deepEqual((await R.checkSite(ok, { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy:')), []);
   const stale = await site({ 'chat/privacy/index.html': good.replace('beta.3', 'beta.2').replace('only on', 'mostly on'), 'privacy.html': moved(line) });
   const r = await R.checkSite(stale, { draft: false, chatRepo: chat });
-  assert.ok(r.errors.filter((e) => e.startsWith('chat-policy')).length >= 2);
+  assert.ok(r.errors.filter((e) => e.startsWith('chat-policy:')).length >= 2);
   const none = await R.checkSite(ok, { draft: false });
   assert.ok(none.warnings.includes('chat-policy skipped (needs the private Chat repo)'));
 });
@@ -253,7 +253,7 @@ test('checkSite: Chat pages may link docs.github.com and Chat\'s contact mailbox
   const chatLinks = '<a href="https://docs.github.com/privacy">g</a><a href="mailto:milo.sovernity@shieber.com">m</a>';
   const dir = await site({ ...ursaPages(), 'chat/privacy/index.html': page({ body: chatLinks }), 'x/index.html': page({ body: '<a href="mailto:milo.sovernity@shieber.com">m</a>' }) });
   const r = await R.checkSite(dir, { draft: false });
-  assert.deepEqual(r.errors.filter((e) => e.includes('chat/privacy/index.html')), []);
+  assert.deepEqual(r.errors.filter((e) => e.includes('chat/privacy/index.html') && !e.startsWith('chat-policy-min:')), []);
   assert.ok(r.errors.some((e) => e.startsWith('outbound: x/index.html') && e.includes('milo.sovernity@shieber.com')));
   const other = await site({ 'chat/index.html': page({ body: '<a href="mailto:someone@shieber.com">m</a><a href="https://github.com/SovernityHQ/SovernityChat">s</a>' }) });
   assert.equal((await R.checkSite(other, { draft: false })).errors.filter((e) => e.startsWith('outbound: chat/index.html')).length, 2);
@@ -349,7 +349,7 @@ test('checkSite: chat-policy requires /privacy.html to carry the bundled policy 
   });
   const policy = page({ body: `<p>${line}</p>\n<!-- BEGIN GENERATED PRIVACY POLICY -->\n<p><strong>${line}</strong></p>\n<!-- END GENERATED PRIVACY POLICY -->` });
   const moved = (l: string) => page({ head: '<meta name="robots" content="noindex">', og: false, body: `<p>The policy (${l}) is now at <a href="/chat/privacy/">/chat/privacy/</a>.</p>` });
-  const errs = async (files: Record<string, string>) => (await R.checkSite(await site(files), { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy'));
+  const errs = async (files: Record<string, string>) => (await R.checkSite(await site(files), { draft: false, chatRepo: chat })).errors.filter((e) => e.startsWith('chat-policy:'));
   assert.deepEqual(await errs({ 'chat/privacy/index.html': policy, 'privacy.html': moved(line) }), []);
   const stale = await errs({ 'chat/privacy/index.html': policy, 'privacy.html': moved('Version 1.0-beta.2 · Effective: 2026-08-01') });
   assert.equal(stale.length, 1);
@@ -370,4 +370,31 @@ test('checkSite: a noindex redirect page may name its target as canonical, nothi
   assert.equal((await metaErrs(page({ og: false, head: head('https://sovernity.com/chat/privacy/', 'https://sovernity.com/chat/privacy/') }))).length, 1, 'only a root-absolute refresh target');
   const withOg = page({ og: `<meta property="og:title" content="T">`, head: head('https://sovernity.com/chat/privacy/') });
   assert.equal((await metaErrs(withOg)).length, 1, 'still no og/twitter tags');
+});
+
+test('chat policy minimum: the constant and the version comparison', () => {
+  assert.equal(R.CHAT_POLICY_MIN, 'beta.4');
+  assert.equal(R.meetsChatPolicyMin('Version 1.0-beta.3 · Effective: 2026-09-01'), false);
+  assert.equal(R.meetsChatPolicyMin('Version 1.0-beta.4 · Effective: 2026-10-07'), true);
+  assert.equal(R.meetsChatPolicyMin('Version 1.0-beta.10 · Effective: 2026-12-01'), true);
+  assert.equal(R.meetsChatPolicyMin('Version 1.0 · Effective: 2027-01-01'), true);
+  assert.equal(R.meetsChatPolicyMin('Version 2.0-beta.1 · Effective: 2027-06-01'), true);
+  assert.equal(R.meetsChatPolicyMin('Version 0.9 · Effective: 2026-01-01'), false);
+});
+
+test('checkSite: chat-policy-min gates /chat/privacy/ and /privacy.html without the Chat repo', async () => {
+  const policy = (l: string) => page({ body: `<p>${l}</p>` });
+  const moved = (l: string) => page({ head: '<meta name="robots" content="noindex">', og: false, body: `<p>The policy (${l}) is now at <a href="/chat/privacy/">/chat/privacy/</a>.</p>` });
+  const v = (n: string) => `Version 1.0-beta.${n} · Effective: 2026-10-07`;
+  const errs = async (files: Record<string, string>) => (await R.checkSite(await site(files), { draft: true })).errors.filter((e) => e.startsWith('chat-policy-min:'));
+  assert.equal((await errs({ 'chat/privacy/index.html': policy(v('3')), 'privacy.html': moved(v('3')) })).length, 1, 'beta.3 fails');
+  assert.deepEqual(await errs({ 'chat/privacy/index.html': policy(v('4')), 'privacy.html': moved(v('4')) }), [], 'beta.4 passes');
+  assert.deepEqual(await errs({ 'chat/privacy/index.html': policy(v('10')), 'privacy.html': moved(v('10')) }), [], 'beta.10 passes');
+  const mismatch = await errs({ 'chat/privacy/index.html': policy(v('4')), 'privacy.html': moved(v('5')) });
+  assert.equal(mismatch.length, 1, 'the two pages differ');
+  assert.ok(mismatch[0].includes('privacy.html'), mismatch[0]);
+  assert.equal((await errs({ 'chat/privacy/index.html': policy('no line here'), 'privacy.html': moved(v('4')) })).length, 1, 'missing line on /chat/privacy/');
+  assert.equal((await errs({ 'chat/privacy/index.html': policy(v('4')) })).length, 1, 'missing /privacy.html');
+  const ok = await R.checkSite(await site({ 'chat/privacy/index.html': policy(v('4')), 'privacy.html': moved(v('4')) }), { draft: false });
+  assert.ok(ok.ok.includes('ok chat-policy-min'));
 });

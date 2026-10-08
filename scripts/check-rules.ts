@@ -201,6 +201,27 @@ export function policyLine(text: string): string | null {
   return POLICY_LINE.exec(text)?.[0] ?? null;
 }
 
+// ---------------------------------------------------------------- chat-policy-min (runs without the Chat repo)
+
+/** The oldest Chat policy the site may publish (SovernityChat #10 §13.4): 1.0-beta.4. A plain 1.0 or anything above 1.0 passes. */
+export const CHAT_POLICY_MIN = 'beta.4';
+const ANY_POLICY_LINE = /Version ([0-9]+)\.([0-9]+)(?:-beta\.([0-9]+))? · Effective: [0-9]{4}-[0-9]{2}-[0-9]{2}/;
+
+/** The "Version X.Y[-beta.N] · Effective: YYYY-MM-DD" line in a text, or null. */
+export function anyPolicyLine(text: string): string | null {
+  return ANY_POLICY_LINE.exec(text)?.[0] ?? null;
+}
+
+/** Whether a policy line is at CHAT_POLICY_MIN or later (the beta number compared as a number). */
+export function meetsChatPolicyMin(line: string): boolean {
+  const m = ANY_POLICY_LINE.exec(line);
+  if (!m) return false;
+  const [major, minor] = [Number(m[1]), Number(m[2])];
+  if (major !== 1 || minor !== 0) return major > 1 || (major === 1 && minor > 0);
+  if (m[3] === undefined) return true; // 1.0, the release after the betas
+  return Number(m[3]) >= Number(CHAT_POLICY_MIN.replace('beta.', ''));
+}
+
 /** Lines of the generated block, as the old script's `have` set. Returns null if the markers are missing. */
 export function generatedBlockLines(html: string): Set<string> | null {
   if (!html.includes('BEGIN GENERATED PRIVACY POLICY')) return null;
@@ -234,7 +255,7 @@ export interface CheckResult { errors: string[]; warnings: string[]; ok: string[
 
 const RULES = [
   'placeholders', 'recheck', 'banned', 'secure', 'fixed-lines', 'ursa-footer', 'root-absolute', 'internal-links', 'outbound',
-  'latest', 'js-network', 'inline-script', 'meta', 'no-badge-yet', 'vera', 'chat-policy',
+  'latest', 'js-network', 'inline-script', 'meta', 'no-badge-yet', 'vera', 'chat-policy-min', 'chat-policy',
 ] as const;
 const AI_LINE = 'Ursa is an AI, not a person or a therapist.';
 const ADULT_LINE = 'For adults 18+. May not be suitable for some minors.';
@@ -485,6 +506,21 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       if (/https?:/i.test(js)) err('js-network', f, 'contains an http: or https: string');
       if (/["'`]\/\//.test(js)) err('js-network', f, 'contains a string starting with // (protocol-relative URL)');
     }
+  }
+
+  // Chat policy minimum (no Chat repo needed, so CI enforces it): /chat/privacy/ and /privacy.html carry the same
+  // policy line, at CHAT_POLICY_MIN or later.
+  const chatPolicy = html.get('chat/privacy/index.html');
+  if (chatPolicy === undefined) skipped.set('chat-policy-min', 'no page yet');
+  else {
+    const line = anyPolicyLine(visibleText(chatPolicy));
+    if (line === null) err('chat-policy-min', 'chat/privacy/index.html', 'no "Version … · Effective: YYYY-MM-DD" line');
+    else if (!meetsChatPolicyMin(line)) err('chat-policy-min', 'chat/privacy/index.html', `${line} is older than the minimum 1.0-${CHAT_POLICY_MIN}`);
+    const moved = html.get('privacy.html');
+    const movedLine = moved === undefined ? null : anyPolicyLine(visibleText(moved));
+    if (moved === undefined) err('chat-policy-min', 'privacy.html', 'missing (Chat reads the policy line at /privacy.html)');
+    else if (movedLine === null) err('chat-policy-min', 'privacy.html', 'no "Version … · Effective: YYYY-MM-DD" line');
+    else if (line !== null && movedLine !== line) err('chat-policy-min', 'privacy.html', `policy line ${movedLine} differs from /chat/privacy/ (${line})`);
   }
 
   // Chat policy (needs the private Chat repo).
