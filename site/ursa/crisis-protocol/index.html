@@ -61,9 +61,9 @@
         <ul>
           <li>Ursa is an AI, not a therapist or a crisis service. It can't contact anyone for you, and it can miss things.</li>
           <li>Ursa checks every message for signs of a crisis. The check runs on your Mac.</li>
-          <li>When it flags a message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, and a card to call or text 988, or call 911. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></li>
-          <li>After that, Ursa replies as usual for a while, with a 988 row under each reply. If it got it wrong, one tap ends the watch period. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></li>
-          <li>Ursa never remembers a flagged message or its fixed reply. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></li>
+          <li>When it flags a message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, and a card to call or text 988, or call 911.</li>
+          <li>After that, Ursa replies as usual for a while, with a 988 row under each reply. If it got it wrong, one tap or click ends the watch period.</li>
+          <li>Ursa never remembers a flagged message or its fixed reply.</li>
           <li>Ursa sends us nothing, so we can't count how often the card appears.</li>
         </ul>
       </section>
@@ -86,9 +86,9 @@
       <section class="lg-sec" id="when" aria-labelledby="when-h">
         <h2 id="when-h"><span class="lg-hn">01</span><span>When Ursa shows crisis help</span></h2>
         <p>Before Ursa replies, it runs a quick check on your message for signs that you might be thinking about suicide or might hurt yourself. The check also reads your previous message, so it sees the new one in context. It runs on your Mac, like everything else in Ursa. Nothing leaves your Mac to be checked.</p>
-        <p>If the check flags your message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, with the crisis card and two buttons under it (section 3). <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>Ursa never remembers a flagged message or its fixed reply to it. It leaves both out of what it learns from, even when learning is on, and the flagged message shows "Not remembered" in the chat. The rest of the conversation follows your learning setting for that chat, as usual. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>After a flagged message comes a watch period (section 4). <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>If the check flags your message, Ursa doesn't write its own reply. It shows a fixed message, written by a person, with the crisis card and two buttons under it (section 3).</p>
+        <p>Ursa never remembers a flagged message or its fixed reply to it. It leaves both out of what it learns from, even when learning is on, and the flagged message shows "Not remembered" in the chat. From the first flagged message on, Ursa also leaves its own replies in that chat out of what it learns from, because they could repeat what you wrote. Everything else in the chat follows your learning setting for that chat, as usual.</p>
+        <p>After a flagged message comes a watch period (section 4).</p>
       </section>
 
       <section class="lg-sec" id="how" aria-labelledby="how-h">
@@ -110,7 +110,6 @@
       <section class="lg-sec" id="card" aria-labelledby="card-h">
         <h2 id="card-h"><span class="lg-hn">03</span><span>What Ursa shows</span></h2>
         <p>When the check first flags a message, Ursa shows this message in place of a reply. A person wrote it, and it's the same every time:</p>
-        <!-- RECHECK-S4: verify against product main once the fixed-response PR merges -->
         <p><strong>"I hear you. I'm an AI, so I'm not the right help for this moment. Please reach a person: call or text 988, the Suicide &amp; Crisis Lifeline, any time. If you're in immediate danger, call 911."</strong></p>
         <p>Under it is the crisis card:</p>
         <div class="lg-card" role="group" aria-label="The crisis card, as text">
@@ -120,7 +119,7 @@
           <p><strong>In immediate danger?</strong> <strong>Call 911</strong></p>
           <p class="lg-cap">US numbers. Elsewhere, call your local emergency number. Ursa is an AI and can't contact anyone for you.</p>
         </div>
-        <p>Under the card are two buttons, <strong>I'm safe</strong> and <strong>I meant something else</strong>, for when Ursa got it wrong (section 4). <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>Between the message and the card are two buttons, <strong>I'm safe</strong> and <strong>I meant something else</strong>, for when Ursa got it wrong (section 4).</p>
         <p>The card has no web link: its buttons only call or text.</p>
         <p>On a Mac, calls and texts go through your iPhone, with FaceTime and Messages. If your Mac can't place the call, the numbers stay on screen so you can dial them from any phone.</p>
         <p>The message, the card and the buttons are part of the app. The AI doesn't write them, and it can't change them or leave them out.</p>
@@ -128,20 +127,19 @@
 
       <section class="lg-sec" id="keeps" aria-labelledby="keeps-h">
         <h2 id="keeps-h"><span class="lg-hn">04</span><span>After a flagged message</span></h2>
-        <p>After a flagged message comes a watch period. Ursa replies as usual to messages that aren't flagged, and puts a shorter row under each reply: <strong>Crisis line, any time</strong>, with buttons to call or text 988 and call 911. The check still runs on every message. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>If another message is flagged during this time, Ursa again doesn't write its own reply. It shows a shorter fixed message, with the 988 row and the two buttons under it: <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <!-- RECHECK-S4: verify against product main once the fixed-response PR merges -->
+        <p>After a flagged message comes a watch period. Ursa replies as usual to messages that aren't flagged, and puts a shorter row under each reply: <strong>Crisis line, any time</strong>, with buttons to call or text 988 and call 911. The check still runs on every message.</p>
+        <p>If another message is flagged during this time, Ursa again doesn't write its own reply. It shows a shorter fixed message, with the two buttons and the 988 row under it:</p>
         <p><strong>"I'm not the right help for this, but 988 is, any time. Call or text."</strong></p>
-        <p>If Ursa got it wrong, tap <strong>I'm safe</strong> or <strong>I meant something else</strong>, and the watch period ends right away. Or tell Ursa in your own words that you're safe, or that it misread you, and it ends once it's clear. After a tap, it says "Thanks for letting me know." <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>Otherwise, the watch period ends on the 10th message in a row that isn't flagged. If a message is flagged after that, the full message and card show again. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
-        <p>Ending the watch period doesn't change what's remembered: a flagged message stays out of Ursa's memory, even if it was a false alarm. <!-- RECHECK-S4: verify against product main once the fixed-response PR merges --></p>
+        <p>If Ursa got it wrong, tap or click <strong>I'm safe</strong> or <strong>I meant something else</strong>, and the watch period ends right away. Or tell Ursa in your own words that you're safe, or that it misread you, and it ends once it's clear. After a tap or click, it says "Thanks for letting me know."</p>
+        <p>Otherwise, the watch period ends on the 10th message in a row that isn't flagged. If a message is flagged after that, the full message and card show again.</p>
+        <p>Ending the watch period doesn't change what's remembered: a flagged message stays out of Ursa's memory, even if it was a false alarm.</p>
       </section>
 
       <section class="lg-sec" id="any-time" aria-labelledby="any-time-h">
         <h2 id="any-time-h"><span class="lg-hn">05</span><span>Help in a crisis, any time</span></h2>
         <p>You don't need to wait for Ursa to flag a message.</p>
         <ul>
-          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is off or out of reach. Before your iPhone is paired with a Mac, it's on the welcome and pairing screens. <!-- RECHECK-S7b: verify against product main once the ux-polish PR (Help in a crisis on Welcome and pairing) merges --></li>
+          <li><strong>On iPhone:</strong> Settings › Help in a crisis. It's built into the iPhone app and works even when your Mac is off or out of reach. Before your iPhone is paired with a Mac, it's on the welcome and pairing screens.</li>
           <li><strong>On Mac:</strong> Help › Help in a crisis, or Settings › About › Safety, with the numbers set large so you can dial them from any phone.</li>
         </ul>
       </section>
