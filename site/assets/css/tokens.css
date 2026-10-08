@@ -1,0 +1,226 @@
+/* Sovernity tokens: fonts, the studio palette and the Dusk set (light and dark), base reset,
+   focus, skip link and utilities. Values: design note §2 and R2Ursa.dc.html renderVals / .r2u-night. */
+
+@font-face {
+  font-family: "Gloock";
+  src: url("/assets/fonts/gloock-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("/assets/fonts/manrope-var.woff2") format("woff2");
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/fraunces-var.woff2") format("woff2");
+  font-weight: 300 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- light (default) ---------- */
+:root {
+  color-scheme: light dark;
+  /* studio */
+  --paper: #F5F3EE;
+  --paper2: #ECE8DF;
+  --ink: #1B1A17;
+  --muted: #5E5A53;
+  --line: #DEDAD1;
+  --vermilion: #C23B22;
+  --night: #1B1A17;
+  --night-ink: #EFEBE3;
+  /* Dusk (Ursa) */
+  --bg: #F6F4EF;
+  --sidebar: #EEEBE4;
+  --surface: #FFFEFB;
+  --line-u: #DDD8CE;
+  --ink-u: #1A1B25;
+  --muted-u: #54555F;
+  --faint: #65656F;
+  --accent: #334770;
+  --accentText: #334770;
+  --onAccent: #FFFFFF;
+  --accentSoft: #C3CCE1;
+  --mem: #C28E34;
+  --memText: #7E5514;
+  --memSoft: #EEDAB2;
+  --connected: #2F7A4A;
+  --seal: #C23B22;
+
+  --focus: var(--ink);
+  --font-display: "Gloock", Georgia, serif;
+  --font-text: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-ursa: "Fraunces", Georgia, serif;
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ---------- dark: the system says dark and no stored Light ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #161513;
+    --paper2: #1D1C19;
+    --ink: #EFEBE3;
+    --muted: #A8A398;
+    --line: #34322E;
+    --vermilion: #E25C40;
+    --night: #23211D;
+    --night-ink: #EFEBE3;
+    --bg: #14161D;
+    --sidebar: #0F1017;
+    --surface: #1D1F28;
+    --line-u: #303341;
+    --ink-u: #EFE9DF;
+    --muted-u: #ACAEBC;
+    --faint: #86889A;
+    --accent: #AAC1EE;
+    --accentText: #B8CBF2;
+    --onAccent: #15141D;
+    --accentSoft: #2C384E;
+    --mem: #E2B566;
+    --memText: #EBC57F;
+    --memSoft: #3A301D;
+    --connected: #6FCB8E;
+    --seal: #E25C40;
+  }
+}
+
+/* ---------- dark: stored Dark (same values) ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #161513;
+  --paper2: #1D1C19;
+  --ink: #EFEBE3;
+  --muted: #A8A398;
+  --line: #34322E;
+  --vermilion: #E25C40;
+  --night: #23211D;
+  --night-ink: #EFEBE3;
+  --bg: #14161D;
+  --sidebar: #0F1017;
+  --surface: #1D1F28;
+  --line-u: #303341;
+  --ink-u: #EFE9DF;
+  --muted-u: #ACAEBC;
+  --faint: #86889A;
+  --accent: #AAC1EE;
+  --accentText: #B8CBF2;
+  --onAccent: #15141D;
+  --accentSoft: #2C384E;
+  --mem: #E2B566;
+  --memText: #EBC57F;
+  --memSoft: #3A301D;
+  --connected: #6FCB8E;
+  --seal: #E25C40;
+}
+
+/* ---------- night panels: night values in both themes ----------
+   .night   = studio night (R2SealHome.css .rsp-night: --panel/--pink/--pmut/--pverm).
+   .night-u = Dusk night for Ursa (R2Ursa.css .r2u-night). */
+.night {
+  --paper: var(--night);
+  --ink: var(--night-ink);
+  --muted: #B3AEA3;
+  --line: #34322E;
+  --vermilion: #E8705A;
+  --focus: var(--night-ink);
+  color-scheme: dark;
+  background: var(--night);
+  color: var(--night-ink);
+}
+.night-u {
+  --bg: #0F1017;
+  --sidebar: #0B0C12;
+  --surface: #1D1F28;
+  --line-u: #303341;
+  --ink-u: #EFE9DF;
+  --muted-u: #ACAEBC;
+  --faint: #86889A;
+  --accent: #AAC1EE;
+  --accentText: #B8CBF2;
+  --onAccent: #15141D;
+  --accentSoft: #2C384E;
+  --mem: #E2B566;
+  --memText: #EBC57F;
+  --memSoft: #3A301D;
+  --connected: #6FCB8E;
+  --seal: #E25C40;
+  --focus: #AAC1EE;
+  color-scheme: dark;
+  background: var(--bg);
+  color: var(--ink-u);
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+:where(h1, h2, h3, h4, p, figure, blockquote) { margin: 0; }
+code, kbd, td, th { overflow-wrap: anywhere; }
+[id] { scroll-margin-top: 96px; }
+
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- utilities ---------- */
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 700px) {
+  .wrap { padding: 0 20px; }
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 100;
+  left: 16px;
+  top: 12px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; outline-color: var(--vermilion); }
+
+/* ---------- reduced motion: still, finished states ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

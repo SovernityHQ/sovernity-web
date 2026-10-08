@@ -1,0 +1,72 @@
+<!--
+  Sovernity Ursa launch markup (stage 2). Not under site/, so it never deploys.
+
+  How to swap it in at launch:
+  1. Fill every [[F2: …]] and [[S6: …]] below with the real values (the check fails while any remain).
+  2. Download Apple's "Download on the App Store" badge SVG, unmodified, from Apple's marketing site
+     (https://developer.apple.com/app-store/marketing/guidelines/) at that time, and save it as
+     site/assets/img/ursa/app-store-badge-black.svg. Do not redraw, recolour or crop it.
+  3. In site/ursa/index.html:
+     - hero: replace the "Coming soon" button and "The first release is on its way." in .r2u-cta-main
+       with block (a)'s Download link, and add block (a)'s .r2u-cta-phone after .r2u-cta-main. Block (a)
+       has no 18+ line: the hero's existing .r2u-age line (after .r2u-cta-row) stays as it is;
+     - download section: in .r2u-dl-main, keep .r2u-head and replace everything after it (the "Coming
+       soon" button, "The first release is on its way." AND the existing .r2u-age 18+ line) with
+       everything in block (b)'s .r2u-dl-main after its .r2u-head stub. Block (b)'s .r2u-age line
+       replaces the existing one, so the section keeps exactly one 18+ line. Then put block (b)'s
+       SHA-256 card before the Requirements card in .r2u-dl-side;
+     - <head>: add block (c).
+  4. Add the launch styles for .r2u-badge, .r2u-ver, .r2u-btn-sub, .r2u-sumrow, .r2u-sum, .r2u-copy and
+     .r2u-code from canvas R2Ursa.css to site/assets/css/ursa.css. copy.ts is already wired by main.ts,
+     so the Copy button needs no code.
+  5. Build, check (without --draft) and shoot /ursa/ before publishing.
+-->
+
+<!-- (a) hero CTA -->
+<!--
+<div class="r2u-cta-main">
+  <a class="r2u-btn" href="#download">
+    <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M9 2.5v9M5 8l4 4 4-4M3 15h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Download for Mac
+  </a>
+  <p class="r2u-req">Mac with Apple silicon and 16 GB of memory · macOS 15 or later · about 7 GB model download</p>
+</div>
+<div class="r2u-cta-phone">
+  <a class="r2u-badge" href="[[F2: App Store link]]"><img src="/assets/img/ursa/app-store-badge-black.svg" alt="Download on the App Store" height="40"></a>
+  <p class="r2u-small">Sovernity Ursa for iPhone talks to your Mac.</p>
+</div>
+-->
+
+<!-- (b) download block -->
+<!--
+<div class="r2u-dl-main">
+  <div class="r2u-head">… the full Dipper and the heading stay as they are …</div>
+  <p class="r2u-ver">Version [[S6: 1.0.0]]<span class="sep" aria-hidden="true">·</span>[[S6: release date]]<span class="sep" aria-hidden="true">·</span><a href="https://github.com/SovernityHQ/sovernity-web/releases/tag/ursa-v[[S6: 1.0.0]]">Release notes →</a></p>
+  <a class="r2u-btn" href="https://github.com/SovernityHQ/sovernity-web/releases/download/ursa-v[[S6: 1.0.0]]/Sovernity-Ursa-[[S6: 1.0.0]].dmg">
+    <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M9 2.5v9M5 8l4 4 4-4M3 15h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Download for Mac <span class="r2u-btn-sub">([[S6: size]] DMG)</span>
+  </a>
+  <p class="r2u-small">macOS asks you to confirm the first time you open it.</p>
+  <p class="r2u-age">For adults 18+. May not be suitable for some minors.</p>
+  <a class="r2u-badge" href="[[F2: App Store link]]"><img src="/assets/img/ursa/app-store-badge-black.svg" alt="Download on the App Store" height="40"></a>
+</div>
+
+<div class="r2u-card">
+  <h3 class="r2u-h3">SHA-256</h3>
+  <div class="r2u-sumrow">
+    <code class="r2u-sum" id="ursa-sha">[[S6: checksum]]</code>
+    <button class="r2u-copy" type="button" data-copy-target="ursa-sha" aria-label="Copy the SHA-256 checksum">
+      <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="7.5" height="7.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 2.5V2A1 1 0 0 0 8.5 1H3A1 1 0 0 0 2 2v5.5a1 1 0 0 0 1 1h.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span>Copy</span>
+    </button>
+  </div>
+  <h3 class="r2u-h3">Verify (optional)</h3>
+  <pre class="r2u-code"><code>spctl -a -vv -t install "Sovernity Ursa.dmg"</code></pre>
+  <p>should report "accepted" and "Notarized Developer ID". [[S6: confirm the exact command and output]]</p>
+</div>
+-->
+
+<!-- (c) Smart App Banner meta, in <head> -->
+<!--
+<meta name="apple-itunes-app" content="app-id=[[F2: id]]">
+-->

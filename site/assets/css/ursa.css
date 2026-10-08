@@ -1,0 +1,328 @@
+/* Sovernity Ursa product page: Night sky with the Dipper tracker.
+   Ported from canvas R2Ursa.css. The canvas names --line/--ink/--muted are --line-u/--ink-u/--muted-u
+   here (tokens.css); .night-u is the canvas .r2u-night. Container queries became media queries.
+   Every rule outside the motion block is the finished, resting state. */
+
+.ursa { font-family: var(--font-system); font-weight: 400; font-size: 17px; line-height: 1.6; color: var(--ink-u); }
+.ursa :where(ul) { list-style: none; margin: 0; padding: 0; }
+.ursa :where(a) { color: var(--accentText); } /* only .ursa counts, so the later .r2u-btn keeps --onAccent on button links */
+.ursa :where(a, button, summary):focus-visible { outline-color: var(--accent); }
+.ursa .night-u :where(a, button, summary):focus-visible { outline-color: var(--focus); }
+
+.r2u-serif { font-family: var(--font-ursa); font-weight: 400; font-optical-sizing: auto; }
+
+/* night panels */
+.ursa .night-u { position: relative; overflow: hidden; }
+.r2u-field { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; pointer-events: none; }
+.r2u-field circle { fill: #EFE9DF; }
+.night-u > .wrap { position: relative; }
+
+/* ---------- section Dippers (viewBox 0 0 210 120) ----------
+   Every section shows the whole figure: stars before this section's star lit, their connectors drawn;
+   later stars dull, no connectors. At rest everything up to the new star is drawn and lit. */
+.r2u-dip { display: block; width: 248px; height: auto; overflow: visible; --dline: .55; --dull: .32; }
+.night-u .r2u-dip { --dline: .72; --dull: .42; }
+.r2u-dip.big { width: 100%; max-width: 480px; }
+.r2u-done, .r2u-seg, .r2u-route {
+  fill: none; stroke: var(--accent); stroke-opacity: var(--dline); stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.r2u-seg, .r2u-route { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.r2u-dip.big .r2u-route { stroke-width: 1.2; }
+.r2u-st { fill: var(--mem); transform-box: fill-box; transform-origin: center; }
+.r2u-st.off { fill: var(--faint); fill-opacity: var(--dull); }
+
+/* ---------- hero ---------- */
+.r2u-hero { padding: 96px 0 128px; }
+.r2u-hero-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: center; }
+.r2u-appid { display: flex; align-items: center; gap: 20px; }
+.r2u-appicon { flex: none; width: 120px; height: 120px; border-radius: 27px; border: 1px solid rgba(239, 233, 223, .16); }
+.r2u-eyebrow { font-size: 15px; letter-spacing: .04em; color: var(--muted-u); }
+.r2u-h1 { margin: 36px 0 0; font-size: clamp(40px, 5vw, 74px); line-height: 1.04; letter-spacing: -0.026em; }
+.r2u-h1 span { display: block; }
+.r2u-h1 .l2 { color: var(--muted-u); }
+.r2u-strip { display: flex; flex-wrap: wrap; gap: 6px 0; margin-top: 36px; font-size: 18px; color: var(--ink-u); }
+.r2u-strip li + li::before { content: "\00B7"; padding: 0 14px; color: var(--faint); }
+.r2u-cta-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 28px 48px; margin-top: 40px; }
+.r2u-cta-main { display: flex; flex-direction: column; gap: 12px; max-width: 440px; }
+.r2u-btn {
+  display: inline-flex; align-self: flex-start; align-items: center; gap: 10px;
+  height: 54px; padding: 0 30px; border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--onAccent);
+  font: inherit; font-weight: 600; font-size: 17px; text-decoration: none;
+}
+.r2u-btn svg { width: 18px; height: 18px; flex: none; }
+.r2u-btn-off { background: transparent; color: var(--ink-u); border: 1.5px solid var(--faint); cursor: default; }
+.r2u-soon { font-size: 16px; color: var(--ink-u); }
+.r2u-req { font-size: 14px; line-height: 1.5; color: var(--muted-u); }
+.r2u-small { font-size: 14px; line-height: 1.5; color: var(--muted-u); }
+.r2u-age { margin-top: 28px; font-size: 14px; color: var(--ink-u); }
+.r2u-hero-sky { display: flex; justify-content: center; }
+
+/* ---------- sections ---------- */
+.r2u-sec { padding: 132px 0; }
+.r2u-head { display: flex; flex-direction: column; gap: 24px; margin-bottom: 56px; }
+.r2u-h2 { margin: 0; font-size: clamp(34px, 4.2vw, 60px); line-height: 1.08; letter-spacing: -0.02em; max-width: 21ch; }
+.r2u-h3 { margin: 0 0 10px; font-size: 15px; font-weight: 600; letter-spacing: .01em; color: var(--ink-u); }
+.r2u-prose p + p { margin-top: 20px; }
+.r2u-lead { font-size: 21px; line-height: 1.55; }
+.r2u-fixed { font-size: 19px; color: var(--ink-u); }
+.r2u-muted { color: var(--muted-u); }
+.r2u-ink { color: var(--ink-u); }
+.r2u-grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; align-items: start; }
+.r2u-grid2 .r2u-head { margin-bottom: 0; }
+.r2u-rule { border-top: 1px solid var(--line-u); }
+.ursa .r2u-arrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 17px; font-weight: 600; text-decoration: none;
+  border-bottom: 1.5px solid var(--accentSoft); padding-bottom: 3px;
+}
+.ursa .r2u-arrow:hover { border-color: currentColor; }
+.r2u-arrow span { display: inline-block; }
+.r2u-arrow:hover span { transform: translateX(3px); }
+
+/* ---------- 3 memory ---------- */
+.r2u-mem-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; align-items: start; }
+.r2u-mem-text p + p { margin-top: 20px; }
+.r2u-mem-text p { font-size: 19px; line-height: 1.6; color: var(--muted-u); }
+.r2u-mem-text p.r2u-ink { color: var(--ink-u); }
+.r2u-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px; border-radius: 999px;
+  background: var(--memSoft); color: var(--memText); font-size: 15px; white-space: nowrap;
+}
+.r2u-chip i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--mem); }
+.ursa .r2u-mshots { position: relative; margin: 0 28px 56px 0; }
+.r2u-mac-shot { width: 100%; border-radius: 10px; border: 1px solid var(--line-u); }
+.r2u-mphone { position: absolute; right: -28px; bottom: -56px; width: 176px; padding: 5px; border-radius: 30px; background: var(--surface); border: 1.5px solid var(--line-u); }
+.r2u-mphone img { width: 100%; border-radius: 25px; }
+.r2u-cap { display: flex; align-items: center; gap: 10px; margin-top: 84px; font-size: 15px; color: var(--memText); }
+.r2u-cap i { display: inline-block; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--mem); }
+
+/* ---------- 4 devices (night panel) ---------- */
+.r2u-dev-intro { max-width: 760px; font-size: 21px; line-height: 1.55; color: var(--ink-u); }
+.ursa .r2u-diagram { display: flex; align-items: center; justify-content: center; max-width: 1000px; margin: 80px auto 0; }
+.r2u-node { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.r2u-node-phone { flex: 0 0 176px; }
+.r2u-node-mac { flex: 0 1 480px; min-width: 0; }
+.r2u-phone-frame { width: 176px; padding: 5px; border-radius: 30px; background: var(--surface); border: 1.5px solid var(--line-u); }
+.r2u-phone-frame img { width: 100%; border-radius: 25px; }
+.r2u-mac-frame { width: 100%; padding: 7px; border-radius: 14px; background: var(--surface); border: 1.5px solid var(--line-u); }
+.r2u-mac-frame img { width: 100%; border-radius: 8px; }
+.r2u-mac-base { width: 112%; max-width: calc(100% + 40px); height: 10px; margin-top: -8px; border-radius: 0 0 10px 10px; background: var(--line-u); }
+.r2u-node-label { font-family: var(--font-ursa); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; color: var(--ink-u); }
+.r2u-link { flex: 1 1 220px; min-width: 180px; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 0 20px; margin-bottom: 40px; }
+.r2u-link-texts { display: contents; }
+.r2u-cloud { order: -1; display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--muted-u); font-size: 14px; }
+.r2u-cloud svg { width: 56px; height: 36px; }
+.r2u-wire { position: relative; width: 100%; height: 12px; display: flex; align-items: center; }
+.r2u-wire-line { position: absolute; left: 6px; right: 6px; top: 5px; height: 2px; background: var(--accentSoft); }
+.r2u-end { position: absolute; top: 1px; width: 10px; height: 10px; border-radius: 50%; background: var(--connected); }
+.r2u-end-a { left: 0; }
+.r2u-end-b { right: 0; }
+/* The packets only exist while they move (html.js, no reduced motion); at rest they are hidden. */
+.r2u-packet { display: none; position: absolute; top: 2px; left: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0; }
+.r2u-link-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted-u); text-align: center; }
+.r2u-link-label svg { width: 16px; height: 16px; flex: none; color: var(--accentText); }
+.r2u-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1000px; margin: 80px auto 0; }
+.r2u-note { display: flex; gap: 16px; align-items: flex-start; border: 1px solid var(--line-u); border-radius: 14px; padding: 26px 28px; background: var(--surface); }
+.r2u-note svg { width: 24px; height: 24px; flex: none; margin-top: 3px; color: var(--accentText); }
+.r2u-note p { font-size: 16px; line-height: 1.6; color: var(--muted-u); }
+.r2u-note strong { font-weight: 400; color: var(--ink-u); }
+
+/* ---------- 5 what leaves your Mac ---------- */
+.r2u-flow { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.5; }
+.r2u-flow th {
+  text-align: left; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--faint); padding: 0 24px 14px 0; border-bottom: 1px solid var(--line-u);
+}
+.r2u-flow td { padding: 22px 24px 22px 0; border-bottom: 1px solid var(--line-u); vertical-align: top; color: var(--muted-u); }
+.r2u-flow td:first-child { color: var(--ink-u); font-weight: 600; width: 22%; }
+.r2u-flow tr.r2u-nowhere td { color: var(--ink-u); }
+.r2u-big { font-weight: 700; color: var(--memText); }
+.r2u-storage { display: flex; align-items: center; gap: 12px; margin-top: 32px; font-size: 16px; color: var(--ink-u); }
+.r2u-storage svg { width: 18px; height: 18px; flex: none; }
+.r2u-storage path, .r2u-storage rect { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.r2u-cards2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
+.r2u-card { border: 1px solid var(--line-u); border-radius: 14px; padding: 28px 30px; background: var(--surface); color: var(--muted-u); font-size: 16px; line-height: 1.6; }
+.r2u-fn { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line-u); max-width: 860px; font-size: 14px; line-height: 1.6; color: var(--muted-u); }
+
+/* ---------- 6 if things get hard, 7 Ursa is free ---------- */
+.r2u-hard-body .r2u-arrow, .r2u-free .r2u-arrow { margin-top: 36px; }
+.r2u-free .r2u-lead { color: var(--ink-u); }
+
+/* ---------- 8 questions (open by default; answers readable without JS) ---------- */
+.r2u-faq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 72px; align-items: start; }
+.r2u-faq-grid .r2u-head { margin-bottom: 0; }
+.r2u-faq { border-top: 1px solid var(--line-u); }
+.r2u-q { border-bottom: 1px solid var(--line-u); }
+.r2u-q summary {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
+  padding: 24px 0; list-style: none; cursor: pointer;
+  font-family: var(--font-ursa); font-weight: 400; font-size: 23px; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink-u);
+}
+.r2u-q summary::-webkit-details-marker { display: none; }
+.r2u-q summary::marker { content: ""; }
+.r2u-pm { position: relative; top: -3px; flex: none; width: 16px; height: 16px; }
+.r2u-pm::before, .r2u-pm::after { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 1.5px; border-radius: 1px; background: var(--accent); }
+.r2u-pm::after { transform: rotate(90deg); }
+.r2u-q[open] .r2u-pm::after { transform: rotate(0deg); }
+.r2u-a { max-width: 720px; padding: 0 48px 28px 0; font-size: 17px; line-height: 1.6; color: var(--muted-u); }
+
+/* ---------- 9 download (night panel) ---------- */
+.r2u-dl { padding: 132px 0 140px; }
+/* The sticky sub-nav (60 px + its 1 px rule) plus 16 px. */
+#download { scroll-margin-top: 77px; }
+.r2u-dl-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 72px; align-items: start; }
+.r2u-dl-main { display: flex; flex-direction: column; gap: 20px; }
+.r2u-dl-main .r2u-head { margin-bottom: 8px; }
+.r2u-dl-main .r2u-btn { margin-top: 12px; }
+.r2u-dl-main .r2u-age { margin-top: 8px; }
+.r2u-dl-side { display: flex; flex-direction: column; gap: 20px; }
+.r2u-dl-side .r2u-card { padding: 26px 28px; }
+.r2u-dl-side .r2u-h3 { margin-bottom: 12px; }
+.r2u-reqs li { position: relative; padding: 8px 0 8px 22px; border-top: 1px solid var(--line-u); font-size: 15px; line-height: 1.5; color: var(--muted-u); }
+.r2u-reqs li:first-child { border-top: 0; padding-top: 0; }
+.r2u-reqs li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .8; }
+.r2u-reqs li:first-child::before { top: 9px; }
+
+/* ---------- narrow (canvas container ≤ 1000 px) ---------- */
+@media (max-width: 1000px) {
+  .r2u-mem-grid { grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .ursa .r2u-mshots { max-width: 640px; margin: 0 auto 56px; }
+  .r2u-dl-grid, .r2u-faq-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+}
+
+/* ---------- phone (≤ 700 px) ---------- */
+@media (max-width: 700px) {
+  .ursa { font-size: 16px; }
+  #download { scroll-margin-top: 71px; } /* sub-nav 54 px + 1 px rule + 16 px */
+  .r2u-hero { padding: 48px 0 72px; }
+  .r2u-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .r2u-appid { gap: 16px; }
+  .r2u-appicon { width: 88px; height: 88px; border-radius: 20px; }
+  .r2u-hero-sky { justify-content: flex-start; }
+  .r2u-dip.big { max-width: 300px; }
+  .r2u-h1 { margin-top: 28px; font-size: 40px; letter-spacing: -0.022em; }
+  .r2u-strip { display: block; font-size: 16px; margin-top: 28px; }
+  .r2u-strip li { display: block; padding: 4px 0; border-top: 1px solid var(--line-u); }
+  .r2u-strip li + li::before { content: none; }
+  .r2u-cta-row { flex-direction: column; gap: 24px; margin-top: 32px; }
+  .r2u-btn { align-self: stretch; justify-content: center; padding: 0 20px; }
+  .r2u-sec, .r2u-dl { padding: 80px 0; }
+  .r2u-head { margin-bottom: 36px; gap: 18px; }
+  .r2u-dip { width: 176px; }
+  .r2u-h2 { font-size: 34px; }
+  .r2u-lead, .r2u-dev-intro { font-size: 18px; }
+  .r2u-grid2 { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .r2u-mem-grid { gap: 36px; }
+  .r2u-mem-text p { font-size: 17px; }
+  .ursa .r2u-mshots { margin: 0; }
+  .r2u-mphone { position: static; width: 190px; margin: 24px auto 0; }
+  .r2u-cap { margin-top: 20px; justify-content: center; }
+  .ursa .r2u-diagram { flex-direction: column; margin-top: 48px; }
+  .r2u-node-phone { flex: none; }
+  .r2u-node-mac { flex: none; width: 100%; }
+  .r2u-mac-base { width: 100%; max-width: 100%; }
+  .r2u-phone-frame { width: 180px; }
+  .r2u-link { flex: none; width: auto; min-width: 0; flex-direction: row; gap: 20px; padding: 0; margin: 20px 0; }
+  .r2u-wire { width: 12px; height: 150px; flex-direction: column; }
+  .r2u-wire-line { left: 5px; right: auto; top: 6px; bottom: 6px; width: 2px; height: auto; }
+  .r2u-end-a { left: 1px; top: 0; }
+  .r2u-end-b { left: 1px; right: auto; top: auto; bottom: 0; }
+  .r2u-packet { left: 2px; top: 6px; }
+  .r2u-link-label { flex-direction: column; align-items: flex-start; text-align: left; max-width: 170px; }
+  .r2u-cloud { order: 0; align-items: flex-start; }
+  .r2u-link-texts { display: flex; flex-direction: column; gap: 20px; }
+  .r2u-notes, .r2u-cards2 { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .r2u-notes { margin-top: 56px; }
+  .r2u-note, .r2u-card { padding: 22px 20px; }
+  .r2u-flow thead { display: none; }
+  .r2u-flow, .r2u-flow tbody, .r2u-flow tr, .r2u-flow td { display: block; width: auto !important; }
+  .r2u-flow tr { padding: 16px 0; border-bottom: 1px solid var(--line-u); }
+  .r2u-flow td { border: 0; padding: 3px 0; }
+  .r2u-flow td::before {
+    content: attr(data-label); display: block;
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--faint);
+  }
+  .r2u-q summary { font-size: 20px; padding: 20px 0; }
+  .r2u-a { padding: 0 0 24px; font-size: 16px; }
+}
+
+/* ---------- motion: only html.js starts an animation; reduced motion keeps the resting state ---------- */
+@keyframes r2u-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes r2u-pulse { 0% { transform: none; } 45% { transform: scale(1.45); } 100% { transform: none; } }
+@keyframes r2u-kindle {
+  0% { fill: var(--faint); fill-opacity: var(--dull, .35); transform: scale(.7); }
+  65% { transform: scale(1.14); }
+  100% { fill: var(--mem); fill-opacity: 1; transform: scale(1); }
+}
+@keyframes r2u-kindlebox { 0% { opacity: .3; transform: scale(.55); } 65% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: none; } }
+@keyframes r2u-rise { from { transform: translateY(24px); } to { transform: none; } }
+@keyframes r2u-risefar { from { opacity: .5; transform: translateY(48px); } to { opacity: 1; transform: none; } }
+@keyframes r2u-settle { from { opacity: .5; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes r2u-dimin { from { opacity: .4; } to { opacity: 1; } }
+@keyframes r2u-row { from { opacity: .45; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+@keyframes r2u-chip { 0% { background: transparent; } 100% { background: var(--memSoft); } }
+@keyframes r2u-packetx { 0% { left: 6px; opacity: 1; } 50% { left: calc(100% - 14px); opacity: 1; } 50.01%, 100% { left: calc(100% - 14px); opacity: 0; } }
+@keyframes r2u-packety { 0% { top: 6px; opacity: 1; } 50% { top: calc(100% - 14px); opacity: 1; } 50.01%, 100% { top: calc(100% - 14px); opacity: 0; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .ursa .r2u-btn:not(.r2u-btn-off) { transition: transform .3s ease; }
+  html.js .ursa .r2u-btn:not(.r2u-btn-off):hover { transform: translateY(-1px); }
+  html.js .ursa .r2u-arrow { transition: border-color .4s ease; }
+  html.js .r2u-arrow span { transition: transform .4s ease; }
+  html.js .r2u-pm::before, html.js .r2u-pm::after { transition: transform .4s ease; }
+
+  /* section Dippers: .is-drawing while in view (dipper.ts) */
+  html.js .r2u-dip.is-drawing .r2u-seg { animation: r2u-draw 1.2s cubic-bezier(.42, 0, .58, 1) .2s both; }
+  html.js .r2u-dip.is-drawing .r2u-st.new { animation: r2u-kindle .85s ease-out 1.25s both; }
+  html.js .r2u-dip.is-drawing .r2u-st.re { animation: r2u-pulse .9s ease-out 1.25s both; }
+  /* hero and download: the whole route draws, each star lights as the line reaches it */
+  html.js .r2u-dip.full.is-drawing .r2u-route { animation: r2u-draw 1.8s linear .2s both; }
+  html.js .r2u-dip.full.is-drawing .r2u-st { animation: r2u-kindle .6s ease-out .1s both; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k2 { animation-delay: .35s; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k3 { animation-delay: .52s; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k5 { animation-delay: 1.1s; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k6 { animation-delay: 1.37s; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k7 { animation-delay: 1.67s; }
+  html.js .r2u-dip.full.is-drawing .r2u-st.k4 { animation: r2u-kindle .6s ease-out .74s both, r2u-pulse .7s ease-out 1.95s; }
+
+  /* hero on load */
+  html.js .r2u-h1 .l1 { animation: r2u-settle 1.6s cubic-bezier(.2, .7, .2, 1) .1s both; }
+  html.js .r2u-h1 .l2 { animation: r2u-settle 1.6s cubic-bezier(.2, .7, .2, 1) .35s both; }
+  html.js .r2u-hero .r2u-appicon { animation: r2u-settle 1.4s cubic-bezier(.2, .7, .2, 1) both; }
+  html.js .r2u-hero .r2u-field { animation: r2u-dimin 4s ease-out both; }
+
+  /* sections as they scroll in (.r2u-in from motion.ts) */
+  html.js .r2u-in .r2u-field { animation: r2u-dimin 4s ease-out both; }
+  html.js .r2u-in .r2u-rv { animation: r2u-settle 1.2s cubic-bezier(.2, .7, .2, 1) .15s both; }
+  html.js .r2u-in .r2u-rv.r2 { animation-delay: .3s; }
+  html.js .r2u-in .r2u-rv.r3 { animation-delay: .45s; }
+  html.js .r2u-in .r2u-rv.r4 { animation-delay: .6s; }
+  html.js .r2u-in .r2u-mac-shot { animation: r2u-rise 1.4s cubic-bezier(.2, .7, .2, 1) .2s both; }
+  html.js .r2u-in .r2u-mphone { animation: r2u-risefar 1.6s cubic-bezier(.2, .7, .2, 1) .55s both; }
+  html.js .r2u-in .r2u-chip { animation: r2u-chip 2s ease-out 1.1s both; }
+  html.js .r2u-in .r2u-cap i { animation: r2u-kindlebox 1.6s ease-out 1.6s both; }
+  html.js .r2u-in .r2u-node-phone { animation: r2u-rise 1.3s cubic-bezier(.2, .7, .2, 1) .1s both; }
+  html.js .r2u-in .r2u-link { animation: r2u-settle 1.3s cubic-bezier(.2, .7, .2, 1) .3s both; }
+  html.js .r2u-in .r2u-node-mac { animation: r2u-rise 1.3s cubic-bezier(.2, .7, .2, 1) .5s both; }
+  html.js .r2u-in .r2u-flow tbody tr { animation: r2u-row 1.2s cubic-bezier(.2, .7, .2, 1) both; }
+  html.js .r2u-in .r2u-flow tbody tr:nth-child(2) { animation-delay: .35s; }
+  html.js .r2u-in .r2u-flow tbody tr:nth-child(3) { animation-delay: .7s; }
+  html.js .r2u-in .r2u-q { animation: r2u-settle 1.1s cubic-bezier(.2, .7, .2, 1) both; }
+  html.js .r2u-in .r2u-q:nth-child(2) { animation-delay: .1s; }
+  html.js .r2u-in .r2u-q:nth-child(3) { animation-delay: .2s; }
+  html.js .r2u-in .r2u-q:nth-child(4) { animation-delay: .3s; }
+  html.js .r2u-in .r2u-q:nth-child(5) { animation-delay: .4s; }
+  html.js .r2u-in .r2u-q:nth-child(6) { animation-delay: .5s; }
+  html.js .r2u-in .r2u-q:nth-child(7) { animation-delay: .6s; }
+  html.js .r2u-in .r2u-q:nth-child(8) { animation-delay: .7s; }
+  html.js .r2u-in .r2u-dl-side .r2u-card { animation: r2u-rise 1.3s cubic-bezier(.2, .7, .2, 1) .4s both; }
+
+  /* the packets on the device diagram's wire */
+  html.js .r2u-packet { display: block; animation: r2u-packetx 4.8s cubic-bezier(.45, 0, .55, 1) infinite; }
+  html.js .r2u-packet-b { animation-direction: reverse; animation-delay: -2.4s; }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 700px) {
+  html.js .r2u-packet { animation-name: r2u-packety; }
+}

@@ -24,9 +24,8 @@
 -->
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
+<!-- include:head -->
+<link rel="stylesheet" href="/assets/css/studio.css">
   <!-- Title + meta description: kit §1a approved strings, verbatim — no free
        assembly, even from approved hero fragments. The "never phones home"
        short form is permitted only while the hero section below carries the
@@ -51,12 +50,13 @@
        qualifier cannot be kept "within eye-shot" inside a 1200x630 graphic.
        The card already renders title and description beside the image — the
        image's job is recognition, not explanation. -->
+  <link rel="canonical" href="https://sovernity.com/chat/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sovernity Chat">
-  <meta property="og:url" content="https://sovernity.com/">
+  <meta property="og:url" content="https://sovernity.com/chat/">
   <meta property="og:title" content="Sovernity Chat — a local AI with hands on your files. It never phones home.">
   <meta property="og:description" content="A local AI with hands on your files — and it never phones home. Runs open-weights Qwen models entirely on your Mac (Apple Silicon) — no account, no cloud, no API key. Free during beta.">
-  <meta property="og:image" content="https://sovernity.com/assets/og-card.png">
+  <meta property="og:image" content="https://sovernity.com/assets/img/chat/og-card.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -64,27 +64,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sovernity Chat — a local AI with hands on your files. It never phones home.">
   <meta name="twitter:description" content="A local AI with hands on your files — and it never phones home. Runs open-weights Qwen models entirely on your Mac (Apple Silicon) — no account, no cloud, no API key. Free during beta.">
-  <meta name="twitter:image" content="https://sovernity.com/assets/og-card.png">
+  <meta name="twitter:image" content="https://sovernity.com/assets/img/chat/og-card.png">
   <meta name="twitter:image:alt" content="The Sovernity Chat app icon.">
-  <link rel="icon" type="image/svg+xml" href="assets/mark.svg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/assets/css/chat.css">
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="assets/mark.svg" width="26" height="26" alt="">
-        Sovernity Chat
-      </a>
-      <nav class="site-nav" aria-label="Site">
-        <a href="#how">How it works</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#download">Download</a>
-      </nav>
-    </div>
-  </header>
+<body data-page="chat">
+<!-- include:seal-defs -->
+<!-- include:studio-header -->
 
   <main id="main">
 
@@ -135,22 +121,22 @@
              screen and makes no privacy, security, deletion or capability claim. -->
         <div class="shot-grid">
           <figure class="shot">
-            <img src="assets/shot-approval.png" width="2084" height="1444" loading="lazy" decoding="async"
+            <img src="/assets/img/chat/shot-approval.png" width="2084" height="1444" loading="lazy" decoding="async"
                  alt="The chat view. A pending change to a Markdown file is shown as a line-by-line diff, with Deny and Approve buttons beneath it.">
             <figcaption>Every change is previewed, approved by you, logged, and undoable — and deletes go to a recoverable trash.</figcaption>
           </figure>
           <figure class="shot">
-            <img src="assets/shot-folders.png" width="2082" height="1448" loading="lazy" decoding="async"
+            <img src="/assets/img/chat/shot-folders.png" width="2082" height="1448" loading="lazy" decoding="async"
                  alt="The Folders pane, listing granted folders with their access setting, indexing status, and a control to revoke access.">
             <figcaption>You choose which folders the app can see, using the standard macOS folder picker. Folder access is enforced by macOS itself — the App Sandbox — not just by our code.</figcaption>
           </figure>
           <figure class="shot">
-            <img src="assets/shot-activity.png" width="2086" height="1444" loading="lazy" decoding="async"
+            <img src="/assets/img/chat/shot-activity.png" width="2086" height="1444" loading="lazy" decoding="async"
                  alt="The Activity pane, listing file actions by date with the file changed and links to view the diff or undo it.">
             <figcaption>The Activity pane: a record of every file action.</figcaption>
           </figure>
           <figure class="shot">
-            <img src="assets/shot-delete.png" width="2086" height="1440" loading="lazy" decoding="async"
+            <img src="/assets/img/chat/shot-delete.png" width="2086" height="1440" loading="lazy" decoding="async"
                  alt="A confirmation dialog asking whether to delete a chat, describing what deleting it removes.">
           </figure>
         </div>
@@ -202,7 +188,7 @@
             <p><strong>Delete means gone from the app</strong> — messages, files, traces, immediately and permanently. There's no cloud copy because there is no cloud. (Your own backups, like Time Machine, are yours and stay yours.)</p>
           </div>
         </div>
-        <p style="margin-top: 24px;"><a href="privacy.html">Read the privacy policy</a></p>
+        <p style="margin-top: 24px;"><a href="/chat/privacy/">Read the privacy policy</a></p>
       </div>
     </section>
 
@@ -220,7 +206,7 @@
                the release asset. The /releases/latest form keeps the link stable across
                versions, and the approved copy below ("served from GitHub Releases")
                stays true. Enforced by scripts/publish-website.sh gate 5. -->
-          <a class="btn" href="https://github.com/SovernityHQ/sovernity-web/releases/latest">Download for Mac</a>
+          <a class="btn" href="https://github.com/SovernityHQ/sovernity-web/releases/tag/v1.0.0-beta.3">Download for Mac</a>
           <!-- "beta" required in or adjacent to the CTA (kit §4). -->
           <span class="cta-note">Free during beta.</span>
         </div>
@@ -265,20 +251,6 @@
 
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <!-- Website self-description (kit §2), verbatim; required to link to the
-           privacy policy (whose §6 carries the hosting-logs nuance). -->
-      <p class="static-note">No cookies. No analytics. No tracking — this site is static files. <a href="privacy.html">Privacy policy</a></p>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="privacy.html">Privacy policy</a>
-        <a href="mailto:milo.sovernity@shieber.com">Contact</a>
-        <!-- Optional per kit §7, same gate as the source-available section:
-        <a href="https://github.com/SovernityHQ/SovernityChat">Source-available on GitHub</a>
-        -->
-      </nav>
-      <p class="copyright">© 2026 Milo Shieber, doing business as Sovernity.</p>
-    </div>
-  </footer>
+<!-- include:chat-footer -->
 </body>
 </html>
