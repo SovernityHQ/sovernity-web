@@ -166,6 +166,16 @@ test('checkSite: copy, fixed-line, badge, inline-script and meta rules', async (
   assert.deepEqual(ruleIds(r.errors), ['banned', 'fixed-lines', 'inline-script', 'meta', 'no-badge-yet', 'secure', 'ursa-footer', 'vera']);
 });
 
+test('checkSite: no-badge-yet still applies after the Mac-only launch (iPhone "Coming soon to the App Store")', async () => {
+  const iphone = '<p>Sovernity Ursa for iPhone talks to your Mac. Coming soon to the App Store.</p>';
+  const clean = await site({ ...ursaPages(iphone), 'index.html': page() });
+  assert.deepEqual((await R.checkSite(clean, { draft: false })).errors, []);
+  const badge = await site({ ...ursaPages(`${iphone}<a href="https://apps.apple.com/app/id1">b</a>`), 'index.html': page() });
+  assert.deepEqual(ruleIds((await R.checkSite(badge, { draft: false })).errors), ['no-badge-yet']);
+  const banner = await site({ ...ursaPages(iphone), 'index.html': page({ head: '<meta name="apple-itunes-app" content="app-id=1">' }) });
+  assert.deepEqual(ruleIds((await R.checkSite(banner, { draft: false })).errors), ['no-badge-yet']);
+});
+
 test('checkSite: JS network and /releases/latest', async () => {
   const dir = await site({ 'js/a.js': 'fetch("https://x.com")', 'css/a.css': 'a{background:url(https://x/y)}', 'index.html': page({ body: '<a href="https://github.com/SovernityHQ/sovernity-web/releases/latest">x</a>' }) });
   const r = await R.checkSite(dir, { draft: false });

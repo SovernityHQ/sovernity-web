@@ -465,6 +465,8 @@ export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: 
       const area = elementBody(ursaIndex, match);
       if (area === null || !norm(area).includes(ADULT_LINE)) err('fixed-lines', 'ursa/index.html', `"${ADULT_LINE}" missing from ${where}`);
     }
+    // No App Store badge, link or Smart App Banner while the page says "Coming soon": before launch, and after the
+    // Mac-only launch, where the iPhone app is "Coming soon to the App Store" (no app id yet).
     if (visibleText(ursaIndex).includes('Coming soon')) {
       for (const [rel, src] of html) {
         if (tagsOf(src).some((x) => x.name === 'meta' && x.attrs.some(([k, v]) => k === 'name' && v === 'apple-itunes-app'))) {
