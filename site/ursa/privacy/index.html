@@ -95,7 +95,7 @@
           <li>Your settings and the list of iPhones you've paired.</li>
           <li>The AI model files.</li>
         </ul>
-        <p>Everything except the model files is kept in one database, encrypted with SQLCipher. The key is a random one that Ursa makes on your Mac and keeps in your Mac's Keychain, set so it stays on that Mac. The model files are public and aren't encrypted. <mark class="ph">[[S6: whether Time Machine includes the encrypted database, and confirm that a restored copy can't be opened without this Mac's Keychain key]]</mark></p>
+        <p>Everything except the model files is kept in one database, encrypted with SQLCipher. The key is a random one that Ursa makes on your Mac and keeps in your Mac's Keychain, set so it stays on that Mac. The model files are public and aren't encrypted.</p>
         <h3>On your iPhone</h3>
         <ul>
           <li>The pairing with your Mac: the keys that let your iPhone and Mac recognise each other, and the addresses where it can reach your Mac. These are in your iPhone's Keychain.</li>
@@ -179,7 +179,7 @@
           <li><strong>Your Introduction:</strong> Settings › Data. This deletes what you told Ursa in it and the facts learned only from it.</li>
           <li><strong>Everything:</strong> Settings › Data › Delete everything. This deletes every chat and everything Ursa knows about you, including any earlier copy Ursa set aside when you restored a backup, and unpairs your iPhones. The model files stay, so you don't have to download them again. This can't be undone.</li>
           <li><strong>On iPhone:</strong> Settings › Your Mac › Unpair this iPhone removes the pairing and any unsent message from that iPhone. Deleting the iPhone app removes its files. Unpair first to remove the pairing from your iPhone's Keychain.</li>
-          <li><strong>Uninstall from your Mac:</strong> quit Ursa and move it to the Trash. Then move the folder <code>~/Library/Containers/com.sovernity.ursa.app</code> to the Trash. It holds your encrypted database, your settings and the model files. Ursa's keys stay in your Mac's Keychain; without that folder they can't unlock anything. <mark class="ph">[[S6: how to remove the Keychain items]]</mark></li>
+          <li><strong>Uninstall from your Mac:</strong> quit Ursa and move it to the Trash. Then move the folder <code>~/Library/Containers/com.sovernity.ursa.app</code> to the Trash. It holds your encrypted database, your settings and the model files. Ursa's keys stay in your Mac's Keychain; without that folder they can't unlock anything.</li>
           <li><strong>Backups and exports</strong> you saved are your own files. Delete them where you saved them.</li>
         </ul>
       </section>
