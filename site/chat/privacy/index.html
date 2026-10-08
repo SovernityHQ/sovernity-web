@@ -10,8 +10,9 @@
 
   The text in place matches the master at Version 1.0-beta.4 (Effective:
   2026-10-07; static-hosting wording in §2/§4/§6/§8, SovernityChat commit
-  e1b3fba) and is wording-identical to that commit's bundled
-  Resources/Legal/PRIVACY_POLICY.md. Until a Chat build ships with 1.0-beta.4,
+  e1b3fba, plus compliance-agent's 2026-10-08 amendments to §6 (theme
+  storage) and §8 (GDPR delivery step) on branch chat-policy-hosting) and is
+  wording-identical to that branch's bundled Resources/Legal/PRIVACY_POLICY.md. Until a Chat build ships with 1.0-beta.4,
   this page is NEWER than the policy bundled in the shipped app.
   (History: verified at 1.0-beta.3 on 2026-09-09 by stripping this container
   and diffing it against the master: the two drifts found then were the
@@ -162,7 +163,7 @@
       <p>Our website, sovernity.com, is the Sovernity studio site: static pages about Sovernity's apps, Sovernity Chat among them, including this policy. It is hosted on GitHub Pages; Sovernity runs no servers of its own. The site:</p>
       <ul>
         <li>runs no analytics and no tracking of any kind,</li>
-        <li>sets no cookies,</li>
+        <li>sets no cookies (if you pick a light or dark theme, your browser remembers that choice in its own local storage, and it is never sent anywhere),</li>
         <li>has no accounts, forms, or sign-ups — nothing on it asks for or accepts your data,</li>
         <li>and is not contacted by the app today. Once the files in §4 are live, connections 2 and 3 (both off by default) fetch them from it, and nothing else in the app ever does.</li>
       </ul>
@@ -174,7 +175,7 @@
 
       <h2>8. Your rights (GDPR, CCPA, and similar laws)</h2>
       <p>For everything you do <strong>in the app</strong>, we are not a data controller or processor — your data never reaches us, so rights of access, deletion, portability, and the rest are satisfied directly and instantly by you, on your device (see §5: the app gives you deletion and export, and there is nothing to request from us).</p>
-      <p>For the sliver of personal data processed around the edges — <strong>IP addresses in the delivery logs of the hosts that serve the downloads, the update files and the website</strong> (Hugging Face, §3; GitHub, §4 and §6) — those hosts process it under their own privacy policies, and you have whatever rights your local law provides (access, deletion, objection) with them. We hold none of those logs, so there is nothing about you we could look up; contact us and we'll do what we can within those limits. We do not sell or share personal information as defined by the CCPA/CPRA, and we have no advertising relationships.</p>
+      <p>For the sliver of personal data processed around the edges — <strong>IP addresses in the delivery logs of the hosts that serve the downloads, the update files and the website</strong> (Hugging Face, §3; GitHub, §4 and §6) — those hosts process it under their own privacy policies, and you have whatever rights your local law provides (access, deletion, objection) with them. Where GDPR applies: the app and the site send those requests to hosts we chose, so we treat ourselves as responsible, together with each host, for delivering your request to it — not for what the host then keeps, which the host alone decides. Our legal basis is our legitimate interest in making the app's downloads, its update files and our website available, securely. We hold none of those logs, so there is nothing about you we could look up; you can still contact us and we'll do what we can within those limits. We do not sell or share personal information as defined by the CCPA/CPRA, and we have no advertising relationships.</p>
 
       <h2>9. Changes</h2>
       <p>If this policy changes materially, the new version ships with the app update that occasions it, is published at sovernity.com, and the change is described plainly. Beyond that, we can't notify you individually — we don't know who you are.</p>
