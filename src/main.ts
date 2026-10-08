@@ -36,7 +36,7 @@ function syncThemedSources(): void {
 syncThemedSources();
 new MutationObserver(syncThemedSources).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
-/** Ursa: the sub-nav tracker, the section Dippers, section reveal and (at launch) the checksum Copy button. */
+/** Ursa: the sub-nav tracker, the section Dippers, section reveal and the checksum Copy button. */
 function initUrsa(): void {
   const sections = Array.from(document.querySelectorAll<HTMLElement>('main [data-step]'));
   const trk = document.querySelector<SVGElement>('.ursa-subnav .r2u-trk');

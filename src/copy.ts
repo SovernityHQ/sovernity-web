@@ -8,7 +8,7 @@ export function copyFeedback(ok: boolean): { label: string; message: string } {
 const RESET_MS = 2200;
 
 /**
- * Copy buttons: `<button data-copy-target="id">` copies the text of `#id` (the SHA-256 at launch).
+ * Copy buttons: `<button data-copy-target="id">` copies the text of `#id` (the SHA-256 in the download section).
  * Uses the Clipboard API; when that fails it selects the text so the visitor can copy it by hand.
  * The button's label (its `<span>`, else the button) reads "Copied" for a moment, and the result
  * is announced in a polite live region.
