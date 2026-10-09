@@ -11,7 +11,7 @@ export const THEME_BOOT =
 
 export const OUTBOUND_HOSTS: readonly string[] = [
   'www.linkedin.com', '988lifeline.org', 'github.com', 'huggingface.co', 'tailscale.com',
-  'www.obdev.at', 'objective-see.org', 'support.apple.com', 'www.apple.com', 'apps.apple.com',
+  'www.obdev.at', 'objective-see.org', 'support.apple.com', 'www.apple.com', 'apps.apple.com', 'testflight.apple.com',
   'opensource.org', 'openfontlicense.org', 'www.apache.org', 'ai.google.dev',
 ];
 /** Extra hosts for Chat pages only: its generated privacy policy (§6) links GitHub's privacy policy. */
