@@ -259,6 +259,27 @@ test('checkSite: js-network scans .mjs and protocol-relative strings', async () 
   assert.ok(r.errors.some((e) => e.startsWith('js-network: b.js') && e.includes('//')));
 });
 
+test('checkSite: the /savings/ source hosts and the Geerling GitHub path are allowed, and nothing next to them', async () => {
+  const good = [
+    'https://developers.openai.com/api/docs/pricing', 'https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use',
+    'https://arxiv.org/abs/2505.09598', 'https://arxiv.org/abs/2508.15734',
+    'https://ember-energy.org/latest-insights/global-electricity-review-2026/electricity-demand-and-supply-trends/',
+    'https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_3', 'https://github.com/geerlingguy/ai-benchmarks/issues/2',
+    'https://support.apple.com/en-us/103253',
+  ];
+  const bad = [
+    'https://openai.com/api/pricing/', 'https://platform.openai.com/docs', 'https://www.epoch.ai/x', 'https://export.arxiv.org/abs/1',
+    'https://eia.gov/x', 'https://github.com/geerlingguy/other', 'https://github.com/geerlingguy/ai-benchmarks-fork',
+    'https://github.com/ggml-org/llama.cpp/discussions/4167', 'http://arxiv.org/abs/2505.09598',
+  ];
+  const links = (hrefs: string[]) => hrefs.map((h) => `<a href="${h}">x</a>`).join('');
+  const ok = await site({ ...ursaPages(), 'savings/index.html': page({ body: links(good) }) });
+  assert.deepEqual((await R.checkSite(ok, { draft: false })).errors, []);
+  const no = await site({ ...ursaPages(), 'savings/index.html': page({ body: links(bad) }) });
+  const out = (await R.checkSite(no, { draft: false })).errors.filter((e) => e.startsWith('outbound: savings/index.html'));
+  assert.equal(out.length, bad.length);
+});
+
 test('checkSite: Chat pages may link docs.github.com and Chat\'s contact mailbox; other pages may not', async () => {
   const chatLinks = '<a href="https://docs.github.com/privacy">g</a><a href="mailto:milo.sovernity@shieber.com">m</a>';
   const dir = await site({ ...ursaPages(), 'chat/privacy/index.html': page({ body: chatLinks }), 'x/index.html': page({ body: '<a href="mailto:milo.sovernity@shieber.com">m</a>' }) });

@@ -38,6 +38,12 @@ test('buildSite copies assets, skips _partials, expands pages', async () => {
   assert.equal(await readFile(join(out, 'assets', 'x.css'), 'utf8'), 'a{}');
   await assert.rejects(access(join(out, '_partials')));
 });
+test('a _partials file may not take a generated partial\'s name', async () => {
+  const src = await mkdtemp(join(tmpdir(), 'sw-src-')); const out = await mkdtemp(join(tmpdir(), 'sw-out-'));
+  await mkdir(join(src, '_partials'));
+  await writeFile(join(src, '_partials', 'savings-sources.html'), '<p>stale</p>');
+  await assert.rejects(buildSite(src, out), /generated partial/);
+});
 test('buildSite skips dotfiles and marks current links by page URL', async () => {
   const src = await mkdtemp(join(tmpdir(), 'sw-src-')); const out = await mkdtemp(join(tmpdir(), 'sw-out-'));
   await mkdir(join(src, '_partials')); await mkdir(join(src, 'x'));

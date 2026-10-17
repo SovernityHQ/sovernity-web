@@ -32,7 +32,7 @@ test('the figures are the recommended values in docs/calculator-sources.md, copi
     cloudPriceInput: 2, cloudPriceOutput: 10, smallCloudPriceInput: 0.1, smallCloudPriceOutput: 0.5,
     cloudWhPerInputToken: 0.0002, cloudWhPerOutputToken: 0.0006,
     macWattsWriting: 30, macTokensPerSecondWriting: 15, macWattsReading: 35, macTokensPerSecondReading: 130,
-    macWhPerInputToken: 0.000075, macWhPerOutputToken: 0.00056, macIdleWatts: 4, macMaxWatts: 65,
+    macWhPerInputToken: 0.000075, macWhPerOutputToken: 0.00056, macIdleWatts: 4, macMaxWatts: 65, geminiWhPerPrompt: 0.24,
     gridGramsCo2ePerKwh: 458, electricityUsdPerKwh: 0.18,
   };
   assert.deepEqual(Object.fromEntries(Object.entries(FIGURES).map(([k, f]) => [k, f.value])), expected);

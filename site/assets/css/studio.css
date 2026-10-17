@@ -368,6 +368,8 @@ html.js .seal-tracker.is-ready .seal-word { transition: fill .6s ease, fill-opac
   font-size: 17px; font-weight: 600; text-decoration: none;
 }
 .home-ubtn { background: var(--accent); color: var(--onAccent); }
+.home-usave { margin-top: 28px; }
+.home-usave .st-link { color: var(--ink-u); }
 .home-dipcol { display: flex; justify-content: center; }
 .home-dip { width: min(100%, 400px); height: auto; overflow: visible; }
 .home-dip-phone { display: none; }
@@ -813,4 +815,111 @@ html.js .ab-ptile { transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
   .ab-mini { width: 130px; }
   .ab-pstamp { right: -8px; bottom: -30px; width: 80px; height: 80px; }
   .ab-fbody { font-size: 19px; }
+}
+
+/* =====================================================================
+   Savings (/savings/): the cloud-or-Mac calculator, its method and sources.
+   ===================================================================== */
+.sv [hidden] { display: none !important; }
+.sv .wrap { max-width: 1120px; }
+.sv-hero { padding: 120px 0 72px; }
+.sv-hero .st-display { max-width: 960px; font-size: 104px; }
+.sv-hero .st-lede { margin-top: 40px; }
+
+/* Calculator: inputs beside the result; without JS only the result, at reading width. */
+.sv-calc { padding: 0 0 120px; }
+.sv-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; align-items: start; }
+.sv-form[hidden] + .sv-result { grid-column: 1 / -1; max-width: 760px; }
+.sv input:focus-visible, .sv select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.sv-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; font-family: var(--font-display); font-size: 28px; line-height: 1.2; }
+.sv-line input, .sv-line select {
+  height: 54px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--paper); color: var(--ink);
+  font: inherit; font-size: 26px;
+}
+.sv-line input { width: 4.4em; font-variant-numeric: tabular-nums; }
+.sv-line input[aria-invalid="true"] { border-color: var(--vermilion); }
+.sv-err { margin-top: 12px; font-size: 15px; font-weight: 600; color: var(--vermilion); }
+
+.sv-size { min-width: 0; margin: 40px 0 0; padding: 0; border: 0; }
+.sv-size legend { margin-bottom: 14px; padding: 0; font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.sv-opt { position: relative; padding: 16px 18px 16px 50px; border: 1px solid var(--line); border-radius: 8px; }
+.sv-opt + .sv-opt { margin-top: 10px; }
+.sv-opt:hover { border-color: var(--muted); }
+.sv-opt:has(input:checked) { border-color: var(--ink); background: var(--paper2); }
+.sv-opt input { position: absolute; left: 18px; top: 20px; width: 18px; height: 18px; margin: 0; accent-color: var(--vermilion); }
+.sv-opt label { font-size: 17px; font-weight: 700; cursor: pointer; }
+.sv-opt label::after { content: ""; position: absolute; inset: 0; } /* the whole card picks the size */
+.sv-opt p { margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.sv-hint { margin-top: 16px; font-size: 15px; line-height: 1.55; color: var(--muted); }
+
+.sv-result { padding: 40px 44px 44px; border-radius: 4px; background: var(--paper2); }
+.sv-noscript { margin-bottom: 28px; padding: 14px 18px; border-left: 3px solid var(--vermilion); background: var(--paper); font-size: 16px; }
+.sv-res-h { font-family: var(--font-display); font-weight: 400; font-size: 52px; line-height: 1.05; letter-spacing: -0.015em; }
+.sv-sub { margin-top: 10px; font-size: 17px; color: var(--muted); }
+.sv-table { width: 100%; margin-top: 32px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.sv-table th, .sv-table td { padding: 16px 12px 16px 0; text-align: left; vertical-align: baseline; }
+.sv-table tbody th, .sv-table tbody td { border-top: 1px solid var(--line); }
+.sv-table thead th { font-size: 17px; font-weight: 700; }
+.sv-table thead th span { display: block; margin-top: 2px; font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--muted); }
+.sv-table tbody th { width: 22%; font-size: 15px; font-weight: 700; }
+.sv-table tbody td { font-size: 28px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+.sv-table abbr { font-size: 17px; font-weight: 500; letter-spacing: 0; text-decoration: none; color: var(--muted); }
+.sv-table .sv-has-note > * { padding-bottom: 6px; }
+.sv-table .sv-note td { padding-top: 0; border-top: 0; font-size: 14px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+.sv-cmp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 32px 0 0; padding-top: 28px; border-top: 1px solid var(--line); }
+.sv-cmp dt { font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.sv-cmp dd { margin: 8px 0 0; font-size: 17px; line-height: 1.55; }
+.sv-cmp div:first-child dd { font-size: 22px; font-weight: 700; line-height: 1.35; }
+.sv-year { margin-top: 24px; font-size: 16px; color: var(--muted); }
+.sv-year span { font-weight: 700; color: var(--ink); }
+.sv-how { margin-top: 28px; }
+
+/* How we calculate this, Sources, disclaimer */
+.sv-sec { padding: 104px 0; border-top: 1px solid var(--line); }
+.sv-sec .st-h2 { font-size: 60px; }
+.sv-prose > :not(h2) { max-width: 760px; }
+.sv-intro { margin-top: 28px; font-size: 20px; line-height: 1.6; color: var(--muted); }
+.sv-prose h3 { margin-top: 48px; font-size: 20px; font-weight: 700; }
+.sv-prose ul { margin: 20px 0 0; padding-left: 1.2em; }
+.sv-prose li { font-size: 17px; line-height: 1.65; color: var(--muted); }
+.sv-prose li + li { margin-top: 14px; }
+.sv-prose li b { font-weight: 700; color: var(--ink); }
+.sv-prose .sv-points { margin-top: 36px; }
+.sv-sources h3 { margin-top: 40px; }
+.sv-src a { color: var(--ink); overflow-wrap: anywhere; }
+.sv-src code { font-size: .92em; }
+.sv-end { padding: 0 0 104px; }
+.sv-end p { font-size: 15px; line-height: 1.6; color: var(--muted); }
+.sv-end p + p { margin-top: 12px; }
+
+@media (max-width: 1100px) {
+  .sv-hero .st-display { font-size: 84px; }
+  .sv-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .sv-form, .sv-form[hidden] + .sv-result { max-width: 760px; }
+}
+@media (max-width: 700px) {
+  .sv-hero { padding: 64px 0 48px; }
+  .sv-hero .st-display { font-size: 48px; }
+  .sv-hero .st-lede { margin-top: 24px; }
+  .sv-calc { padding-bottom: 80px; }
+  .sv-line { font-size: 26px; }
+  .sv-line input, .sv-line select { height: 50px; font-size: 24px; }
+  .sv-size { margin-top: 32px; }
+  .sv-result { margin: 0 -20px; padding: 28px 20px 32px; border-radius: 0; }
+  .sv-res-h { font-size: 38px; }
+  .sv-table th, .sv-table td { padding-right: 8px; }
+  .sv-table thead th { font-size: 15px; }
+  .sv-table thead th span { font-size: 13px; }
+  .sv-table tbody th { font-size: 14px; }
+  .sv-table tbody td { font-size: 20px; }
+  .sv-table abbr { display: block; font-size: 13px; }
+  .sv-cmp { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .sv-cmp div:first-child dd { font-size: 19px; }
+  .sv-sec { padding: 72px 0; }
+  .sv-sec .st-h2 { font-size: 38px; }
+  .sv-intro { font-size: 18px; }
+  .sv-end { padding-bottom: 72px; }
 }

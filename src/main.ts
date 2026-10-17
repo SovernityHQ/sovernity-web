@@ -6,6 +6,7 @@ import { initTracker, initSectionDippers } from './dipper.ts';
 import { initCopyButtons } from './copy.ts';
 import { revealOnScroll } from './motion.ts';
 import { initToc } from './toc.ts';
+import { initSavings } from './savings-page.ts';
 
 const root = document.documentElement;
 
@@ -51,6 +52,7 @@ const pages: Record<string, () => void> = {
   home: initHome,
   about: initAbout,
   ursa: initUrsa,
+  savings: initSavings,
 };
 pages[document.body.dataset.page ?? '']?.();
 
