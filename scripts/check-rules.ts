@@ -13,10 +13,13 @@ export const OUTBOUND_HOSTS: readonly string[] = [
   'www.linkedin.com', '988lifeline.org', 'github.com', 'huggingface.co', 'tailscale.com',
   'www.obdev.at', 'objective-see.org', 'support.apple.com', 'www.apple.com', 'apps.apple.com', 'testflight.apple.com',
   'opensource.org', 'openfontlicense.org', 'www.apache.org', 'ai.google.dev',
+  // /savings/ sources: the hosts in docs/calculator-sources.md ("Hosts to add for the recommended figures").
+  'developers.openai.com', 'epoch.ai', 'arxiv.org', 'ember-energy.org', 'www.eia.gov',
 ];
 /** Extra hosts for Chat pages only: its generated privacy policy (§6) links GitHub's privacy policy. */
 export const CHAT_OUTBOUND_HOSTS: readonly string[] = ['docs.github.com'];
-const GITHUB_PATH = '/SovernityHQ/sovernity-web';
+/** The only github.com paths a page may link: this repository, and Jeff Geerling's benchmarks (a /savings/ source). */
+const GITHUB_PATHS = ['/SovernityHQ/sovernity-web', '/geerlingguy/ai-benchmarks'];
 const SUPPORT_MAILBOX = 'support@sovernity.com';
 /** Chat's contact address, named in its generated privacy policy (§10), which is copied verbatim from Chat's master. Chat pages only. */
 const CHAT_MAILBOX = 'milo.sovernity@shieber.com';
@@ -303,7 +306,7 @@ function attributeText(tags: { name: string; attrs: [string, string][] }[]): str
     k === 'alt' || k === 'title' || k === 'placeholder' || k === 'value' || k.startsWith('aria-') || (k === 'content' && name === 'meta')).map(([, v]) => v));
 }
 const hostAllowed = (u: URL, group: 'ursa' | 'chat'): boolean => (group === 'chat' && CHAT_OUTBOUND_HOSTS.includes(u.hostname)) || OUTBOUND_HOSTS.includes(u.hostname) &&
-  (u.hostname !== 'github.com' || u.pathname === GITHUB_PATH || u.pathname.startsWith(`${GITHUB_PATH}/`));
+  (u.hostname !== 'github.com' || GITHUB_PATHS.some((p) => u.pathname === p || u.pathname.startsWith(`${p}/`)));
 
 export async function checkSite(dir: string, opts: { draft: boolean; chatRepo?: string }): Promise<CheckResult> {
   const errors: string[] = [];

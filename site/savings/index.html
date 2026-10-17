@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- include:head -->
+<link rel="stylesheet" href="/assets/css/studio.css">
+<title>Cloud or Mac: what a message costs · Sovernity Ursa</title>
+<meta name="description" content="Estimate what your AI messages cost in the cloud and on your own Mac, the energy each uses and the carbon it emits.">
+<link rel="canonical" href="https://sovernity.com/savings/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sovernity Ursa">
+<meta property="og:url" content="https://sovernity.com/savings/">
+<meta property="og:title" content="Cloud or Mac: what a message costs · Sovernity Ursa">
+<meta property="og:description" content="Estimate what your AI messages cost in the cloud and on your own Mac, the energy each uses and the carbon it emits.">
+<meta property="og:image" content="https://sovernity.com/assets/img/og-ursa.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Sovernity Ursa app icon and the Big Dipper.">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body data-page="savings">
+<!-- include:seal-defs -->
+<!-- include:studio-header -->
+<main id="main" class="sv">
+  <section class="sv-hero" aria-labelledby="sv-h">
+    <div class="wrap">
+      <p class="sec-mark"><b>Sovernity Ursa</b></p>
+      <h1 id="sv-h" class="st-display">What does a message cost?</h1>
+      <p class="st-lede">Every message to a cloud AI runs on a server in a data centre. With Ursa, a message like it runs on your Mac. Choose how many messages you send and how long they are, and see what each costs in money, energy and carbon.</p>
+    </div>
+  </section>
+
+  <section class="sv-calc" aria-label="Calculator">
+    <div class="wrap sv-grid">
+      <!-- Shown by src/savings-page.ts: without JS the inputs can't do anything, so the page shows the default result only. -->
+      <form class="sv-form" aria-labelledby="sv-in-h" data-savings-form hidden>
+        <h2 id="sv-in-h" class="sr-only">Your messages</h2>
+        <div class="sv-line">
+          <input id="sv-count" name="count" type="number" inputmode="numeric" min="1" max="100000" step="1" value="20" required aria-describedby="sv-count-err">
+          <label for="sv-count" data-count-label>messages</label>
+          <label for="sv-period">every</label>
+          <select id="sv-period" name="period">
+            <option value="day" selected>day</option>
+            <option value="week">week</option>
+            <option value="month">month</option>
+            <option value="year">year</option>
+          </select>
+        </div>
+        <p id="sv-count-err" class="sv-err" data-count-error hidden>Enter a whole number from 1 to 100,000.</p>
+        <fieldset class="sv-size">
+          <legend>Message size</legend>
+          <div class="sv-opt">
+            <input id="sv-p-short" type="radio" name="preset" value="short" aria-describedby="sv-p-short-h">
+            <label for="sv-p-short">Short chat</label>
+            <p id="sv-p-short-h">A quick question and answer: about 75 words read, 225 written.</p>
+          </div>
+          <div class="sv-opt">
+            <input id="sv-p-typical" type="radio" name="preset" value="typical" aria-describedby="sv-p-typical-h" checked>
+            <label for="sv-p-typical">Typical</label>
+            <p id="sv-p-typical-h">A message in an ongoing conversation, with the earlier messages sent along: about 750 words read, 375 written.</p>
+          </div>
+          <div class="sv-opt">
+            <input id="sv-p-long" type="radio" name="preset" value="long" aria-describedby="sv-p-long-h">
+            <label for="sv-p-long">Long document</label>
+            <p id="sv-p-long-h">A question about a long document of about 15 pages: 7,500 words read, 1,100 written.</p>
+          </div>
+          <p class="sv-hint">A token is a piece of a word. In English, one token is about three quarters of a word.</p>
+        </fieldset>
+      </form>
+
+      <!-- The default result (20 typical messages every day) is written in; scripts/savings-page.test.ts pins it to calculate(). -->
+      <div class="sv-result" data-savings-result>
+        <noscript><p class="sv-noscript">The calculator needs JavaScript. Below is the result for 20 typical messages a day. Every figure it uses is listed under How we calculate this.</p></noscript>
+        <h2 class="sv-res-h">Every <span data-out="period">day</span></h2>
+        <p class="sv-sub" aria-live="polite"><span data-out="count">20</span> <span data-out="size">typical messages</span>, in the cloud and on your Mac.</p>
+        <table class="sv-table">
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col">Cloud AI <span>GPT-6 Sol, at its API price</span></th>
+              <th scope="col">Your Mac <span>Mac mini M4 running Ursa</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="sv-has-note">
+              <th scope="row">Cost</th>
+              <td data-out="cloudCost">$0.14</td>
+              <td data-out="macCost">0.13¢</td>
+            </tr>
+            <tr class="sv-note"><td colspan="3">Cloud AI at the API price. Your Mac: electricity only.</td></tr>
+            <tr>
+              <th scope="row">Energy</th>
+              <td data-out="cloudEnergy">10 Wh</td>
+              <td data-out="macEnergy">7.1 Wh</td>
+            </tr>
+            <tr>
+              <th scope="row">Carbon</th>
+              <td><span data-out="cloudCarbon">4.6 g</span> <abbr title="Carbon dioxide equivalent">CO₂e</abbr></td>
+              <td><span data-out="macCarbon">3.3 g</span> <abbr title="Carbon dioxide equivalent">CO₂e</abbr></td>
+            </tr>
+          </tbody>
+        </table>
+        <dl class="sv-cmp">
+          <div>
+            <dt>Cost</dt>
+            <dd>On your Mac, about <span data-out="ratio">110</span> times cheaper.</dd>
+          </div>
+          <div>
+            <dt>Energy and carbon</dt>
+            <dd>About the same, within the margin of error. These estimates are too rough to say which uses less.</dd>
+          </div>
+        </dl>
+        <p class="sv-year" data-year>Over a year: <span data-out="yearCloudCost">$51.10</span> in the cloud, <span data-out="yearMacCost">$0.47</span> on your Mac.</p>
+        <a class="st-link sv-how" href="#method">How we calculate this <span class="st-ar" aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sv-sec" id="method" aria-labelledby="sv-method-h">
+    <div class="wrap sv-prose">
+      <h2 id="sv-method-h" class="st-h2">How we calculate this</h2>
+      <p class="sv-intro">These are estimates. We use the best published figures we could find, and our own estimates where none exist. The sources are listed below.</p>
+      <ul class="sv-points">
+        <li><b>Cloud cost</b> is what OpenAI charges developers for GPT-6 Sol: $2 per million tokens read and $10 per million written. As of October 2026, it is the model ChatGPT gives paid users by default. Most people pay for ChatGPT by subscription, not per message, so the API price stands in for what a message costs to run.</li>
+        <li><b>A like-for-like note:</b> GPT-6 Sol is a more capable class of model than Gemma 4 12B, the model Ursa runs. A small cloud model such as GPT-6 Luna costs $0.10 per million tokens read and $0.50 per million written. Against that, your Mac is about 5 to 6 times cheaper.</li>
+        <li><b>Cost on your Mac counts electricity only</b>, at $0.18 per kWh, about the average household price in the US. It doesn't include what you paid for the Mac, or the one-time download of Ursa's AI model.</li>
+        <li><b>Energy on your Mac is the Mac's own draw at the wall</b>, for the whole computer: a Mac mini M4 with 16 GB of memory running Gemma 4 12B. We estimate about 30 W while it writes a reply, at about 15 tokens a second, and about 35 W while it reads your message, at about 130 tokens a second. The writing figures are based on measurements of a similar model on the same Mac. The reading figures are our own estimate. No one has yet published measurements of Gemma 4 12B on this Mac.</li>
+        <li><b>Energy in the cloud</b> is 0.0006 Wh for each token written and 0.0002 Wh for each token read. That includes the data centre's cooling and other overhead. The estimate is for a 2025 chatbot reply from a GPT-4o-class model; no figures have been published for GPT-6 Sol itself.</li>
+        <li><b>Both sides use the same grid carbon intensity</b>: 458 g of carbon dioxide equivalent (<abbr title="Carbon dioxide equivalent">CO₂e</abbr>) per kWh, the world average for 2025. Some data centres report lower figures by buying renewable energy certificates. A home can't claim those, so we use the same figure for both sides, and the carbon comparison depends only on the energy each side uses.</li>
+      </ul>
+      <h3>What this doesn't count</h3>
+      <ul class="sv-not">
+        <li>What it took to build your Mac: its price, and the energy used to make it.</li>
+        <li>Training the AI models, in the cloud or for Ursa.</li>
+        <li>The network between you and the data centre.</li>
+        <li>That your Mac may be on anyway. It draws about 4 W when idle, and we count all of its draw, not just the extra.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sv-sec sv-sources" id="sources" aria-labelledby="sv-sources-h">
+    <div class="wrap sv-prose">
+      <h2 id="sv-sources-h" class="st-h2">Sources</h2>
+<!-- include:savings-sources -->
+    </div>
+  </section>
+
+  <div class="sv-end">
+    <div class="wrap sv-prose">
+      <p>These are estimates, not measurements of your own use. Real figures depend on the model, how long your messages are, which Mac you have and where your electricity comes from. Prices and figures were last checked on 16 October 2026, and they change only when we update this page.</p>
+      <p>OpenAI, ChatGPT and GPT are trademarks of OpenAI. Gemini is a trademark of Google LLC.</p>
+    </div>
+  </div>
+</main>
+<!-- include:studio-footer -->
+</body>
+</html>

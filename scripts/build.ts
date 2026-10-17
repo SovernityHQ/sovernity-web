@@ -1,6 +1,7 @@
 import { readdir, readFile, writeFile, mkdir, copyFile, rm } from 'node:fs/promises';
 import { join, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderSources } from './savings-sources.ts';
 
 const INCLUDE = /<!-- include:([a-z0-9-]+) -->/g;
 
@@ -42,7 +43,8 @@ async function walk(dir: string): Promise<string[]> {
 
 export async function buildSite(srcDir: string, outDir: string): Promise<string[]> {
   const partialDir = join(srcDir, '_partials');
-  const partials = new Map<string, string>();
+  // Generated partials are built from code (the /savings/ Sources list from src/savings-data.ts); _partials/ adds the rest.
+  const partials = new Map<string, string>([['savings-sources', renderSources()]]);
   for (const f of await readdir(partialDir).catch(() => [] as string[])) {
     if (f.endsWith('.html')) partials.set(f.slice(0, -5), await readFile(join(partialDir, f), 'utf8'));
   }

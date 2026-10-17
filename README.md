@@ -10,7 +10,8 @@ No cookies, no analytics, no third-party requests.
 
 - `site/` page sources (hand-written HTML), with shared pieces in `site/_partials/` (not deployed).
 - `site/assets/` CSS, fonts, images.
-- `src/` browser TypeScript (theme toggle, phone menu, Dipper, seal motion), compiled by `tsc` into `_site/assets/js/`.
+- `src/` browser TypeScript (theme toggle, phone menu, Dipper, seal motion, the `/savings/` calculator), compiled by `tsc` into `_site/assets/js/`.
+- `/savings/` Sources list: generated at build time by `scripts/savings-sources.ts` from the figures in `src/savings-data.ts` (the `savings-sources` partial).
 - `scripts/` build, check, serve and shoot scripts (Node runs the `.ts` files directly).
 - `templates/` the launch markup (download block, App Store badge, Smart App Banner) for the stage-2 swap. Not deployed.
 - `_site/` build output (gitignored).

@@ -98,6 +98,11 @@ export const FIGURES = {
     value: 65, unit: 'W', label: 'Mac mini M4 16 GB maximum power',
     source: APPLE_POWER, publisher: 'Apple', asOf: '2026-09-21',
   },
+  geminiWhPerPrompt: {
+    value: 0.24, unit: 'Wh/prompt', label: 'Median Gemini Apps text prompt energy, data-centre overhead included',
+    source: 'arxiv.org/abs/2508.15734', publisher: 'Google', asOf: '2025-08-21',
+    note: 'For comparison only, on the Sources list. Not used in the calculation.',
+  },
   gridGramsCo2ePerKwh: {
     value: 458, unit: 'gCO2e/kWh', label: 'World average grid carbon intensity, lifecycle, 2025',
     source: 'ember-energy.org/latest-insights/global-electricity-review-2026/electricity-demand-and-supply-trends/',
