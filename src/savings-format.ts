@@ -18,9 +18,9 @@ export function formatCount(n: number): string {
 
 /** $0.01 and over: dollars to two decimal places ($0.14, $1,234.50). Under $0.01: cents to two significant figures (0.13¢). */
 export function formatCost(usd: number): string {
-  const cents = Math.round(usd * 100);
-  if (usd === 0 || cents >= 1) return `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  return `${sig2(usd * 100)}¢`;
+  // Cents while the two-significant-figure cents value is under 1 (0.64¢); from there dollars, so 0.996¢ reads $0.01, not 1.0¢.
+  if (usd !== 0 && Number((usd * 100).toPrecision(2)) < 1) return `${sig2(usd * 100)}¢`;
+  return `$${(Math.round(usd * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 /** A value and a unit that steps up by 1,000 (Wh → kWh, g → kg), chosen on the rounded value so 999.7 Wh reads 1.0 kWh. */

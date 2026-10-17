@@ -46,7 +46,9 @@ export async function buildSite(srcDir: string, outDir: string): Promise<string[
   // Generated partials are built from code (the /savings/ Sources list from src/savings-data.ts); _partials/ adds the rest.
   const partials = new Map<string, string>([['savings-sources', renderSources()]]);
   for (const f of await readdir(partialDir).catch(() => [] as string[])) {
-    if (f.endsWith('.html')) partials.set(f.slice(0, -5), await readFile(join(partialDir, f), 'utf8'));
+    if (!f.endsWith('.html')) continue;
+    if (partials.has(f.slice(0, -5))) throw new Error(`_partials/${f} has the name of a generated partial`);
+    partials.set(f.slice(0, -5), await readFile(join(partialDir, f), 'utf8'));
   }
   await rm(outDir, { recursive: true, force: true });
   const pages: string[] = [];

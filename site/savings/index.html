@@ -30,13 +30,13 @@
     </div>
   </section>
 
-  <section class="sv-calc" aria-label="Calculator">
+  <div class="sv-calc">
     <div class="wrap sv-grid">
       <!-- Shown by src/savings-page.ts: without JS the inputs can't do anything, so the page shows the default result only. -->
       <form class="sv-form" aria-labelledby="sv-in-h" data-savings-form hidden>
         <h2 id="sv-in-h" class="sr-only">Your messages</h2>
         <div class="sv-line">
-          <input id="sv-count" name="count" type="number" inputmode="numeric" min="1" max="100000" step="1" value="20" required aria-describedby="sv-count-err">
+          <input id="sv-count" name="count" type="number" inputmode="numeric" min="1" max="100000" step="1" value="20" required>
           <label for="sv-count" data-count-label>messages</label>
           <label for="sv-period">every</label>
           <select id="sv-period" name="period">
@@ -46,7 +46,7 @@
             <option value="year">year</option>
           </select>
         </div>
-        <p id="sv-count-err" class="sv-err" data-count-error hidden>Enter a whole number from 1 to 100,000.</p>
+        <p id="sv-count-err" class="sv-err" role="alert" data-count-error hidden>Enter a whole number from 1 to 100,000.</p>
         <fieldset class="sv-size">
           <legend>Message size</legend>
           <div class="sv-opt">
@@ -71,8 +71,11 @@
       <!-- The default result (20 typical messages every day) is written in; scripts/savings-page.test.ts pins it to calculate(). -->
       <div class="sv-result" data-savings-result>
         <noscript><p class="sv-noscript">The calculator needs JavaScript. Below is the result for 20 typical messages a day. Every figure it uses is listed under How we calculate this.</p></noscript>
-        <h2 class="sv-res-h">Every <span data-out="period">day</span></h2>
-        <p class="sv-sub" aria-live="polite"><span data-out="count">20</span> <span data-out="size">typical messages</span>, in the cloud and on your Mac.</p>
+        <!-- Announced whole on any change: the period, count and size behind every figure below. -->
+        <div aria-live="polite" aria-atomic="true">
+          <h2 class="sv-res-h">Every <span data-out="period">day</span></h2>
+          <p class="sv-sub"><span data-out="count">20</span> <span data-out="size">typical messages</span>, in the cloud and on your Mac.</p>
+        </div>
         <table class="sv-table">
           <thead>
             <tr>
@@ -114,7 +117,7 @@
         <a class="st-link sv-how" href="#method">How we calculate this <span class="st-ar" aria-hidden="true">↓</span></a>
       </div>
     </div>
-  </section>
+  </div>
 
   <section class="sv-sec" id="method" aria-labelledby="sv-method-h">
     <div class="wrap sv-prose">
@@ -149,6 +152,7 @@
     <div class="wrap sv-prose">
       <p>These are estimates, not measurements of your own use. Real figures depend on the model, how long your messages are, which Mac you have and where your electricity comes from. Prices and figures were last checked on 16 October 2026, and they change only when we update this page.</p>
       <p>OpenAI, ChatGPT and GPT are trademarks of OpenAI. Gemini is a trademark of Google LLC.</p>
+      <p>For adults 18+. May not be suitable for some minors.</p>
     </div>
   </div>
 </main>

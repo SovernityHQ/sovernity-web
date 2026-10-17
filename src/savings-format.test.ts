@@ -26,6 +26,10 @@ test('cost: dollars from $0.01, cents below', () => {
   assert.equal(formatCost(1234.5), '$1,234.50');
   assert.equal(formatCost(0.01), '$0.01');
   assert.equal(formatCost(0.00996), '$0.01', 'rounds up to a cent, not "1.0¢"');
+  assert.equal(formatCost(0.0064), '0.64¢', 'under a cent stays in cents');
+  assert.equal(formatCost(0.005), '0.50¢');
+  assert.equal(formatCost(0.00994), '0.99¢');
+  assert.equal(formatCost(0), '$0.00');
   assert.equal(formatCost(0.001278), '0.13¢');
   assert.equal(formatCost(0.00004), '0.0040¢');
 });
