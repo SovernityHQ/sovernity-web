@@ -27,7 +27,7 @@ The header, Ursa sub-nav and Ursa footer are the shared ones in the HQ website c
 - `<title>` and og:title (must be identical): **Cloud or Mac: what a message costs · Sovernity Ursa**
 - Meta description and og:description (must be identical): Estimate what your AI messages cost in the cloud and on your own Mac, the energy each uses and the carbon it emits.
 - og:type: website. og:site_name: Sovernity Ursa. og:url and canonical: `https://sovernity.com` plus the D1 path. These and og:image are absolute `https://sovernity.com/…` URLs, as the checker requires.
-- og:image: the shared Ursa card (`/assets/img/og-ursa.png`, image/png, 1200 × 630). og:image:alt: The Sovernity Ursa app icon and the Big Dipper.
+- og:image: the shared Ursa card (`https://sovernity.com/assets/img/og-ursa.png`, image/png, 1200 × 630). og:image:alt: The Sovernity Ursa app icon and the Big Dipper.
 - twitter:card: summary_large_image.
 
 ## Hero
@@ -91,7 +91,7 @@ Intro: These are estimates. We use the best published figures we could find, and
 - **Cloud cost** is what OpenAI charges developers for GPT-6 Sol: $2 per million tokens read and $10 per million written. As of October 2026, it is the model ChatGPT gives paid users by default. Most people pay for ChatGPT by subscription, not per message, so the API price stands in for what a message costs to run.
 - **A like-for-like note:** GPT-6 Sol is a more capable class of model than Gemma 4 12B, the model Ursa runs. A small cloud model such as GPT-6 Luna costs $0.10 per million tokens read and $0.50 per million written. Against that, your Mac is about 5 to 6 times cheaper.
 - **Cost on your Mac counts electricity only**, at $0.18 per kWh, about the average household price in the US. It doesn't include what you paid for the Mac, or the one-time download of Ursa's AI model.
-- **Energy on your Mac is the Mac's own draw at the wall**, for the whole computer: a Mac mini M4 with 16 GB of memory running Gemma 4 12B. We estimate about 30 W while it writes a reply, at about 15 tokens a second, and about 35 W while it reads your message, at about 130 tokens a second. The writing figures are scaled from measurements of a similar model on the same Mac. The reading figures are our own estimate. No one has yet published measurements of Gemma 4 12B on this Mac.
+- **Energy on your Mac is the Mac's own draw at the wall**, for the whole computer: a Mac mini M4 with 16 GB of memory running Gemma 4 12B. We estimate about 30 W while it writes a reply, at about 15 tokens a second, and about 35 W while it reads your message, at about 130 tokens a second. The writing figures are based on measurements of a similar model on the same Mac. The reading figures are our own estimate. No one has yet published measurements of Gemma 4 12B on this Mac.
 - **Energy in the cloud** is 0.0006 Wh for each token written and 0.0002 Wh for each token read. That includes the data centre's cooling and other overhead. The estimate is for a 2025 chatbot reply from a GPT-4o-class model; no figures have been published for GPT-6 Sol itself.
 - **Both sides use the same grid carbon intensity**: 458 g of carbon dioxide equivalent (CO₂e) per kWh, the world average for 2025. Some data centres report lower figures by buying renewable energy certificates. A home can't claim those, so we use the same figure for both sides, and the carbon comparison depends only on the energy each side uses.
 
