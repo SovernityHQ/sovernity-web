@@ -1,10 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { FIGURES, PRESETS, type Figure } from './savings-data.ts';
-import { calculate, messageTokens, PERIOD_DAYS, type Footprint, type Period, type PresetId } from './savings.ts';
-
-const PERIODS: Period[] = ['day', 'week', 'month', 'year'];
-const PRESET_IDS = Object.keys(PRESETS) as PresetId[];
+import { calculate, isPeriod, isPresetId, messageTokens, PERIOD_DAYS, PERIODS, PRESET_IDS, type Footprint, type Period, type PresetId } from './savings.ts';
 
 /** Equal to within a relative 1e-9 (floating-point noise only). */
 const close = (actual: number, expected: number, what: string) =>
@@ -30,7 +27,7 @@ test('every figure has a value, unit, label, source URL, publisher and as-of dat
   }
 });
 
-test('the figures are the values recommended in docs/calculator-sources.md', () => {
+test('the figures are the recommended values in docs/calculator-sources.md, copied by hand (change both together)', () => {
   const expected: Record<keyof typeof FIGURES, number> = {
     cloudPriceInput: 2, cloudPriceOutput: 10, smallCloudPriceInput: 0.1, smallCloudPriceOutput: 0.5,
     cloudWhPerInputToken: 0.0002, cloudWhPerOutputToken: 0.0006,
@@ -80,7 +77,7 @@ for (const preset of PRESET_IDS) {
       energyWh: h.cloud.energyWh - h.local.energyWh,
       co2eG: h.cloud.co2eG - h.local.co2eG,
     }, 'savings');
-    close(r.costRatio, h.cloud.costUsd / h.local.costUsd, 'cost ratio');
+    close(r.costRatio ?? NaN, h.cloud.costUsd / h.local.costUsd, 'cost ratio');
   });
 
   for (const period of PERIODS) {
@@ -90,7 +87,7 @@ for (const preset of PRESET_IDS) {
         assert.equal(t.messages, 0);
         assert.deepEqual(t.tokens, { input: 0, output: 0 });
         for (const side of [t.cloud, t.local, t.savings]) assert.deepEqual(side, { costUsd: 0, energyWh: 0, co2eG: 0 });
-        assert.ok(Number.isNaN(t.costRatio));
+        assert.equal(t.costRatio, null);
       }
     });
 
@@ -108,7 +105,6 @@ for (const preset of PRESET_IDS) {
       close(r.year.messages, count * perYear, 'year messages');
       closeFootprint(r.year.cloud, scale(r.cloud, perYear), 'year cloud');
       closeFootprint(r.year.local, scale(r.local, perYear), 'year local');
-      close(r.costRatio, one.costRatio, 'cost ratio');
     });
 
     test(`${preset} × ${period}: local energy, CO2e and cost are above zero for any count above zero`, () => {
@@ -140,9 +136,29 @@ test('the copy draft example: 20 typical messages a day', () => {
   close(r.local.co2eG, 3.2518, 'Mac g');
   close(r.year.cloud.costUsd, 51.1, 'year cloud $');
   close(r.year.local.costUsd, 0.46647, 'year Mac $ ($0.47)');
-  assert.equal(Number(r.costRatio.toPrecision(2)), 110);
+  assert.equal(Number(r.costRatio?.toPrecision(2)), 110);
 });
 
 test('a negative or non-finite count is rejected', () => {
   for (const bad of [-1, NaN, Infinity, -Infinity]) assert.throws(() => calculate(bad, 'day', 'typical'), RangeError);
+});
+
+test('-0 is treated as 0', () => {
+  assert.ok(Object.is(calculate(-0, 'day', 'typical').cloud.costUsd, 0));
+});
+
+test('an unknown period or preset, as read from a form field, is rejected', () => {
+  assert.throws(() => calculate(1, 'fortnight' as Period, 'typical'), RangeError);
+  assert.throws(() => calculate(1, 'day', 'huge' as PresetId), RangeError);
+  assert.throws(() => calculate(1, 'day', 'toString' as PresetId), RangeError);
+});
+
+test('the guards accept exactly the periods and presets', () => {
+  assert.ok(PERIODS.every(isPeriod));
+  assert.ok(PRESET_IDS.every(isPresetId));
+  assert.deepEqual([...PRESET_IDS].sort(), ['long', 'short', 'typical']);
+  for (const bad of ['', 'Day', 'fortnight', 'toString', undefined, 1]) {
+    assert.equal(isPeriod(bad), false);
+    assert.equal(isPresetId(bad), false);
+  }
 });

@@ -11,7 +11,8 @@ export interface Figure {
   label: string;
   /**
    * The source's https URL without its `https://`. This file ships as page JS, and the site check
-   * (`js-network`) allows no URL strings in JS. The page links each source in its HTML.
+   * (`js-network`) allows no URL strings in JS. The page links each source in its HTML; the build can
+   * render that list from these entries by adding the scheme back, so the two can't drift.
    */
   source: string;
   publisher: string;
@@ -51,7 +52,7 @@ export const FIGURES = {
   cloudWhPerInputToken: {
     value: 0.0002, unit: 'Wh/token', label: 'Cloud energy per input token, data-centre overhead included',
     source: EPOCH, publisher: 'Epoch AI', asOf: '2025-02-07',
-    note: '(2.4 Wh at 10k input − 0.3 Wh) ÷ 10,000.',
+    note: '(2.4 Wh at 10k input − 0.3 Wh) ÷ 10,000 = 0.00021, rounded as in the sources doc.',
   },
   cloudWhPerOutputToken: {
     value: 0.0006, unit: 'Wh/token', label: 'Cloud energy per output token, data-centre overhead included',
@@ -71,7 +72,7 @@ export const FIGURES = {
   macWattsReading: {
     value: 35, unit: 'W (wall)', label: 'Mac mini M4 16 GB power while reading the prompt',
     source: APPLE_POWER, publisher: 'Sovernity estimate', asOf: '2026-10-16',
-    note: 'Estimate, no direct measurement exists: above the 30 W writing draw, below Apple\'s 65 W maximum.',
+    note: 'Our estimate; no direct measurement exists. The source backs only the 65 W maximum it sits below; it is above the 30 W writing draw.',
   },
   macTokensPerSecondReading: {
     value: 130, unit: 'tokens/s', label: 'Gemma 4 12B 4-bit prompt reading speed on a Mac mini M4',
@@ -85,8 +86,8 @@ export const FIGURES = {
   },
   macWhPerOutputToken: {
     value: 0.00056, unit: 'Wh/token', label: 'Mac energy per output token',
-    source: GEERLING, publisher: 'Jeff Geerling', asOf: '2024-11-20',
-    note: 'Derived: 30 W ÷ 15 tok/s = 2.0 J, rounded as in the sources doc.',
+    source: GEERLING, publisher: 'Sovernity estimate', asOf: '2026-10-16',
+    note: 'Derived: 30 W ÷ 15 tok/s = 2.0 J, rounded as in the sources doc. Both inputs are proxies from Geerling\'s measurements.',
   },
   macIdleWatts: {
     value: 4, unit: 'W', label: 'Mac mini M4 idle power',
